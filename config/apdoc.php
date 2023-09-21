@@ -29,7 +29,7 @@ return [
             'description' => 'DEV',
         ],
         [
-            'url' => 'http://todo.medco.com',
+            'url' => 'http://test.example.com',
             'description' => 'LIVE',
         ],
     ],

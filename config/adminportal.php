@@ -107,7 +107,7 @@ return [
         'secret_key' => env('API_SECRET_KEY'),
         'jwt_secret_key' => env('JWT_SECRET_KEY'),
         'expired_duration_get_token' => "+1 hours",
-        'validate_blacklist' => true
+        'validate_blacklist' => false
     ]
     
 ];
