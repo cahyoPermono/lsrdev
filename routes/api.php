@@ -19,3 +19,9 @@ Route::middleware(['portal-api'])
     ->group(function () {
         Route::post('/auth/login', ApiLoginController::class)->name('auth.login');
     });
+
+Route::get('/key', function () {
+    if (!config('app.debug') || config('app.env') != 'local')
+        abort(404);
+    return base64_encode(date('Y-m-d') . "|" . portalconfig('api.secret_key'));
+});
