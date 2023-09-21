@@ -17,5 +17,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-
-/storage/api-docs
+/storage/api-docs/openapi-documentation.json
