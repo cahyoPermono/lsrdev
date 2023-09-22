@@ -1,0 +1,2 @@
+<x-portal::input type="text" name="email" label="Email" placeholder="Email" horizontal>{{$row->email}}</x-portal::input>
+<x-portal::input type="text" name="select_modules" label="Select Modules" placeholder="Select Modules" horizontal>{{$row->select_modules}}</x-portal::input>

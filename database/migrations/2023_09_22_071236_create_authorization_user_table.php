@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authtorization_user', function (Blueprint $table) {
+        Schema::create('authorization_users', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('email')->unique();
-            $table->json('select_modules')->nullable();
+            $table->string('email');
+            $table->foreignId('modules_id')->constrained('app_modules')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('authtorization_user');
+        Schema::dropIfExists('authorization_user');
     }
 };
