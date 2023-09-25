@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
+use App\Http\Controllers\Api\Isolation\ApiIsolationController;
 use App\Http\Controllers\Api\Issolation\ApiIssolationController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
@@ -76,6 +77,7 @@ Route::middleware(['private-api'])
             ->as('isolation.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
+                Route::get('/method/{type}', 'method')->name('method')->whereIn('method', ['process', 'automation', 'electrical', 'esd', 'positive']);
             });
 
 
