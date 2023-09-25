@@ -30,6 +30,7 @@ Route::middleware(['private-api'])
             ->as('profile.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
+                Route::delete('/logout', 'logout')->name('logout');
             });
         Route::controller(ApiSelfScreeningController::class)
             ->prefix('self-screening')

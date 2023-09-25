@@ -3,6 +3,7 @@ namespace App\Actions\Auth;
 
 use App\Enum\Status;
 use App\Helpers\Faker\UserDataFake;
+use App\Services\Account\UserActivityService;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUser;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Laililmahfud\Adminportal\Helpers\BadRequestException;
 class ApiLoginAction
 {
      public function __construct(
+          private $userActivityService = new UserActivityService,
           private $userService = new UserService,
           private $medcoUser = new MedcoUser
      ) {
@@ -38,7 +40,7 @@ class ApiLoginAction
 
 
           // Todo : send fcm force logout last user
-          $this->userService->createOrUpdateUser($ptsUser->email, [
+          $user = $this->userService->createOrUpdateUser($ptsUser->email, [
                'email' => $ptsUser->email,
                'workforce' => $ptsUser->department_name,
                'identify_provider' => $ptsUser->company_name,
@@ -49,6 +51,8 @@ class ApiLoginAction
                'last_login' => now(),
           ]);
 
+          $ptsUser->user_id = $user->id;
+          $this->userActivityService->createActivity($user->id, 'login');
 
           return $ptsUser;
      }

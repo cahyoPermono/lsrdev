@@ -9,4 +9,13 @@ class UserActivityService
           public $model = UserActivity::class
      ) {
      }
+
+     public function createActivity($userId, $activity)
+     {
+          return $this->model::create([
+               'user_id' => $userId,
+               'activity' => $activity,
+               'date_time' => now()
+          ]);
+     }
 }

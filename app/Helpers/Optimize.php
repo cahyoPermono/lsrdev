@@ -15,7 +15,16 @@ class Optimize
           return Cache::remember($key, $ttl, $callback);
      }
 
-     public static function cacheForever($key, $callback): mixed
+     public static function cacheForever($key, $value): mixed
+     {
+          if($cache = Cache::get($key)){
+               return $cache;
+          }
+          Cache::forever($key, $value);
+          return $value;
+     }
+
+     public static function cacheRememberForever($key, $callback): mixed
      {
           return Cache::rememberForever($key, $callback);
      }

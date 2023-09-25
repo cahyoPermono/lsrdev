@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Actions\Auth\ApiLogoutAction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Auth\ProfileResource;
 use App\Services\MedcoApi\MedcoUser;
@@ -15,7 +16,8 @@ class ApiProfileController extends ApiController
 {
     public function __construct(
         private MedcoUser $medcoUser
-    ){}
+    ) {
+    }
 
     /**
      * Detail Profile
@@ -47,8 +49,27 @@ class ApiProfileController extends ApiController
     {
         $person_id = $this->auth()->person_id;
         $user = $this->medcoUser->findUserByPersonId($person_id);
-        abort_if(!$user,404);
-        
+        abort_if(!$user, 404);
+
         return $this->sendSuccess(new ProfileResource($user));
+    }
+
+    /**
+     * Logout
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "Good Bye !"
+     * }
+     * 
+     */
+    public function logout(Request $request, ApiLogoutAction $apiLogoutAction)
+    {
+        $email = $this->auth()->email;
+        $apiLogoutAction->handle($email);
+        return $this->sendMessage('Good Bye !');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Helpers\Optimize;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Laililmahfud\Adminportal\Api\Error;
 use Laililmahfud\Adminportal\Api\JwtToken;
 use Laililmahfud\Adminportal\Traits\JsonResponse;
@@ -22,12 +23,10 @@ class ApiPrivateMiddleware
     {
         try {
             $token = $request->header('authorization');
-            $dataToken = Optimize::cacheForever("data-token:{$token}", function () {
+            $dataToken = Optimize::cacheRememberForever("data-token:{$token}", function () {
                 return $this->auth();
             });
-            $isBlacklistToken = Optimize::cacheForever("is-blacklist-token:{$token}", function () {
-                return JwtToken::isBlacklist();
-            });
+            $isBlacklistToken = Optimize::cacheForever("is-blacklist-token:{$token}", JwtToken::isBlacklist());
 
             if ($isBlacklistToken || !@$dataToken->person_id) {
                 return $this->unauthorized('Your token was not found !', Error::FORBIDDEN);
