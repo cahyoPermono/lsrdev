@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\SelfScreening;
+namespace App\Http\Controllers\Api\OtherScreening;
 
 use App\Http\Controllers\Controller;
 use App\Services\MedcoApi\CertificateUserService;
@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
 
 /**
- * @group Self Screening/Certificate
- * @sorting 4
+ * @group Other Screening/Certificate
+ * @sorting 6
  */
-class ApiSelfScreeningCertificateController extends ApiController
+class ApiOtherScreeningCertificateController extends ApiController
 {
     public function __construct(
         private CertificateUserService $certificateUserService
@@ -19,7 +19,7 @@ class ApiSelfScreeningCertificateController extends ApiController
     }
 
     /**
-     * Self : Certificate List
+     * Other : Certificate List
      * 
      * <b>CODE LIST</b>
      * <code>
@@ -30,6 +30,7 @@ class ApiSelfScreeningCertificateController extends ApiController
      * 
      * @authenticated
      * @defaultParam
+     * @pathParam person_id string required
      * 
      * @response {
      *   "status": 200,
@@ -72,19 +73,19 @@ class ApiSelfScreeningCertificateController extends ApiController
      *   ]
      * }
      */
-    public function index(Request $request)
+    public function index(Request $request,$person_id)
     {
-        $person_id = $this->auth()->person_id;
         $items = $this->certificateUserService->certificate($person_id);
         return $this->sendSuccess($items);
     }
 
     /**
      * 
-     * Self : PTS Certificate
+     * Other : PTS Certificate
      * 
      * @authenticated
      * @defaultParam
+     * @pathParam person_id string required
      * 
      * @response {
      *   "status": 200,
@@ -104,11 +105,9 @@ class ApiSelfScreeningCertificateController extends ApiController
      * }
      * 
      */
-    public function ptsCertificate(Request $request)
+    public function ptsCertificate(Request $request,$person_id)
     {
-        $person_id = $this->auth()->person_id;
         $items = $this->certificateUserService->ptsCertificate($person_id);
         return $this->sendSuccess($items);
     }
-
 }

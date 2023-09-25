@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
+use App\Http\Controllers\Api\Issolation\ApiIssolationController;
+use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
+use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
 use Illuminate\Http\Request;
@@ -49,6 +52,25 @@ Route::middleware(['private-api'])
                 Route::get('/training', 'training')->name('training');
                 Route::get('/competency', 'competency')->name('training');
             });
+
+
+        Route::controller(ApiOtherScreeningCertificateController::class)
+            ->prefix('other-screening/{person_id}/certificate')
+            ->as('other-screening.certificate.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/pts', 'ptsCertificate')->name('pts-certificate');
+            });
+
+        Route::controller(ApiOtherScreeningController::class)
+            ->prefix('other-screening/{person_id}')
+            ->as('other-screening.')
+            ->group(function () {
+                Route::get('/profile', 'profile')->name('profile');
+                Route::get('/training', 'training')->name('training');
+                Route::get('/competency', 'competency')->name('training');
+            });
+
 
     });
 

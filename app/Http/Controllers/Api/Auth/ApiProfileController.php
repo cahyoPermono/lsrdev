@@ -11,6 +11,7 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
 
 /**
  * @group Profile
+ * @sorting 2
  */
 class ApiProfileController extends ApiController
 {
