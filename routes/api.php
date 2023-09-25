@@ -71,6 +71,13 @@ Route::middleware(['private-api'])
                 Route::get('/competency', 'competency')->name('training');
             });
 
+        Route::controller(ApiIsolationController::class)
+            ->prefix('isolation/{pid}')
+            ->as('isolation.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
+
 
     });
 
