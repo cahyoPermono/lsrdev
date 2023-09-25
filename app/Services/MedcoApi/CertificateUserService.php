@@ -3,7 +3,7 @@ namespace App\Services\MedcoApi;
 
 use Illuminate\Support\Facades\Storage;
 
-class SelfScreeningService
+class CertificateUserService
 {
      private static function fakeCertificate()
      {

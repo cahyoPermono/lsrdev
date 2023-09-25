@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\SelfScreening;
 
 use App\Http\Controllers\Controller;
-use App\Services\MedcoApi\SelfScreeningService;
+use App\Services\MedcoApi\CompetencyService;
+use App\Services\MedcoApi\TrainingService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
 
@@ -13,18 +14,13 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
 class ApiSelfScreeningController extends ApiController
 {
     public function __construct(
-        private SelfScreeningService $selfScreeningService
+        private TrainingService $trainingService,
+        private CompetencyService $competencyService
     ) {
     }
+
     /**
-     * Certificate List
-     * 
-     * <b>CODE LIST</b>
-     * <code>
-     *  MEDICAL CHECK UP = 2-MCU
-     *  HSE ORIENTATION = 1-HSEORI
-     *  COVID = COVID
-     * </code>
+     * List Training
      * 
      * @authenticated
      * @defaultParam
@@ -34,52 +30,36 @@ class ApiSelfScreeningController extends ApiController
      *   "message": "success",
      *   "data": [
      *       {
-     *       "name": "2 Medic.Check Up",
-     *       "valid_until": "2023-08-09",
-     *       "code": "2-MCU",
-     *       "items": []
-     *       },
-     *       {
-     *       "name": "1 HSE Orientatio",
-     *       "valid_until": "2023-09-05",
-     *       "code": "1-HSEORI",
-     *       "items": []
-     *       },
-     *       {
-     *       "name": "Covid Vaccine",
-     *       "valid_until": null,
-     *       "code": "COVID",
-     *       "items": [
-     *           {
-     *           "name": "2 Covid19 Vacc 1",
-     *           "valid_until": "2099-12-31",
-     *           "code": "2-COVID1"
-     *           },
-     *           {
-     *           "name": "2 Covid19 Vacc 2",
-     *           "valid_until": "2099-12-31",
-     *           "code": "2-COVID2"
-     *           },
-     *           {
-     *           "name": "2 Covid19 Vacc 3",
-     *           "valid_until": "2099-12-31",
-     *           "code": "2-COVID3"
-     *           }
-     *       ]
+     *       "training_name": "Medical Check Up",
+     *       "valid_until": "2023-12-16",
+     *       "contract_number": 287467,
+     *       "status": "Active",
+     *       "contact_owner": "Mr. Geovany Kling",
+     *       "contract_period": "35 Months",
+     *       "npwp": "01.365.921.4-073.999",
+     *       "trainer": "Hosea McDermott",
+     *       "nik": "190933303993541706",
+     *       "location": "612 Gleichner Stravenue\nEast Metaborough, NV 30983-5281",
+     *       "position": "D/CADET (ABPL)",
+     *       "requirement_title": "Medical Check Up",
+     *       "requirement_type": "MCU",
+     *       "training_type": "Technical Training",
+     *       "last_taken": "00:00,0",
+     *       "mandatory": "Yes",
+     *       "personel_type": null
      *       }
      *   ]
      * }
      */
-    public function certificate(Request $request)
+    public function training(Request $request)
     {
         $person_id = $this->auth()->person_id;
-        $items = $this->selfScreeningService->certificate($person_id);
+        $items = $this->trainingService->findAllTraining($person_id);
         return $this->sendSuccess($items);
     }
 
     /**
-     * 
-     * PTS Certificate
+     * List Competency
      * 
      * @authenticated
      * @defaultParam
@@ -89,23 +69,22 @@ class ApiSelfScreeningController extends ApiController
      *   "message": "success",
      *   "data": [
      *       {
-     *       "name": "2 Cont Period",
-     *       "valid_until": "2023-12-31",
-     *       "issue_date": "2022-01-20",
-     *       "registered_date": "2019-09-02",
-     *       "changed_date": "2023-09-15",
-     *       "code": "2-CP",
-     *       "type": "Site Specific",
-     *       "clinic_doctor": null
+     *       "competency_name": "Electrical Safety Level 2",
+     *       "valid_until": "2023-12-24",
+     *       "assessment_result": "Fail",
+     *       "assessor": "Rafael Herman MD",
+     *       "company": "Farrell and Sons",
+     *       "location": "628 Juwan Lakes\nGoyetteburgh, DE 52493",
+     *       "assessment_date": "2023-01-23",
+     *       "assessment_method": "Test"
      *       }
      *   ]
-     * }
-     * 
+     *}
      */
-    public function ptsCertificate(Request $request)
+    public function competency(Request $request)
     {
         $person_id = $this->auth()->person_id;
-        $items = $this->selfScreeningService->ptsCertificate($person_id);
+        $items = $this->competencyService->findAllCompetency($person_id);
         return $this->sendSuccess($items);
     }
 }
