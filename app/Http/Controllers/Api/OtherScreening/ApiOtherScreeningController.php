@@ -19,44 +19,9 @@ class ApiOtherScreeningController extends ApiController
     public function __construct(
         private TrainingService $trainingService,
         private CompetencyService $competencyService,
-        private MedcoUserService $medcoUserService
     ) {
     }
 
-    /**
-     * Profile Other User
-     * 
-     * @authenticated
-     * @defaultParam
-     * 
-     * @pathParam person_id string required
-     * 
-     * @response {
-     *   "status": 200,
-     *   "message": "success",
-     *   "data": {
-     *       "person_id": 19821141,
-     *       "email": "ayu.annisa@contractor.medcoenergi.com",
-     *       "first_name": "Ayu",
-     *       "middle_name": "",
-     *       "last_name": "ANNISA",
-     *       "sex": "F",
-     *       "nationality": "Indonesia",
-     *       "department": "Information Technology",
-     *       "company": "ISTECH RESOURCES ASIA PT",
-     *       "entity": ":TODO",
-     *       "person_status": "A",
-     *       "supervisor": "Ade  ANWAR",
-     *       "qr_code": "https://chart.googleapis.com/chart?chl19821141&chs=500x500&cht=qr&chld=H%7C0"
-     *   }
-     *  }
-     */
-    public function profile(Request $request,$person_id){
-        $user = $this->medcoUserService->findUserByPersonId($person_id);
-        abort_if(!$user, 404);
-
-        return $this->sendSuccess(new ProfileResource($user));
-    }
     /**
      * Other : List Training
      * 

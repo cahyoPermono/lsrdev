@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateControll
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
+use App\Http\Controllers\Api\User\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,9 @@ Route::middleware(['portal-api'])
 
 Route::middleware(['private-api'])
     ->group(function () {
+
+        
+        Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile');
 
         Route::controller(ApiProfileController::class)
             ->prefix('profile')
@@ -77,7 +81,8 @@ Route::middleware(['private-api'])
             ->as('isolation.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/method/{type}', 'method')->name('method')->whereIn('method', ['process', 'automation', 'electrical', 'esd', 'positive']);
+                Route::get('/method/{type}', 'method')->name('method')->whereIn('type', ['process', 'automation', 'electrical', 'esd', 'positive']);
+                Route::post('/method', 'updateMethod')->name('method.update');
             });
 
 

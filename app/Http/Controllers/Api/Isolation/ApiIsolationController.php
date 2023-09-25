@@ -48,6 +48,32 @@ class ApiIsolationController extends ApiController
      * @pathParam pid string required
      * @pathParam type string required in <code>'process', 'automation', 'electrical', 'esd', 'positive'</code>
      * 
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": [
+     *       {
+     *       "id": "ID-N-CG-MU-23-23DE333",
+     *       "code": "ID-N-CG-MU-23-23DE333",
+     *       "is_done": true,
+     *       "ip": "I00009",
+     *       "required": "CLO",
+     *       "lock": 9,
+     *       "is_isolated": true,
+     *       "verified_by": "Oscar Aufderhar"
+     *       },
+     *       {
+     *       "id": "ID-N-CG-MU-23-23DE566",
+     *       "code": "ID-N-CG-MU-23-23DE566",
+     *       "is_done": false,
+     *       "ip": "I00004",
+     *       "required": "CLO",
+     *       "lock": 5,
+     *       "is_isolated": false,
+     *       "verified_by": null
+     *       }
+     *   ]
+     * }
      */
     public function method(Request $request, $pid, $type)
     {
@@ -55,5 +81,13 @@ class ApiIsolationController extends ApiController
         $function = "findIsolation{$method}";
         $items = $this->isolationService->{$function}($pid);
         return $this->sendSuccess($items);
+    }
+
+    /**
+     * Update Method
+     */
+    public function updateMethod(Request $request, $pid)
+    {
+
     }
 }
