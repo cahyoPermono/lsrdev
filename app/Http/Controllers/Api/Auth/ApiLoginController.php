@@ -12,6 +12,7 @@ use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 /**
  * @group Authentication
+ * @sorting 1
  */
 class ApiLoginController extends ApiController
 {
@@ -26,7 +27,7 @@ class ApiLoginController extends ApiController
      * @defaultParam
      * 
      * @requestBody multipart/form-data
-     * @bodyParam email string required ex : ade.anwar@medcoenergi.com
+     * @bodyParam email string required ex : abdul.hakim@contractor.medcoenergi.com
      * 
      * @response 400 {
      *   "status": 400,
@@ -38,7 +39,7 @@ class ApiLoginController extends ApiController
      *   "status": 200,
      *   "message": "success",
      *   "data": {
-     *       "email": "ade.anwar@medcoenergi.com",
+     *       "email": "abdul.hakim@contractor.medcoenergi.com",
      *       "authorization": [],
      *       "token": {
      *       "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTUzNTE1OTQsImlzcyI6Ik1FRENPIFNNQVJUIEFQUFMiLCJpYXQiOjE2OTUyNjUxOTQsIm5iZiI6MTY5NTI2NTE5NCwianRpIjoiazExalBUMlAxVTc1OWZUIiwiZGF0YSI6eyJlbWFpbCI6Ik9DWTJCeUQyanJNSEpGT0E2YUJwaUgzdzdmQkswaTl6cW5ybklveWxRVnRvVUZrbDdjaGRnTFU9IiwicGVyc29uX2lkIjoiYWVMNDNWKzBHZDVXSnIweldoNGV3aTZwaFdsZUhmRGEiLCJyZWdpZCI6IjEyMzQ1NiJ9fQ.OlmgVkLVrm02Za4uOat2IEP_Ny5miV-GJ-_s9DzLoZ4",

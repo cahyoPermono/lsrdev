@@ -4,13 +4,15 @@ namespace App\Actions\Auth;
 use App\Enum\Status;
 use App\Helpers\Faker\UserDataFake;
 use App\Services\Account\UserService;
+use App\Services\MedcoApi\MedcoUser;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ApiLoginAction
 {
      public function __construct(
-          private $userService = new UserService
+          private $userService = new UserService,
+          private $medcoUser = new MedcoUser
      ) {
      }
 
@@ -20,7 +22,7 @@ class ApiLoginAction
           // TODO : get this from setting database
           $maxLastLoginDays = 90;
 
-          if (!$ptsUser = UserDataFake::findUserByEmail($request->email)) {
+          if (!$ptsUser = $this->medcoUser->findUserByEmail($request->email)) {
                throw new BadRequestException(__('alert.email_not_found'));
           }
           if ($user = $this->userService->findUserByEmail($ptsUser->email)) {

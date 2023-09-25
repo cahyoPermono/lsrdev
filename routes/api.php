@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\ApiLoginController;
+use App\Http\Controllers\Api\Auth\ApiProfileController;
+use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,23 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['portal-api'])
     ->group(function () {
         Route::post('/auth/login', ApiLoginController::class)->name('auth.login');
+    });
+
+Route::middleware(['private-api'])
+    ->group(function () {
+
+        Route::controller(ApiProfileController::class)
+            ->prefix('profile')
+            ->as('profile.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
+        Route::controller(ApiSelfScreeningController::class)
+            ->prefix('self-screening')
+            ->as('self-screening.')
+            ->group(function () {
+            });
+
     });
 
 Route::get('/key', function () {

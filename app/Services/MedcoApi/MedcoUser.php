@@ -1,9 +1,9 @@
 <?php
-namespace App\Helpers\Faker;
+namespace App\Services\MedcoApi;
 
 use Illuminate\Support\Facades\Storage;
 
-class UserDataFake
+class MedcoUser
 {
      private static function usersData()
      {
@@ -25,9 +25,19 @@ class UserDataFake
            */
           return collect(Storage::json('json/users-by-email.json'));
      }
-     public static function findUserByEmail($email)
+     public function findUserByEmail($email)
      {
-          $user =  self::usersData()->where('email', $email)->first();
+          $user = self::usersData()->where('email', $email)->first();
           return $user ? (object) $user : null;
+     }
+
+     public function findUserByPersonId($personId)
+     {
+          $user = self::usersData()->where('person_id', $personId)->first();
+          $user =  $user ? (object) $user : null;
+          if($user && @$user->supervisor){
+               $user->supervisor = $this->findUserByPersonId($user->supervisor);
+          }
+          return $user;
      }
 }
