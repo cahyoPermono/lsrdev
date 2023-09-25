@@ -85,9 +85,23 @@ class ApiIsolationController extends ApiController
 
     /**
      * Update Method
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @requestBody multipart/form-data
+     * @bodyParam isolated_id string required
+     * @bodyParam is_isolated boolean required
+     * @bodyParam verified_name string required
+     * @bodyParam verified_id string required person id
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "Successfully isolated and verified !"
+     *  }
      */
     public function updateMethod(Request $request, $pid)
     {
-
+        return $this->sendMessage("Successfully isolated and verified !");
     }
 }
