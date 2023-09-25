@@ -36,6 +36,8 @@ Route::middleware(['private-api'])
             ->prefix('self-screening')
             ->as('self-screening.')
             ->group(function () {
+                Route::get('certificate', 'certificate')->name('certificate');
+                Route::get('pts-certificate', 'ptsCertificate')->name('pts-certificate');
             });
 
     });

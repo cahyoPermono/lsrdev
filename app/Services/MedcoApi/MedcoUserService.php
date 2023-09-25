@@ -3,9 +3,9 @@ namespace App\Services\MedcoApi;
 
 use Illuminate\Support\Facades\Storage;
 
-class MedcoUser
+class MedcoUserService
 {
-     private static function usersData()
+     private static function fakeUsers()
      {
           /**
            *  {
@@ -27,13 +27,13 @@ class MedcoUser
      }
      public function findUserByEmail($email)
      {
-          $user = self::usersData()->where('email', $email)->first();
+          $user = self::fakeUsers()->where('email', $email)->first();
           return $user ? (object) $user : null;
      }
 
      public function findUserByPersonId($personId)
      {
-          $user = self::usersData()->where('person_id', $personId)->first();
+          $user = self::fakeUsers()->where('person_id', $personId)->first();
           $user =  $user ? (object) $user : null;
           if($user && @$user->supervisor){
                $user->supervisor = $this->findUserByPersonId($user->supervisor);
