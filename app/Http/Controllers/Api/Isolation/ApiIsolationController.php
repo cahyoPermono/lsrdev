@@ -92,8 +92,8 @@ class ApiIsolationController extends ApiController
      * @requestBody multipart/form-data
      * @bodyParam isolated_id string required
      * @bodyParam is_isolated boolean required
-     * @bodyParam verified_name string required
-     * @bodyParam verified_id string required person id
+     * @bodyParam verifier_name string required
+     * @bodyParam verifier_id string required person id
      * 
      * @response {
      *   "status": 200,
