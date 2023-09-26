@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Isolation\ApiIsolationController;
 use App\Http\Controllers\Api\Issolation\ApiIssolationController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
+use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
 use App\Http\Controllers\Api\User\ApiUserController;
@@ -31,7 +32,7 @@ Route::middleware(['portal-api'])
 Route::middleware(['private-api'])
     ->group(function () {
 
-        
+
         Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile');
 
         Route::controller(ApiProfileController::class)
@@ -82,7 +83,16 @@ Route::middleware(['private-api'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/method/{type}', 'method')->name('method')->whereIn('type', ['process', 'automation', 'electrical', 'esd', 'positive']);
-                Route::post('/method', 'updateMethod')->name('method.update');
+                Route::put('/method', 'updateMethod')->name('method.update');
+            });
+
+        Route::controller(ApiPwtIssuerController::class)
+            ->prefix('pwt-issuer/{pid}')
+            ->as('pwt-issuer.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/{code}/wl', 'wlList')->name('wl-list');
+                Route::put('/{code}/wl/update', 'updateWl')->name('wl-update');
             });
 
 

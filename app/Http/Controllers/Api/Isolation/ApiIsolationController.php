@@ -9,6 +9,7 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
 
 /**
  * @group Isolation
+ * @sorting 7
  */
 class ApiIsolationController extends ApiController
 {
@@ -89,7 +90,7 @@ class ApiIsolationController extends ApiController
      * @authenticated
      * @defaultParam
      * 
-     * @requestBody multipart/form-data
+     * @requestBody application/x-www-form-urlencoded
      * @bodyParam isolated_id string required
      * @bodyParam is_isolated boolean required
      * @bodyParam verifier_name string required
