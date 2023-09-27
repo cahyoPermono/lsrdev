@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Models\AuthorizationUser;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\AdminController;
 use App\Services\AuthorizationUserService;
@@ -22,6 +23,8 @@ class AdminAuthorizationUserController extends AdminController
         "email" => "required|min:3|max:150",
         "permissions" => "required"
     ];
+
+
 
     public function create(Request $request)
     {

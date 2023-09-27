@@ -8,7 +8,10 @@
     </td>
     @enditcan
     <td>{{$row->email}}</td>
-    <td>{{$row->select_modules}}</td>
+    <td>
+            {{ $row->module_name }}
+            
+    </td>
     <td class="text-end">
         @if(itcan('edit admin.authorization-user') || itcan('delete admin.authorization-user'))
         <div class="btn-group">
