@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
+use App\Http\Controllers\Api\Auth\ApiUserAuthorizationController;
 use App\Http\Controllers\Api\Isolation\ApiIsolationController;
 use App\Http\Controllers\Api\Issolation\ApiIssolationController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
@@ -35,12 +36,18 @@ Route::middleware(['private-api'])
 
         Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile');
 
+        Route::controller(ApiUserAuthorizationController::class)
+            ->prefix('auth/')
+            ->as('auth.')
+            ->group(function () {
+                Route::get('/authorization', 'authorization')->name('logout');
+                Route::delete('/logout', 'logout')->name('logout');
+            });
         Route::controller(ApiProfileController::class)
             ->prefix('profile')
             ->as('profile.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::delete('/logout', 'logout')->name('logout');
             });
 
         Route::controller(ApiSelfScreeningCertificateController::class)

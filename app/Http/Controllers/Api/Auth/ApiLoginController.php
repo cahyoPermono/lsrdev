@@ -40,7 +40,6 @@ class ApiLoginController extends ApiController
      *   "message": "success",
      *   "data": {
      *       "email": "abdul.hakim@contractor.medcoenergi.com",
-     *       "authorization": [],
      *       "token": {
      *       "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTUzNTE1OTQsImlzcyI6Ik1FRENPIFNNQVJUIEFQUFMiLCJpYXQiOjE2OTUyNjUxOTQsIm5iZiI6MTY5NTI2NTE5NCwianRpIjoiazExalBUMlAxVTc1OWZUIiwiZGF0YSI6eyJlbWFpbCI6Ik9DWTJCeUQyanJNSEpGT0E2YUJwaUgzdzdmQkswaTl6cW5ybklveWxRVnRvVUZrbDdjaGRnTFU9IiwicGVyc29uX2lkIjoiYWVMNDNWKzBHZDVXSnIweldoNGV3aTZwaFdsZUhmRGEiLCJyZWdpZCI6IjEyMzQ1NiJ9fQ.OlmgVkLVrm02Za4uOat2IEP_Ny5miV-GJ-_s9DzLoZ4",
      *       "expiredAt": 1695351594

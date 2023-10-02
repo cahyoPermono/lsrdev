@@ -55,22 +55,4 @@ class ApiProfileController extends ApiController
         return $this->sendSuccess(new ProfileResource($user));
     }
 
-    /**
-     * Logout
-     * 
-     * @authenticated
-     * @defaultParam
-     * 
-     * @response {
-     *   "status": 200,
-     *   "message": "Good Bye !"
-     * }
-     * 
-     */
-    public function logout(Request $request, ApiLogoutAction $apiLogoutAction)
-    {
-        $email = $this->auth()->email;
-        $apiLogoutAction->handle($email);
-        return $this->sendMessage('Good Bye !');
-    }
 }

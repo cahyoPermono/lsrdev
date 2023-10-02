@@ -26,9 +26,6 @@ class LoginResponseResource extends JsonResource
 
         return [
             'email' => $this->email,
-            'authorization' => [
-                // Todo : get List authorization from table
-            ],
             'token' => $token
         ];
     }
