@@ -16,11 +16,22 @@ class AuthorizationUserService extends AdminService
     {
         $search = $request->search ?? '';
 
-        return $this->model::where(function ($q) use ($search) {
-            $q->orWhere("email", "like", "%" . $search . "%");
-        })
-            ->select("*")
+        // return $this->model::where(function ($q) use ($search) {
+        //     $q->orWhere("email", "like", "%" . $search . "%");
+        // })
+        //     ->select("*")
+        //     ->datatable($perPage, "created_at");
+        return $this->model::with('modules')
+            ->select('email')
+            ->groupBy('email')
             ->datatable($perPage, "created_at");
+            
+        // foreach($request->permissions as $id){
+        //     $this->AppModules::select([
+        //         'email' => $request->email,
+        //         'modules_id' => $id,
+        //     ]);
+        // }
 
     }
 

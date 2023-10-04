@@ -28,11 +28,12 @@ class AppModulesService extends AdminService
     
     public function store(Request $request)
     {
-        return $this->model::create([
-            "name" => $request->name,
-            "icon" => AdminPortal::uploadFile($request->file('icon')),
-            "key" => $request->key,
-        ]);
+        $data = $request->only(['name','key']);
+        if($request->hasFile('icon')){
+             $data['icon'] = AdminPortal::uploadFile($request->file('icon'));
+        }
+
+        return $this->model::updateOrCreate(['id'=>$request->id],$data);
     }
 
     public function update(Request $request, $uuid)

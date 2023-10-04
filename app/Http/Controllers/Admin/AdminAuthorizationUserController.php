@@ -28,8 +28,9 @@ class AdminAuthorizationUserController extends AdminController
 
     public function create(Request $request)
     {
-        $appModules = AppModules::all(); // Mengambil semua data App Modules
+        $appModules = AppModules::all();
 
         return parent::create($request)->with('appModules', $appModules);
     }
+    
 }

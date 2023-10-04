@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\AdminController;
 use App\Services\AppModulesService;
+use App\Models\AppModules;
 
 class AdminAppModulesController extends AdminController
 {
@@ -20,9 +21,16 @@ class AdminAppModulesController extends AdminController
 
     protected $rules = [
         "name" => "required|min:3|max:150",
-        "icon" => "required|file",
         "key" => "required|min:3|max:150",
     ];
+    public function index(Request $request)
+    {
+        $data = AppModules::all();
     
+        return view('admin.modules.table', [
+            'data' => $data
+        ]);
+    }
+
     
 }
