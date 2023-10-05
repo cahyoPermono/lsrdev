@@ -13,5 +13,7 @@ class AppModules extends Model
 
     protected $table = "app_modules";
     protected $fillable = ["name","icon","key"];
-    
+    public function sub() {
+        return $this->hasMany(AppModules::class, 'parent_id', 'id');
+    }
 }

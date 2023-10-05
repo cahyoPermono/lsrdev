@@ -25,12 +25,25 @@ class AdminAppModulesController extends AdminController
     ];
     public function index(Request $request)
     {
-        $data = AppModules::all();
+        $data = AppModules::with('sub')->whereNull('parent_id')->get();
     
         return view('admin.modules.table', [
             'data' => $data
         ]);
     }
 
-    
+    public function sortingMenu(Request $request){
+        $data = json_decode($request->data);
+        foreach($data as $i => $row){
+            $sorting = $i+1;
+            AppModules::where('id',$row->id)->update([
+                'sorting' => $sorting,
+                'parent_id' => @$row->parent
+            ]);
+        }
+        
+        return response()->json([
+            'message' => 'success'
+        ]);
+    }
 }

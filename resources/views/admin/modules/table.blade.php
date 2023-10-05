@@ -57,7 +57,7 @@
                     let formData = new FormData();
                     formData.set('_token', "{{ csrf_token() }}")
                     formData.set('data', JSON.stringify(data))
-                    fetch("{{ route('admin.cms-modules.sort-menu') }}", {
+                    fetch("{{ route('admin.modules.sorting-menu') }}", {
                         method: "POST",
                         body: formData,
                     }).then(async (res) => {
@@ -122,7 +122,7 @@
                         <li data-id="{{ $row->id }}">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <i class="modul-icon {{  asset($row->icon) }}"></i>
+                                    
                                     <i class="modul-icon"><img src="{{ asset($row->icon) }}" alt="{{ $row->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
                                     {{ $row->name }}
                                 </div>
@@ -136,7 +136,30 @@
                                         data-method="DELETE">Delete</a>
                                 </div>
                             </div>
-                            
+                            @if (count($row->sub))
+                                <ul data-id="{{ $row->id }}">
+                                    @foreach ($row->sub as $sub)
+                                        <li data-id="{{ $sub->id }}">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="modul-icon {{ $sub->icon }}"><img src="{{ asset($row->icon) }}" alt="{{ $row->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
+                                                    {{ $sub->name }}
+                                                </div>
+                                                <div class="d-flex">
+                                                    <a href="javascript:;" class="btn-edit"
+                                                        data-id="{{ $sub->id }}" data-name="{{ $sub->name }}"
+                                                        data-key="{{ $sub->key }}"
+                                                        data-icon="{{ $sub->icon }}">Edit</a>
+                                                    <a href="javascript:;" data-toggle="confirmation"
+                                                        data-message="{{ __('adminportal.delete_confirmation') }}"
+                                                        data-action="{{ adminRoute('admin.cms-modules.delete', $sub->id) }}"
+                                                        data-method="DELETE">Delete</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </li>
                     @endforeach
                 </ul>
@@ -148,7 +171,7 @@
                     @csrf
                     <div class="header-form d-flex justify-content-between">
                         <div class="left-side d-flex align-items-center">
-                            <h5 class="form-title" id="title-form">@lang('adminportal.create_app_modules')</h5>
+                            <h5 class="form-title" id="title-form">@lang('adminportal.create_app_module')</h5>
                         </div>
                         <div class="right-side d-flex">
                             <a href="javascript:;" class="btn btn-light btn-cancel d-none text-upper">
@@ -159,9 +182,11 @@
                             </button>
                         </div>
                     </div>
-                    <x-portal::input type="text" name="name" label="Name" placeholder="Name" horizontal>{{old('name')}}</x-portal::input>
-                    <x-portal::input type="file" name="icon" label="Icon" placeholder="Icon" required horizontal>{{old('icon')}}</x-portal::input>
-                    <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key" horizontal>{{old('key')}}</x-portal::input>
+                    <x-portal::input type="text" name="name" label="Name" placeholder="Name" style="width: 325px;" horizontal>{{old('name')}}</x-portal::input>
+                    <x-portal::input type="file" name="icon" label="Icon" placeholder="Icon" style="width: 325px;" required horizontal>{{old('icon')}}</x-portal::inpu>
+                        <span style="font-size: 10px;margin-left: 80px;">Biarkan kosong jika tidak ingin mengedit</span>
+                        <label for="fileInput" style="font-size: 12px; margin-left: 80px;">Klik <a href="#" id="fileLabel">disini</a> untuk melihat <fieldset></fieldset></label>
+                    <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key" style="width: 325px;" horizontal>{{old('key')}}</x-portal::input>
                       @push('js')
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {

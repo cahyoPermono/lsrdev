@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('icon');
             $table->string('key');
+            $table->integer('sorting')->default(1);
+            $table->integer('parent_id')->nullable();
             $table->timestamps();
         });
     }

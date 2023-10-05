@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AdminAppModulesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::group(['prefix' => portalconfig('admin_path'), 'as' => "admin.",'middleware'=>['portal-admin']], function () {
+    Route::post('/modules/sorting-menu', [AdminAppModulesController::class, 'sortingMenu'])->name('modules.sorting-menu');
 });
