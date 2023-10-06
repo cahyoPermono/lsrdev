@@ -47,6 +47,8 @@
             color: #000;
             margin-left: 15px;
         }
+
+    
     </style>
     {{-- https://www.hesamurai.com/nested-sort/latest/ --}}
     <script src="{{ asset('adminportal/js/Sortable.js?') }}"></script>
@@ -71,6 +73,8 @@
         });
 
         const btnCancel = document.querySelector('.btn-cancel')
+        const labelElement = document.getElementById('fileLabel');
+        const spanElement = document.getElementById('spanElement');
         const titleForm = document.getElementById('title-form')
         const formMenu = document.getElementById('form-menu');
         const menuName = document.getElementById('name')
@@ -89,9 +93,12 @@
                 menuIcon.value = '';
                 menuKey.value = key;
                 btnCancel.classList.remove('d-none')
+                labelElement.style.display = 'block';
+                spanElement.style.display = 'block';
                 titleForm.innerHTML = 'Update Static Menu';
                 formMenu.querySelector('input[name="id"]')?.remove()
                 formMenu.insertAdjacentHTML("beforeend", `<input type="hidden" name="id" value="${id}"/>`)
+                
             })
         })
 
@@ -103,8 +110,11 @@
             menuKey.value = ''
             window['select_menu_icon'].setValue('')
             btnCancel.classList.add('d-none')
+            labelElement.style.display = 'none';
+            spanElement.style.display = 'none';
             titleForm.innerHTML = 'Create Static Menu';
             formMenu.querySelector('input[name="id"]')?.remove()
+            
         })
     </script>
 @endpush
@@ -122,7 +132,6 @@
                         <li data-id="{{ $row->id }}">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    
                                     <i class="modul-icon"><img src="{{ asset($row->icon) }}" alt="{{ $row->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
                                     {{ $row->name }}
                                 </div>
@@ -142,7 +151,7 @@
                                         <li data-id="{{ $sub->id }}">
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center">
-                                                    <i class="modul-icon {{ $sub->icon }}"><img src="{{ asset($row->icon) }}" alt="{{ $row->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
+                                                    <i class="modul-icon {{ $sub->icon }}"><img src="{{ asset($sub->icon) }}" alt="{{ $sub->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
                                                     {{ $sub->name }}
                                                 </div>
                                                 <div class="d-flex">
@@ -152,7 +161,7 @@
                                                         data-icon="{{ $sub->icon }}">Edit</a>
                                                     <a href="javascript:;" data-toggle="confirmation"
                                                         data-message="{{ __('adminportal.delete_confirmation') }}"
-                                                        data-action="{{ adminRoute('admin.cms-modules.delete', $sub->id) }}"
+                                                        data-action="{{ adminRoute('admin.modules.destroy', $sub->id) }}"
                                                         data-method="DELETE">Delete</a>
                                                 </div>
                                             </div>
@@ -182,11 +191,14 @@
                             </button>
                         </div>
                     </div>
-                    <x-portal::input type="text" name="name" label="Name" placeholder="Name" style="width: 325px;" horizontal>{{old('name')}}</x-portal::input>
-                    <x-portal::input type="file" name="icon" label="Icon" placeholder="Icon" style="width: 325px;" required horizontal>{{old('icon')}}</x-portal::inpu>
-                        <span style="font-size: 10px;margin-left: 80px;">Biarkan kosong jika tidak ingin mengedit</span>
-                        <label for="fileInput" style="font-size: 12px; margin-left: 80px;">Klik <a href="#" id="fileLabel">disini</a> untuk melihat <fieldset></fieldset></label>
-                    <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key" style="width: 325px;" horizontal>{{old('key')}}</x-portal::input>
+                    <x-portal::input type="text" name="name" label="Name" placeholder="Name" style="width: 440px;" horizontal>{{old('name')}}</x-portal::input>
+                    <x-portal::input type="file" name="icon" label="Icon" placeholder="Icon" style="width: 440px;" required horizontal>{{old('icon')}}</x-portal::input>
+
+                    <label for="fileInput" id="fileLabel" style="font-size: 12px; display: none; margin-left: 100px;" data-edit-mode="false">Klik <a href="{{ asset($row->icon) }}" target="_blank">disini</a> untuk melihat</label>
+                    <span id="spanElement" style="font-size: 10px; display: none; margin-left: 100px;" data-edit-mode="false">Biarkan kosong jika tidak ingin mengedit</span>
+
+
+                    <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key" style="width: 440px;" horizontal>{{old('key')}}</x-portal::input>
                       @push('js')
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {

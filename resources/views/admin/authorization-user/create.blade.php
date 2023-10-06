@@ -22,6 +22,22 @@
                             ></x-portal::input.checkbox.option>
                         </div>
                     </li>
+                    @if (count($module->sub))
+                    <ul class="list-group">
+                        @foreach ($module->sub as $sub)
+                            <li class="list-group-item p-0 ps-3" style="margin-left: 24px;">
+                                <div class="custom-checkbox">
+                                    <x-portal::input.checkbox.option
+                                        required="false"
+                                        name="permissions[{{ $sub->id }}]"
+                                        value="{{ $sub->id }}"
+                                        label="{{ $sub->name }}"
+                                    ></x-portal::input.checkbox.option>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             @endforeach
                 </ul>
         </div>

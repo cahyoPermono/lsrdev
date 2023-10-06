@@ -28,7 +28,7 @@ class AdminAuthorizationUserController extends AdminController
 
     public function create(Request $request)
     {
-        $appModules = AppModules::all();
+        $appModules = AppModules::whereNull('parent_id')->with('sub')->orderBy('sorting', 'asc')->get();
 
         return parent::create($request)->with('appModules', $appModules);
     }
