@@ -25,12 +25,12 @@ return [
 
     'servers' => [
         [
-            'url' => env('APP_URL', 'http://localhost'),
+            'url' => 'https://saturn.crocodic.net/medco/public',
             'description' => 'DEV',
         ],
         [
-            'url' => 'http://test.example.com',
-            'description' => 'LIVE',
+            'url' => env('APP_URL', 'http://localhost'),
+            'description' => 'LOCAL',
         ],
     ],
 
