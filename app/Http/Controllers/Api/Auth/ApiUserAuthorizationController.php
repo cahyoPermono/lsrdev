@@ -55,7 +55,7 @@ class ApiUserAuthorizationController extends ApiController
      *       ]
      *       },
      *       {
-     *       "label": "PWT Issuer",
+     *       "label": "PTW Issuer",
      *       "key": "ptw-issuer",
      *       "icon": "http://crocodic.test/medco-sa/public/fake/pwt-issuer.png",
      *       "sorting": 2,
