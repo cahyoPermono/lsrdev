@@ -88,7 +88,7 @@ class ApiUserAuthorizationController extends ApiController
                 ]
             ],
             [
-                "label" => "PWT Issuer",
+                "label" => "PTW Issuer",
                 "key" => "ptw-issuer",
                 "icon" => asset("fake/pwt-issuer.png"),
                 "sorting" => 2,
