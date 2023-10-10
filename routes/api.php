@@ -94,8 +94,8 @@ Route::middleware(['private-api'])
             });
 
         Route::controller(ApiPwtIssuerController::class)
-            ->prefix('pwt-issuer/{pid}')
-            ->as('pwt-issuer.')
+            ->prefix('ptw-issuer/{pid}')
+            ->as('ptw-issuer.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/{code}/wl', 'wlList')->name('wl-list');
