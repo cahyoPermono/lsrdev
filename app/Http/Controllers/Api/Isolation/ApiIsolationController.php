@@ -61,7 +61,8 @@ class ApiIsolationController extends ApiController
      *       "required": "CLO",
      *       "lock": 9,
      *       "is_isolated": true,
-     *       "verified_by": "Oscar Aufderhar"
+     *       "verified_by": "Oscar Aufderhar",
+     *       "name": "Oscar"
      *       },
      *       {
      *       "id": "ID-N-CG-MU-23-23DE566",
@@ -71,7 +72,8 @@ class ApiIsolationController extends ApiController
      *       "required": "CLO",
      *       "lock": 5,
      *       "is_isolated": false,
-     *       "verified_by": null
+     *       "verified_by": null,
+     *       "name": "Oscar"
      *       }
      *   ]
      * }

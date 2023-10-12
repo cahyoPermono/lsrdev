@@ -20,16 +20,18 @@ class IsolationService
                [
                     "id" => "ID-N-CG-MU-23-23DE" . rand(111, 999),
                     "code" => "ID-N-CG-MU-23-23DE" . rand(111, 999),
+                    "name" => fake()->name(),
                     "is_done" => true,
                     "ip" => "I0000" . rand(1, 9),
                     "required" => "CLO",
                     "lock" => rand(1, 9),
                     "is_isolated" => true,
-                    "verified_by" => fake()->name()
+                    "verified_by" => fake()->name(),
                ],
                [
                     "id" => "ID-N-CG-MU-23-23DE" . rand(111, 999),
                     "code" => "ID-N-CG-MU-23-23DE" . rand(111, 999),
+                    "name" => fake()->name(),
                     "is_done" => false,
                     "ip" => "I0000" . rand(1, 9),
                     "required" => "CLO",
