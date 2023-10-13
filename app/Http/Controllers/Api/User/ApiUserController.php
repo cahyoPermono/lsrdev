@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Auth\ProfileResource;
 use App\Services\MedcoApi\MedcoUserService;
 use Illuminate\Http\Request;
+use Laililmahfud\Adminportal\Controllers\ApiController;
 
 /**
  * @group User
  */
-class ApiUserController extends Controller
+class ApiUserController extends ApiController
 {
     public function __construct(
         private MedcoUserService $medcoUserService

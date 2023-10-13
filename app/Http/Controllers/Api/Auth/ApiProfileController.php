@@ -49,6 +49,7 @@ class ApiProfileController extends ApiController
     public function index(Request $request)
     {
         $person_id = $this->auth()->person_id;
+        abort_if(!$person_id, 401);
         $user = $this->medcoUserService->findUserByPersonId($person_id);
         abort_if(!$user, 404);
 
