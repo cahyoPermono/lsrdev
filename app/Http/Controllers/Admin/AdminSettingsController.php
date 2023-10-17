@@ -16,8 +16,8 @@ class AdminSettingsController extends AdminController
 
     public function index(Request $request){
         $min_active_day = Settings::where('key', 'min_active_day')->first();
-        return view('admin.settings.edit' , [
-            'min_active_day'=> $min_active_day
+        return view('admin.settings.index' , [
+            'min_active_day'=> $min_active_day?->value
         ]);
     }
     

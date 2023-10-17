@@ -17,9 +17,9 @@ class AppModulesService extends AdminService
         $search = $request->search ?? '';
         
         return $this->model::where(function ($q) use ($search) {
-                $q->orWhere("name", "like", "%" . $search . "%");
-                $q->orWhere("icon", "like", "%" . $search . "%");
-                $q->orWhere("key", "like", "%" . $search . "%");;
+                $q->orWhere("name", "ilike", "%" . $search . "%");
+                $q->orWhere("icon", "ilike", "%" . $search . "%");
+                $q->orWhere("key", "ilike", "%" . $search . "%");;
             })
             ->select("*")
             ->datatable($perPage, "app_modules.created_at");

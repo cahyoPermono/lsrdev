@@ -16,12 +16,12 @@ class UsersService extends AdminService
         $search = $request->search ?? '';
         
         return $this->model::where(function ($q) use ($search) {
-                $q->orWhere("email", "like", "%" . $search . "%");
-                $q->orWhere("workforce", "like", "%" . $search . "%");
-                $q->orWhere("identify_provider", "like", "%" . $search . "%");
-                $q->orWhere("pts_id", "like", "%" . $search . "%");
-                $q->orWhere("status", "like", "%" . $search . "%");
-                $q->orWhere("last_login", "like", "%" . $search . "%");
+                $q->orWhere("email", "ilike", "%" . $search . "%");
+                $q->orWhere("workforce", "ilike", "%" . $search . "%");
+                $q->orWhere("identify_provider", "ilike", "%" . $search . "%");
+                $q->orWhere("pts_id", "ilike", "%" . $search . "%");
+                $q->orWhere("status", "ilike", "%" . $search . "%");
+                $q->orWhere("last_login", "ilike", "%" . $search . "%");
 ;
             })
             ->select("*")

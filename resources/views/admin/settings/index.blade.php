@@ -4,7 +4,7 @@
             <form action="{{ route('admin.settings.store') }}" method="post">
                 @csrf
                 <x-portal::input type="number" name="min_active_day" label="Max in Active Day" placeholder="90" horizontal>
-                    {{$min_active_day->value}}
+                    {{$min_active_day}}
                 </x-portal::input>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </form>

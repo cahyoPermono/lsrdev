@@ -33,9 +33,6 @@ class SettingsService extends AdminService
 
     public function update(Request $request, $uuid)
     {
-        //$data =  $request->only(['value','key']);
-
-        //return $this->model::whereUuid($uuid)->update($data);
         return $this->model::updateOrCreate(
             ['key' => 'min_active_day'],
             ['value' => $request->input('min_active_day')]
