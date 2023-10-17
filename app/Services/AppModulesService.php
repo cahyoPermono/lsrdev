@@ -17,9 +17,9 @@ class AppModulesService extends AdminService
         $search = $request->search ?? '';
         
         return $this->model::where(function ($q) use ($search) {
-                $q->orWhere("name", "like", "%" . $search . "%");
-                $q->orWhere("icon", "like", "%" . $search . "%");
-                $q->orWhere("key", "like", "%" . $search . "%");;
+                $q->orWhere("name", "ilike", "%" . $search . "%");
+                $q->orWhere("icon", "ilike", "%" . $search . "%");
+                $q->orWhere("key", "ilike", "%" . $search . "%");;
             })
             ->select("*")
             ->datatable($perPage, "app_modules.created_at");
@@ -28,11 +28,12 @@ class AppModulesService extends AdminService
     
     public function store(Request $request)
     {
-        return $this->model::create([
-            "name" => $request->name,
-            "icon" => AdminPortal::uploadFile($request->file('icon')),
-            "key" => $request->key,
-        ]);
+        $data = $request->only(['name','key']);
+        if($request->hasFile('icon')){
+             $data['icon'] = AdminPortal::uploadFile($request->file('icon'));
+        }
+
+        return $this->model::updateOrCreate(['id'=>$request->id],$data);
     }
 
     public function update(Request $request, $uuid)

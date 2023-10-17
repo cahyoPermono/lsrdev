@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Models\AuthorizationUser;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\AdminController;
 use App\Services\AuthorizationUserService;
@@ -15,7 +16,8 @@ class AdminAuthorizationUserController extends AdminController
 
 
     protected $tableColumns = [
-        ["label" => "Email", "name" => "email"],["label" => "Select Modules", "name" => "modules_id"],
+        ["label" => "Email", "name" => "email"],
+        ["label" => "Select Modules", "name" => "modules_id"],
     ];
 
     protected $rules = [
@@ -23,10 +25,31 @@ class AdminAuthorizationUserController extends AdminController
         "permissions" => "required"
     ];
 
+
     public function create(Request $request)
     {
-        $appModules = AppModules::all(); // Mengambil semua data App Modules
-
-        return parent::create($request)->with('appModules', $appModules);
+        $this->data = [
+            "appModules" => AppModules::whereNull('parent_id')->with('sub')->orderBy('sorting', 'asc')->get(),
+            "authorization" => []
+        ];
+        return parent::create($request);
     }
+
+    public function edit(Request $request, $email)
+    {
+        $authorization = $this->moduleService()->findModuleIdByEmail($email)->toArray();
+        $this->data = [
+            "page_title" => $this->pageTitle,
+            "route" => $this->routePath,
+            "action" => route("{$this->routePath}.update", $email),
+            "form_views" => "{$this->resourcePath}.create",
+            "type" => "update",
+            "email" => $email,
+            "authorization" => $authorization,
+            "appModules" => AppModules::whereNull('parent_id')->with('sub')->orderBy('sorting', 'asc')->get()
+        ];
+
+        return view("portal::default.form", $this->data);
+    }
+
 }

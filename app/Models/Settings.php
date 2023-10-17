@@ -7,13 +7,10 @@ use Laililmahfud\Adminportal\Traits\HasDatatable;
 use Laililmahfud\Adminportal\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AppModules extends Model
+class Settings extends Model
 {
     use HasFactory,HasUuid,HasDatatable;
 
-    protected $table = "app_modules";
-    protected $fillable = ["name","icon","key"];
-    public function sub() {
-        return $this->hasMany(AppModules::class, 'parent_id', 'id');
-    }
+    protected $table = "settings";
+    protected $fillable = ["value","key"];
 }

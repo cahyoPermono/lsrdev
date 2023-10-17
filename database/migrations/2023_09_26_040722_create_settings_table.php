@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('app_modules', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('name');
-            $table->string('icon');
-            $table->string('key');
+            $table->integer('value');
+            $table->string('key')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('app_modules');
+        Schema::dropIfExists('settings');
     }
 };
