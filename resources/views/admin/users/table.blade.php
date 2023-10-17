@@ -1,12 +1,5 @@
 @foreach ($data as $row)
     <tr>
-        @itcan('delete admin.users')
-            <td>
-                <div class="form-checkbox">
-                    <input type="checkbox" class="table-checkbox" value="{{ $row->uuid }}" name="selected_ids[]">
-                </div>
-            </td>
-        @enditcan
         <td>{{ $row->workforce }}</td>
         <td>{{ $row->email }}</td>
         <td>{{ $row->identify_provider }}</td>
@@ -14,20 +7,18 @@
         <td>{{ $row->last_login }}</td>
         @if ($row->last_login)
             @php
-                $lastLoginDate = \Carbon\Carbon::parse($row->last_login);
-                $currentDate = \Carbon\Carbon::now();
-                $daysSinceLogin = $currentDate->diffInDays($lastLoginDate);
+                $daysSinceLogin = diffDays($row->last_login);
             @endphp
             <td>{{ $daysSinceLogin > 90 ? '> 90 days' : $daysSinceLogin . ' days' }}</td>
         @else
             <td>N/A</td>
         @endif
         <td>
-            @php
-                $minActiveDaySetting = \App\Models\Settings::where('key', 'min_active_day')->value('value');
-                $status = $daysSinceLogin > $minActiveDaySetting ? 'Inactive' : 'Active';
-            @endphp
-            {{ $status }}
+            @if ($row->status->value === 'active')
+                <span class="badge bg-success" style="font-weight: normal;font-size: 12px">Active</span>
+            @else
+                <span class="badge bg-danger" style="font-weight: normal;font-size: 12px">Inactive</span>
+            @endif
         </td>
 
         <td class="text-end">

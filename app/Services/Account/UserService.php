@@ -3,8 +3,9 @@ namespace App\Services\Account;
 
 use App\Models\Account\User;
 use Illuminate\Http\Request;
+use Laililmahfud\Adminportal\Services\AdminService;
 
-class UserService
+class UserService extends AdminService
 {
      public function __construct(
           public $model = User::class
@@ -26,7 +27,6 @@ class UserService
             })
             ->select("*")
             ->datatable($perPage, "users.created_at");
-
     }
 
      public function findUserByEmail($email)
@@ -42,5 +42,12 @@ class UserService
      public function createOrUpdateUser($email, $properties)
      {
           return $this->model::updateOrCreate(['email' => $email], $properties);
+     }
+
+     public function update(Request $request, $uuid){
+          return $this->model::where('uuid', $uuid)->update([
+               'status' => $request->status,
+               'last_login' => $request->last_login
+          ]);
      }
 }

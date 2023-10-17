@@ -55,4 +55,9 @@ class AuthorizationUserService extends AdminService
     {
         return $this->store($request);
     }
+
+    public function bulkDeleteByUuid($emails)
+    {
+        return $this->model::whereIn('email',$emails)->delete();
+    }
 }

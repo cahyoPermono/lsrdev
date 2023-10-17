@@ -219,5 +219,4 @@
         </div>
     </div>
 
-    <x-portal::input.select.asset />
 </x-portal::layout.admin>

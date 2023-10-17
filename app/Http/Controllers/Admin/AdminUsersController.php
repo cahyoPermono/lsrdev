@@ -2,9 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Services\Account\UserService;
-use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\AdminController;
-use App\Models\Settings;
 
 class AdminUsersController extends AdminController
 {
@@ -12,6 +10,7 @@ class AdminUsersController extends AdminController
     protected $pageTitle = "Users";
     protected $resourcePath = "admin.users";
     protected $moduleService = UserService::class;
+    protected $bulkAction = false;
     protected $add = false;
 
     protected $tableColumns = [
@@ -22,21 +21,6 @@ class AdminUsersController extends AdminController
         ["label" => "Last Login", "name" => "last_login"],
         ["label" => "Days Since Login", "name" => ""],
         ["label" => "Status", "name" => "status"],
-        
     ];
-
-    protected $rules = [
-        "email" => "required|min:3|max:150",
-        "workforce" => "required|min:3|max:150",
-        "identify_provider" => "required|min:3|max:150",
-        "pts_id" => "required|min:3|max:150",
-        "last_login" => "required|min:3|max:150",
-        "status" => "required|min:3|max:150",
-    ];
-    public function create(Request $request)
-    {
-        $settings = Settings::all();
-        return parent::create($request)->with('settings', $settings);
-    }
     
 }
