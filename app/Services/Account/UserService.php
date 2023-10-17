@@ -2,6 +2,7 @@
 namespace App\Services\Account;
 
 use App\Models\Account\User;
+use Illuminate\Http\Request;
 
 class UserService
 {
@@ -9,6 +10,24 @@ class UserService
           public $model = User::class
      ) {
      }
+
+    public function datatable(Request $request, $perPage = 10)
+    {
+        $search = $request->search ?? '';
+        
+        return $this->model::where(function ($q) use ($search) {
+                $q->orWhere("email", "ilike", "%" . $search . "%");
+                $q->orWhere("workforce", "ilike", "%" . $search . "%");
+                $q->orWhere("identify_provider", "ilike", "%" . $search . "%");
+                $q->orWhere("pts_id", "ilike", "%" . $search . "%");
+                $q->orWhere("status", "ilike", "%" . $search . "%");
+                $q->orWhere("last_login", "ilike", "%" . $search . "%");
+;
+            })
+            ->select("*")
+            ->datatable($perPage, "users.created_at");
+
+    }
 
      public function findUserByEmail($email)
      {

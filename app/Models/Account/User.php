@@ -5,11 +5,12 @@ namespace App\Models\Account;
 use App\Enum\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laililmahfud\Adminportal\Traits\HasDatatable;
 use Laililmahfud\Adminportal\Traits\HasUuid;
 
 class User extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid,HasDatatable;
 
     protected $table = 'users';
     protected $guarded = [];

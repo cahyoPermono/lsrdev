@@ -2,9 +2,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\AuthorizationUser;
+use App\Services\Account\AuthorizationUserService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\AdminController;
-use App\Services\AuthorizationUserService;
 use App\Models\AppModules;
 
 class AdminAuthorizationUserController extends AdminController

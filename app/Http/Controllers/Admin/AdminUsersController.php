@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Services\Account\UserService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\AdminController;
-use App\Services\UsersService;
 use App\Models\Settings;
 
 class AdminUsersController extends AdminController
@@ -11,8 +11,7 @@ class AdminUsersController extends AdminController
     protected $routePath = "admin.users";
     protected $pageTitle = "Users";
     protected $resourcePath = "admin.users";
-    protected $moduleService = UsersService::class;
-    protected $filter = true;
+    protected $moduleService = UserService::class;
     protected $add = false;
 
     protected $tableColumns = [
@@ -37,7 +36,6 @@ class AdminUsersController extends AdminController
     public function create(Request $request)
     {
         $settings = Settings::all();
-
         return parent::create($request)->with('settings', $settings);
     }
     
