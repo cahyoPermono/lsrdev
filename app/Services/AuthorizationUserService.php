@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\Models\AuthorizationUser;
+use Illuminate\Support\Str;
 use Laililmahfud\Adminportal\Services\AdminService;
 
 class AuthorizationUserService extends AdminService
@@ -16,39 +17,42 @@ class AuthorizationUserService extends AdminService
     {
         $search = $request->search ?? '';
 
-        // return $this->model::where(function ($q) use ($search) {
-        //     $q->orWhere("email", "like", "%" . $search . "%");
-        // })
-        //     ->select("*")
-        //     ->datatable($perPage, "created_at");
+
         return $this->model::with('modules')
             ->select('email')
+            ->when($search, fn($query) => $query->where("email", "ilike", "%{$search}%"))
             ->groupBy('email')
-            ->datatable($perPage, "created_at");
-            
-        // foreach($request->permissions as $id){
-        //     $this->AppModules::select([
-        //         'email' => $request->email,
-        //         'modules_id' => $id,
-        //     ]);
-        // }
-
+            ->datatable($perPage, "email");
     }
 
+    public function deleteByUuid($email)
+    {
+        return $this->model::where('email',$email)->delete();
+    }
+
+    public function findModuleIdByEmail($email)
+    {
+        return $this->model::query()
+            ->where('email', $email)
+            ->pluck('modules_id');
+    }
     public function store(Request $request)
     {
-        foreach($request->permissions as $id){
-            $this->model::create([
-                'email' => $request->email,
+        $email = $request->email;
+        $this->model::where('email',$email)->delete();
+        
+        $this->model::insert(
+            collect($request->permissions)->map(fn($id)=>[
+                'uuid' => Str::uuid(),
+                'created_at' => now(),
+                'email' => $email,
                 'modules_id' => $id
-            ]);
-        }
+            ])->toArray()
+        );
     }
 
-    public function update(Request $request, $uuid)
+    public function update(Request $request, $email)
     {
-        $data = $request->only(['email', 'select_modules']);
-
-        return $this->model::whereUuid($uuid)->update($data);
+        return $this->store($request);
     }
 }

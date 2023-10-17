@@ -47,8 +47,6 @@
             color: #000;
             margin-left: 15px;
         }
-
-    
     </style>
     {{-- https://www.hesamurai.com/nested-sort/latest/ --}}
     <script src="{{ asset('adminportal/js/Sortable.js?') }}"></script>
@@ -80,25 +78,26 @@
         const menuName = document.getElementById('name')
         const menuIcon = document.getElementById('icon')
         const menuKey = document.getElementById('key')
-        
+        const viewIcon = document.getElementById('view-icon')
+        const linkIcon = document.getElementById('link-icon')
+
         document.querySelectorAll('.btn-edit').forEach((item) => {
             item.addEventListener('click', function() {
-                console.log(menuIcon)
                 const id = item.getAttribute('data-id');
                 const name = item.getAttribute('data-name');
-                const icon = item.getAttribute('data-icon').replace('isax', '');
                 const key = item.getAttribute('data-key');
+                const icon = item.getAttribute('data-icon');
                 menuIcon.removeAttribute('required');
                 menuName.value = name;
                 menuIcon.value = '';
                 menuKey.value = key;
                 btnCancel.classList.remove('d-none')
-                labelElement.style.display = 'block';
-                spanElement.style.display = 'block';
-                titleForm.innerHTML = 'Update Static Menu';
+                titleForm.innerHTML = 'Update Module';
+                viewIcon.classList.remove('d-none')
+                linkIcon.setAttribute('href',icon)
                 formMenu.querySelector('input[name="id"]')?.remove()
                 formMenu.insertAdjacentHTML("beforeend", `<input type="hidden" name="id" value="${id}"/>`)
-                
+
             })
         })
 
@@ -108,13 +107,11 @@
             menuName.value = ''
             menuIcon.value = ''
             menuKey.value = ''
-            window['select_menu_icon'].setValue('')
+            menuIcon.setAttribute('required', true);
             btnCancel.classList.add('d-none')
-            labelElement.style.display = 'none';
-            spanElement.style.display = 'none';
-            titleForm.innerHTML = 'Create Static Menu';
+            viewIcon.classList.add('d-none')
+            titleForm.innerHTML = 'Create New Module';
             formMenu.querySelector('input[name="id"]')?.remove()
-            
         })
     </script>
 @endpush
@@ -132,13 +129,15 @@
                         <li data-id="{{ $row->id }}">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <i class="modul-icon"><img src="{{ asset($row->icon) }}" alt="{{ $row->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
+                                    <i class="modul-icon"><img src="{{ asset($row->icon) }}"
+                                            alt="{{ $row->name }} Icon" class="rounded-circle"
+                                            style="height: 40px; width: 40px;"></i>
                                     {{ $row->name }}
                                 </div>
                                 <div class="d-flex">
                                     <a href="javascript:;" class="btn-edit" data-id="{{ $row->id }}"
                                         data-name="{{ $row->name }}" data-key="{{ $row->key }}"
-                                        data-icon="{{  asset($row->icon) }}">Edit</a>
+                                        data-icon="{{ asset($row->icon) }}">Edit</a>
                                     <a href="javascript:;" data-toggle="confirmation"
                                         data-message="{{ __('adminportal.delete_confirmation') }}"
                                         data-action="{{ adminRoute('admin.modules.destroy', $row->uuid) }}"
@@ -151,14 +150,17 @@
                                         <li data-id="{{ $sub->id }}">
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center">
-                                                    <i class="modul-icon {{ $sub->icon }}"><img src="{{ asset($sub->icon) }}" alt="{{ $sub->name }} Icon" class="rounded-circle" style="height: 40px; width: 40px;"></i>
+                                                    <i class="modul-icon {{ $sub->icon }}"><img
+                                                            src="{{ asset($sub->icon) }}"
+                                                            alt="{{ $sub->name }} Icon" class="rounded-circle"
+                                                            style="height: 40px; width: 40px;"></i>
                                                     {{ $sub->name }}
                                                 </div>
                                                 <div class="d-flex">
                                                     <a href="javascript:;" class="btn-edit"
                                                         data-id="{{ $sub->id }}" data-name="{{ $sub->name }}"
                                                         data-key="{{ $sub->key }}"
-                                                        data-icon="{{ $sub->icon }}">Edit</a>
+                                                        data-icon="{{ asset($sub->icon) }}">Edit</a>
                                                     <a href="javascript:;" data-toggle="confirmation"
                                                         data-message="{{ __('adminportal.delete_confirmation') }}"
                                                         data-action="{{ adminRoute('admin.modules.destroy', $sub->id) }}"
@@ -176,11 +178,14 @@
         </div>
         <div class="col-sm-5">
             <section class="app-content shadow-sm">
-                <form action="{{ route('admin.modules.store') }}" method="post" id="form-menu" enctype="multipart/form-data">
+                <form action="{{ route('admin.modules.store') }}" method="post" id="form-menu"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="header-form d-flex justify-content-between">
                         <div class="left-side d-flex align-items-center">
-                            <h5 class="form-title" id="title-form">@lang('adminportal.create_app_module')</h5>
+                            <h5 class="form-title" id="title-form">
+                                Create New Module
+                            </h5>
                         </div>
                         <div class="right-side d-flex">
                             <a href="javascript:;" class="btn btn-light btn-cancel d-none text-upper">
@@ -191,37 +196,28 @@
                             </button>
                         </div>
                     </div>
-                    <x-portal::input type="text" name="name" label="Name" placeholder="Name" style="width: 440px;" horizontal>{{old('name')}}</x-portal::input>
-                    <x-portal::input type="file" name="icon" label="Icon" placeholder="Icon" style="width: 440px;" required horizontal>{{old('icon')}}</x-portal::input>
+                    <x-portal::input type="text" name="name" label="Name" placeholder="Name"
+                        style="width: 440px;" horizontal>{{ old('name') }}</x-portal::input>
+                    <x-portal::input type="file" name="icon" label="Icon" placeholder="Icon"
+                        style="width: 440px;" horizontal>{{ old('icon') }}</x-portal::input>
 
-                    <label for="fileInput" id="fileLabel" style="font-size: 12px; display: none; margin-left: 100px;" data-edit-mode="false">Klik <a href="{{ asset($row->icon) }}" target="_blank">disini</a> untuk melihat</label>
-                    <span id="spanElement" style="font-size: 10px; display: none; margin-left: 100px;" data-edit-mode="false">Biarkan kosong jika tidak ingin mengedit</span>
+                    <div id="view-icon" class="d-none" style="margin-top: -10px;margin-bottom: 20px;">
+                        <label for="fileInput" id="fileLabel"
+                            style="font-size: 12px; margin-left: 100px;" data-edit-mode="false">
+                            Klik <a href="" id="link-icon" target="_blank">disini</a> untuk
+                            melihat
+                        </label>
+                        <span id="spanElement" class="d-block" style="font-size: 10px; margin-left: 100px;"
+                            data-edit-mode="false">Biarkan kosong jika tidak ingin mengedit</span>
+                    </div>
 
 
-                    <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key" style="width: 440px;" horizontal>{{old('key')}}</x-portal::input>
-                      @push('js')
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var nameInput = document.getElementById('name');
-                                var keyInput = document.getElementById('key');
-
-                                nameInput.addEventListener('input', function () {
-                                    var nameValue = this.value;
-                                    var key = generateKeyFromName(nameValue);
-                                    keyInput.value = key;
-                                });
-
-                                function generateKeyFromName(name) {
-                                    var key = name.replace(/[^a-za-z0-9]/g, '-');
-                                    return key;
-                                }
-                            });
-                        </script>
-                        @endpush                  
+                    <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key"
+                        style="width: 440px;" horizontal>{{ old('key') }}</x-portal::input>
                 </form>
             </section>
         </div>
     </div>
 
     <x-portal::input.select.asset />
-    </x-portal::layout.admin>
+</x-portal::layout.admin>
