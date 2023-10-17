@@ -81,7 +81,7 @@ class ApiPwtIssuerController extends ApiController
      * @authenticated
      * @defaultParam
      * @pathParam pid string required
-     * @pathParam code string required
+     * @pathParam code string optional
      * 
      * @requestBody application/x-www-form-urlencoded
      * @bodyParam status string required
