@@ -80,12 +80,13 @@ return [
      | For display dropdown notification on header
      | --------------------------------------------
      */
-    'notification' => [
-        'display' => true,
-        'interval' => 120,
-        'path' => 'admin.notification.index',
-        'ajax_path' => 'notification-admin/list'
-    ],
+    'notification' => false,
+    // 'notification' => [
+    //     'display' => "false",
+    //     'interval' => 120,
+    //     'path' => 'admin.notification.index',
+    //     'ajax_path' => 'notification-admin/list'
+    // ],
 
     /*
      | --------------------------------------------

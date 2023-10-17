@@ -20,3 +20,4 @@ yarn-error.log
 /storage/api-docs/openapi-documentation.json
 .note
 /storage/blacklist-token
+/public/uploads
