@@ -27,7 +27,7 @@ class AuthorizationUserService extends AdminService
 
     public function deleteByUuid($email)
     {
-        return $this->model::where('email',$email)->delete();
+        return $this->model::where('email', $email)->delete();
     }
 
     public function findModuleIdByEmail($email)
@@ -36,13 +36,40 @@ class AuthorizationUserService extends AdminService
             ->where('email', $email)
             ->pluck('modules_id');
     }
+
+
+    public function findUserModule($email)
+    {
+        $modules = $this->model::query()
+            ->join('app_modules as module', 'module.id', 'authorization_users.modules_id')
+            ->where('authorization_users.email', $email)
+            ->select(['module.*'])
+            ->orderBy('module.sorting', 'asc')
+            ->get();
+
+
+        return $modules->whereNull('parent_id')
+            ->map(function ($module) use ($modules) {
+                return [
+                    "label" => $module->name,
+                    "key" => $module->key,
+                    "icon" => asset($module->icon),
+                    "sorting" => $module->sorting,
+                    "subs" => $modules->where('parent_id', $module->id)
+                        ->map(fn($row) => [
+                            "label" => $row->name,
+                            "key" => $row->key
+                        ])->values()
+                ];
+            })->values();
+    }
     public function store(Request $request)
     {
         $email = $request->email;
-        $this->model::where('email',$email)->delete();
-        
+        $this->model::where('email', $email)->delete();
+
         $this->model::insert(
-            collect($request->permissions)->map(fn($id)=>[
+            collect($request->permissions)->map(fn($id) => [
                 'uuid' => Str::uuid(),
                 'created_at' => now(),
                 'email' => $email,
@@ -58,6 +85,6 @@ class AuthorizationUserService extends AdminService
 
     public function bulkDeleteByUuid($emails)
     {
-        return $this->model::whereIn('email',$emails)->delete();
+        return $this->model::whereIn('email', $emails)->delete();
     }
 }

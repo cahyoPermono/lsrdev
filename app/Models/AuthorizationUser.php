@@ -14,8 +14,8 @@ class AuthorizationUser extends Model
     protected $table = "authorization_users";
     protected $fillable = ["email","modules_id"];
 
-    public function appModules() {
-        return $this->hasMany(AppModules::class);
+    public function module() {
+        return $this->hasMany(AppModules::class,"id","modules_id");
     }
 
     public function modules() {

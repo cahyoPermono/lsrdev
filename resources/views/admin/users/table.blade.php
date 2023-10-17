@@ -33,3 +33,9 @@
 
     </tr>
 @endforeach
+<x-slot name="buttons">
+    <a href="javascript:;" data-toggle="confirmation" data-message="Anda yakin ingin melakukan validasi status?"
+        data-action="{{ route('admin.users.sync-status') }}" class="btn btn-dark btn-icon text-upper ms-2">
+        Sync Status
+    </a>
+</x-slot>

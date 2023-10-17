@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Actions\Auth\ApiLogoutAction;
 use App\Http\Controllers\Controller;
+use App\Services\Account\AuthorizationUserService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
 
@@ -12,6 +13,9 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
  */
 class ApiUserAuthorizationController extends ApiController
 {
+    public function __construct(
+        private AuthorizationUserService $authorizationUserService
+    ){}
 
     /**
      * Logout
@@ -74,6 +78,8 @@ class ApiUserAuthorizationController extends ApiController
      */
     public function authorization(Request $request)
     {
+        $user = $this->auth();
+        $a = $this->authorizationUserService->findUserModule($user->email);
         $authorization = [
             [
                 "label" => "Self Screening",
@@ -102,6 +108,6 @@ class ApiUserAuthorizationController extends ApiController
                 "subs" => []
             ]
         ];
-        return $this->sendSuccess($authorization);
+        return $this->sendSuccess($a);
     }
 }

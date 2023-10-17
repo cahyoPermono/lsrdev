@@ -3,6 +3,7 @@ namespace App\Actions\Auth;
 
 use App\Enum\Status;
 use App\Helpers\Faker\UserDataFake;
+use App\Models\Settings;
 use App\Services\Account\UserActivityService;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
@@ -21,8 +22,8 @@ class ApiLoginAction
      public function handle(Request $request)
      {
 
-          // TODO : get this from setting database
-          $maxLastLoginDays = 90;
+          $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
+          $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
 
           if (!$ptsUser = $this->medcoUserService->findUserByEmail($request->email)) {
                throw new BadRequestException(__('alert.email_not_found'));

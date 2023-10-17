@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Services\Account\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Laililmahfud\Adminportal\Controllers\AdminController;
 
 class AdminUsersController extends AdminController
@@ -22,5 +24,11 @@ class AdminUsersController extends AdminController
         ["label" => "Days Since Login", "name" => ""],
         ["label" => "Status", "name" => "status"],
     ];
-    
+
+
+    public function syncStatus(Request $request)
+    {
+        Artisan::call('app:deactivate-inactive-users');
+        return back()->with(['success' => 'Sync status berhasil dijalankan!']);
+    }
 }
