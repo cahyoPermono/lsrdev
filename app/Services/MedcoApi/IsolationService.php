@@ -44,21 +44,113 @@ class IsolationService
 
      public function findIsolationAutomation($pid)
      {
-          return [];
+          return [
+               [
+                    "id" => "GG-MU-21-21DE" . rand(111, 999),
+                    "code" => "GG-MU-21-21DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => true,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => true,
+                    "verified_by" => fake()->name(),
+               ],
+               [
+                    "id" => "ID-N-CG-MU-21-21DE" . rand(111, 999),
+                    "code" => "ID-N-CG-MU-21-21DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => false,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => false,
+                    "verified_by" => null
+               ]
+          ];
      }
 
      public function findIsolationElectrical($pid)
      {
-          return [];
+          return [
+               [
+                    "id" => "OKE-OC-20-20DE" . rand(111, 999),
+                    "code" => "OKE-OC-20-20DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => true,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => true,
+                    "verified_by" => fake()->name(),
+               ],
+               [
+                    "id" => "OKE-OC-20-20DE" . rand(111, 999),
+                    "code" => "OKE-OC-20-20DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => false,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => false,
+                    "verified_by" => null
+               ]
+          ];
      }
 
      public function findIsolationEsd($pid)
      {
-          return [];
+          return [
+               [
+                    "id" => "CROCO-11-11DE" . rand(111, 999),
+                    "code" => "CROCO-11-11DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => true,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => true,
+                    "verified_by" => fake()->name(),
+               ],
+               [
+                    "id" => "CROCO-11-11DE" . rand(111, 999),
+                    "code" => "CROCO-11-11DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => false,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => false,
+                    "verified_by" => null
+               ]
+          ];
      }
 
      public function findIsolationPositive($pid)
      {
-          return [];
+          return [
+               [
+                    "id" => "IDN-MDK-DE" . rand(111, 999),
+                    "code" => "IDN-MDK-DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => true,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => true,
+                    "verified_by" => fake()->name(),
+               ],
+               [
+                    "id" => "IDN-MDK-DE" . rand(111, 999),
+                    "code" => "IDN-MDK-DE" . rand(111, 999),
+                    "name" => fake()->name(),
+                    "is_done" => false,
+                    "ip" => "I0000" . rand(1, 9),
+                    "required" => "CLO",
+                    "lock" => rand(1, 9),
+                    "is_isolated" => false,
+                    "verified_by" => null
+               ]
+          ];
      }
 }
