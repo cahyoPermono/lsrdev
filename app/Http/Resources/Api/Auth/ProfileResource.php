@@ -32,7 +32,7 @@ class ProfileResource extends JsonResource
             'entity' => ":TODO",
             'person_status' => $this->person_status,
             'supervisor' => $spv,
-            'qr_code' => "https://chart.googleapis.com/chart?chl{$this->person_id}&chs=500x500&cht=qr&chld=H%7C0"
+            'qr_code' => "https://chart.googleapis.com/chart?chl={$this->person_id}&chs=500x500&cht=qr&chld=H%7C0"
         ];
     }
 }

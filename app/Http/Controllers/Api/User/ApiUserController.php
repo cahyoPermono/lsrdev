@@ -41,7 +41,7 @@ class ApiUserController extends ApiController
      *       "entity": ":TODO",
      *       "person_status": "A",
      *       "supervisor": "Ade  ANWAR",
-     *       "qr_code": "https://chart.googleapis.com/chart?chl19821141&chs=500x500&cht=qr&chld=H%7C0"
+     *       "qr_code": "https://chart.googleapis.com/chart?chl=19821141&chs=500x500&cht=qr&chld=H%7C0"
      *   }
      *  }
      */
