@@ -29,6 +29,7 @@ Route::middleware(['portal-api'])
     ->group(function () {
         Route::post('/auth/login', ApiLoginController::class)->name('auth.login');
     });
+    
 
 Route::middleware(['private-api'])
     ->group(function () {
