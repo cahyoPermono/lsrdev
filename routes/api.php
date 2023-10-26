@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
 use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
+use App\Http\Controllers\Api\Page\ApiMainPageController;
 use App\Http\Controllers\Api\User\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,7 @@ Route::middleware(['portal-api'])
     ->group(function () {
         Route::post('/auth/login', ApiLoginController::class)->name('auth.login');
     });
-    
+
 
 Route::middleware(['private-api'])
     ->group(function () {
@@ -67,6 +68,16 @@ Route::middleware(['private-api'])
                 Route::get('/competency', 'competency')->name('training');
             });
 
+        Route::controller(ApiMainPageController::class)
+            ->prefix('main-page')
+            ->as('main-page.')
+            ->group(function () {
+                Route::get('/user-case-main', 'userCaseMain')->name('user-case-main');
+                Route::get('/main-summary-production', 'mainSummaryProduction')->name('main-summary-production');
+                Route::get('/main-chart-gas', 'mainChartGas')->name('main-chart-gas');
+                Route::get('/main-chart-oil', 'mainChartOil')->name('main-chart-oil');
+                Route::get('/main-data-list', 'mainDataList')->name('main-data-list');
+            });
 
         Route::controller(ApiOtherScreeningCertificateController::class)
             ->prefix('other-screening/{person_id}/certificate')
@@ -102,8 +113,6 @@ Route::middleware(['private-api'])
                 Route::get('/{code}/wl', 'wlList')->name('wl-list');
                 Route::put('/{code}/wl/update', 'updateWl')->name('wl-update');
             });
-
-
     });
 
 Route::get('/key', function () {
