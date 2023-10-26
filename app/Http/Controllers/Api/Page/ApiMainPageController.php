@@ -188,29 +188,58 @@ class ApiMainPageController extends ApiController
      *     "data": [
      *       {
      *          "production": "Corridor",
-     *          "mmscfd": "12345",
-     *          "bpopd": "67890"
+     *          "mmscfd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *           },
+     *          "bpopd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *            }
      *        },
      *       {
      *          "production": "Onshore",
-     *          "mmscfd": "12345",
-     *          "bpopd": "67890"
-
+     *          "mmscfd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *           },
+     *          "bpopd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *            }
      *        },
      *       {
      *          "production": "Offshore",
-     *          "mmscfd": "12345",
-     *          "bpopd": "67890"
+     *          "mmscfd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *           },
+     *          "bpopd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *            }
      *        },
      *       {
      *          "production": "Noa",
-     *          "mmscfd": "12345",
-     *          "bpopd": "67890"
+     *          "mmscfd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *           },
+     *          "bpopd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *            }
      *        },
      *       {
      *          "production": "International",
-     *          "mmscfd": "12345",
-     *          "bpopd": "67890"
+     *          "mmscfd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *           },
+     *          "bpopd": {
+     *              "net": 12345,
+     *              "gross": 67890
+     *            }
      *        }
      *     ]
      * }

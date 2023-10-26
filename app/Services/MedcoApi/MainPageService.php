@@ -130,28 +130,58 @@ class MainPageService
         $dataList = [
             [
                 "production" => "Corridor",
-                "mmscfd" => rand(500000, 1_000_000),
-                "bpopd" => rand(500000, 1_000_000),
+                "mmscfd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
+                "bpopd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
             ],
             [
                 "production" => "Onshore",
-                "mmscfd" => rand(500000, 1_000_000),
-                "bpopd" => rand(500000, 1_000_000),
+                "mmscfd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
+                "bpopd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
             ],
             [
                 "production" => "Offshore",
-                "mmscfd" => rand(500000, 1_000_000),
-                "bpopd" => rand(500000, 1_000_000),
+                "mmscfd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
+                "bpopd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
             ],
             [
                 "production" => "Noa",
-                "mmscfd" => rand(500000, 1_000_000),
-                "bpopd" => rand(500000, 1_000_000),
+                "mmscfd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
+                "bpopd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
             ],
             [
                 "production" => "International",
-                "mmscfd" => rand(500000, 1_000_000),
-                "bpopd" => rand(500000, 1_000_000),
+                "mmscfd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
+                "bpopd" => [
+                    "net" => rand(500000, 1_000_000),
+                    "gross" => rand(500000, 1_000_000),
+                ],
             ],
         ];
 
