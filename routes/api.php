@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
 use App\Http\Controllers\Api\Page\ApiMainPageController;
+use App\Http\Controllers\Api\Page\ApiAssetsPageController;
 use App\Http\Controllers\Api\User\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +78,17 @@ Route::middleware(['private-api'])
                 Route::get('/main-chart-gas', 'mainChartGas')->name('main-chart-gas');
                 Route::get('/main-chart-oil', 'mainChartOil')->name('main-chart-oil');
                 Route::get('/main-data-list', 'mainDataList')->name('main-data-list');
+            });
+
+        Route::controller(ApiAssetsPageController::class)
+            ->prefix('assets-page')
+            ->as('assets-page.')
+            ->group(function () {
+                Route::get('/user-case-assets', 'userCaseMain')->name('user-case-assets');
+                Route::get('/assets-summary-production', 'assetsSummaryProduction')->name('assets-summary-production');
+                Route::get('/assets-chart-gas', 'assetsChartGas')->name('assets-chart-gas');
+                Route::get('/assets-chart-oil', 'assetsChartOil')->name('assets-chart-oil');
+                Route::get('/assets-data-list', 'assetsDataList')->name('assets-data-list');
             });
 
         Route::controller(ApiOtherScreeningCertificateController::class)
