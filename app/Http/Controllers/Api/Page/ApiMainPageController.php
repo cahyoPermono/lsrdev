@@ -22,6 +22,8 @@ class ApiMainPageController extends ApiController
      * User Case Main
      *
      * @authenticated
+     * @defaultParam
+     * 
      * @response {
      *   "status": 200,
      *   "message": "success",
@@ -63,6 +65,8 @@ class ApiMainPageController extends ApiController
      * Main Summary Production
      *
      * @authenticated
+     * @defaultParam
+     * 
      * @response {
      *     "status": 200,
      *     "message": "success",
@@ -100,6 +104,8 @@ class ApiMainPageController extends ApiController
      * Main Chart Gas
      *
      * @authenticated
+     * @defaultParam
+     * 
      * @response {
      *     "status": 200,
      *     "message": "success",
@@ -141,6 +147,8 @@ class ApiMainPageController extends ApiController
      * Main Chart Oil
      *
      * @authenticated
+     * @defaultParam
+     * 
      * @response {
      *     "status": 200,
      *     "message": "success",
@@ -182,6 +190,8 @@ class ApiMainPageController extends ApiController
      * Main Data List
      *
      * @authenticated
+     * @defaultParam
+     * 
      * @response {
      *     "status": 200,
      *     "message": "success",
