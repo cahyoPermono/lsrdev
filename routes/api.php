@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
 use App\Http\Controllers\Api\Page\ApiMainPageController;
 use App\Http\Controllers\Api\Page\ApiAssetsPageController;
+use App\Http\Controllers\Api\Page\ApiBlockPageController;
+use App\Http\Controllers\Api\Page\ApiFieldPageController;
 use App\Http\Controllers\Api\User\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -89,6 +91,27 @@ Route::middleware(['private-api'])
                 Route::get('/assets-chart-gas', 'assetsChartGas')->name('assets-chart-gas');
                 Route::get('/assets-chart-oil', 'assetsChartOil')->name('assets-chart-oil');
                 Route::get('/assets-data-list', 'assetsDataList')->name('assets-data-list');
+            });
+
+        Route::controller(ApiBlockPageController::class)
+            ->prefix('block-page/{assets_id}')
+            ->as('block-page.')
+            ->group(function () {
+                Route::get('/user-case-block', 'userCaseBlock')->name('user-case-block');
+                Route::get('/block-summary-production', 'blockSummaryProduction')->name('block-summary-production');
+                Route::get('/block-chart-gas', 'blockChartGas')->name('block-chart-gas');
+                Route::get('/block-chart-oil', 'blockChartOil')->name('block-chart-oil');
+                Route::get('/block-data-list', 'blockDataList')->name('block-data-list');
+            });
+        Route::controller(ApiFieldPageController::class)
+            ->prefix('field-page/{assets_id}')
+            ->as('field-page.')
+            ->group(function () {
+                Route::get('/user-case-field', 'userCaseField')->name('user-case-field');
+                Route::get('/field-summary-production', 'fieldSummaryProduction')->name('field-summary-production');
+                Route::get('/field-chart-gas', 'fieldChartGas')->name('field-chart-gas');
+                Route::get('/field-chart-oil', 'fieldChartOil')->name('field-chart-oil');
+                Route::get('/field-data-list', 'fieldDataList')->name('field-data-list');
             });
 
         Route::controller(ApiOtherScreeningCertificateController::class)
