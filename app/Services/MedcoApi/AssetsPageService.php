@@ -2,172 +2,31 @@
 
 namespace App\Services\MedcoApi;
 
-use App\Services\MedcoApi\MainPageService; // Import MainPageService
 
-class AssetsPageService
+class AssetsPageService extends MainPageService
 {
-     private $mainPageService;
-
-     public function __construct(MainPageService $mainPageService)
+     public function userCaseAssets($main_id)
      {
-          $this->mainPageService = $mainPageService;
+          return parent::userCaseMain();
      }
 
-     public function userCaseMain($main_id)
+     public function assetsSummaryProduction($main_id)
      {
-          return $this->mainPageService->userCaseMain($main_id);
+          return parent::mainSummaryProduction();
      }
 
-     public function assetsSummaryProduction()
+     public function assetsChartGas($main_id, $filter = null)
      {
-          return [
-               "total_value" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
-               ],
-               "items" => [
-                    [
-                         "title" => "Day Variance",
-                         "value" => [
-                              "net" => rand(500000, 1_000_000),
-                              "gross" => rand(500000, 1_000_000),
-                         ],
-                    ],
-                    [
-                         "title" => "YTD Production",
-                         "value" => [
-                              "net" => rand(500000, 1_000_000),
-                              "gross" => rand(500000, 1_000_000),
-                         ],
-                    ],
-               ],
-          ];
+          return parent::mainChartGas($filter);
      }
 
-     public function assetsChartGas()
+     public function assetsChartOil($main_id, $filter = null)
      {
-          $data = [
-               [
-                    "month" => "October",
-                    "title" => "Budget",
-                    "value" => [
-                         "net" => 12345,
-                         "gross" => 67890,
-                    ],
-               ],
-               [
-                    "month" => "November",
-                    "title" => "Actual",
-                    "value" => [
-                         "net" => 12345,
-                         "gross" => 67890,
-                    ],
-               ],
-               [
-                    "month" => "December",
-                    "title" => "Outlook",
-                    "value" => [
-                         "net" => 12345,
-                         "gross" => 67890,
-                    ],
-               ]
-          ];
-
-          return $data;
+          return parent::mainChartOil($filter);
      }
 
-     public function assetsChartOil()
+     public function assetsDataList($main_id)
      {
-          $data = [
-               [
-                    "month" => "October",
-                    "title" => "Budget",
-                    "value" => [
-                         "net" => 12345,
-                         "gross" => 67890,
-                    ],
-               ],
-               [
-                    "month" => "November",
-                    "title" => "Actual",
-                    "value" => [
-                         "net" => 12345,
-                         "gross" => 67890,
-                    ],
-               ],
-               [
-                    "month" => "December",
-                    "title" => "Outlook",
-                    "value" => [
-                         "net" => 12345,
-                         "gross" => 67890,
-                    ],
-               ]
-          ];
-
-          return $data;
-     }
-
-     public function assetsDataList()
-     {
-          $dataList = [
-               [
-                    "production" => "Block A",
-                    "mmscfd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "bpopd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-               ],
-               [
-                    "production" => "Dayung",
-                    "mmscfd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "bpopd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-               ],
-               [
-                    "production" => "Sumpal",
-                    "mmscfd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "bpopd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-               ],
-               [
-                    "production" => "Rawa Letang",
-                    "mmscfd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "bpopd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-               ],
-               [
-                    "production" => "Gelam",
-                    "mmscfd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "bpopd" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-               ],
-          ];
-
-          return $dataList;
+          return parent::mainDataList();
      }
 }

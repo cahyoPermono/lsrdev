@@ -29,29 +29,41 @@ class ApiMainPageController extends ApiController
      *   "message": "success",
      *   "data": [
      *       {
+     *          "value": {
+     *              "net": 748888,
+     *              "gross": 693953
+     *          },
+     *          "values": {
+     *              "net": -1,
+     *              "gross": 1
+     *          },
      *          "title": "MEDC.",
-     *          "date": "2023-08-24",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        },
+     *          "date": "2023-08-24"
+     *       },
      *       {
+     *          "value": {
+     *              "net": 931947,
+     *              "gross": 817878
+     *          },
+     *          "values": {
+     *              "net": -1,
+     *              "gross": 1
+     *          },
      *          "title": "Brent",
-     *          "date": "2023-08-24",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        },
+     *          "date": "2023-08-24"
+     *       },
      *       {
-     *          "title": "CPI",
-     *          "date": "2023-08-24",
      *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        }
+     *              "net": 872194,
+     *              "gross": 882703
+     *          },
+     *          "values": {
+     *              "net": -1,
+     *              "gross": -1
+     *          },
+     *          "title": "CPI",
+     *          "date": "2023-08-24"
+     *       }
      *     ]
      * }
      */
@@ -76,20 +88,28 @@ class ApiMainPageController extends ApiController
      *             "gross": 67890
      *         },
      *         "items": [
-     *             {
-     *                 "title": "Day Variance",
-     *                 "value": {
-     *                     "net": 54321,
-     *                     "gross": 98765
-     *                 }
-     *             },
-     *             {
-     *                 "title": "YTD Production",
-     *                 "value": {
-     *                     "net": 67890,
-     *                     "gross": 12345
-     *                 }
-     *             }
+     *           {
+     *             "title": "Day Variance",
+     *             "value": {
+     *                 "net": 553271,
+     *                 "gross": 772923
+     *              },
+     *              "values": {
+     *                  "net": -1,
+     *                  "gross": -1
+     *              }
+     *           },
+     *           {
+     *              "title": "YTD Production",
+     *              "value": {
+     *                  "net": 553271,
+     *                  "gross": 772923
+     *               },
+     *               "values": {
+     *                  "net": -1,
+     *                  "gross": 1
+     *               }
+     *            }
      *         ]
      *     }
      * }
@@ -105,84 +125,118 @@ class ApiMainPageController extends ApiController
      *
      * @authenticated
      * @defaultParam
+     * @queryParam filter Filter data by "YTD" for Year-to-Date and data by "360daysago" for will calculate dates that are 360 ​​days from now..
      * 
      * @response {
      *     "status": 200,
      *     "message": "success",
      *     "data": [
-     *       {
-     *          "month": "October",
-     *          "title": "Budget",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        },
-     *       {
-     *          "month": "November",
-     *          "title": "Actual",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        },
-     *       {
-     *          "month": "December",
-     *          "title": "Outlook",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        }
+     *         {
+     *             "month": "October",
+     *             "items": [
+     *                 {
+     *                     "title": "Budget",
+     *                     "value": {
+     *                         "net": 12345,
+     *                         "gross": 67890
+     *                     },
+     *                     "slug": "budget",
+     *                     "code": "1"
+     *                 },
+     *                 {
+     *                     "title": "Actual",
+     *                     "value": {
+     *                         "net": 12345,
+     *                         "gross": 67890
+     *                     },
+     *                     "slug": "actual",
+     *                     "code": "2"
+     *                 },
+     *                 {
+     *                     "title": "Outlook",
+     *                     "value": {
+     *                         "net": 12345,
+     *                         "gross": 67890
+     *                     },
+     *                     "slug": "outlook",
+     *                     "code": "3"
+     *                 }
+     *             ]
+     *         }
      *     ]
      * }
      */
     public function mainChartGas(Request $request)
     {
-        $data = $this->mainPageService->mainChartGas();
+        $filter = $request->input('filter');
+
+        if ($filter === 'YTD' || $filter === '360daysago') {
+            $data = $this->mainPageService->mainChartGas($filter);
+        } else {
+            $data = $this->mainPageService->mainChartGas();
+        }
+
         return $this->sendSuccess($data);
     }
+
+
 
     /**
      * Main Chart Oil
      *
      * @authenticated
      * @defaultParam
-     * 
+     * @queryParam filter Filter data by "YTD" for Year-to-Date and data by "360daysago" for will calculate dates that are 360 ​​days from now.
+     *  
      * @response {
      *     "status": 200,
      *     "message": "success",
      *     "data": [
      *       {
      *          "month": "October",
-     *          "title": "Budget",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
+     *          "items": [
+     *           {
+     *              "title": "Budget",
+     *              "value": {
+     *                  "net": 12345,
+     *                  "gross": 54321
+     *              },
+     *              "slug": "budget",
+     *              "code": "1"      
+     *           },
+     *           {
+     *              "title": "Actual",
+     *              "value": {
+     *                  "net": 12345,
+     *                  "gross": 54321
+     *              },
+     *              "slug": "actual",
+     *              "code": "2"   
+     *           },
+     *           {
+     *              "title": "Outlook",
+     *              "value": {
+     *                  "net": 12345,
+     *                  "gross": 54321
+     *              },
+     *              "slug": "outlook",
+     *              "code": "3"   
      *           }
-     *        },
-     *       {
-     *          "month": "November",
-     *          "title": "Actual",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
-     *        },
-     *       {
-     *          "month": "December",
-     *          "title": "Outlook",
-     *          "value": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *           }
+     *           ]
      *        }
      *     ]
      * }
      */
     public function mainChartOil(Request $request)
     {
-        $data = $this->mainPageService->mainChartOil();
+        $filter = $request->input('filter');
+
+        if ($filter === 'YTD' || $filter === '360daysago') {
+            $data = $this->mainPageService->mainChartOil($filter);
+        } else {
+            $data = $this->mainPageService->mainChartOil();
+        }
+
         return $this->sendSuccess($data);
     }
 
@@ -197,60 +251,120 @@ class ApiMainPageController extends ApiController
      *     "message": "success",
      *     "data": [
      *       {
-     *          "production": "Corridor",
-     *          "mmscfd": {
-     *              "net": 12345,
-     *              "gross": 67890
+     *          "name": "Corridor",
+     *          "gas": {
+     *             "value": {
+     *                "net": 531657,
+     *                "gross": 879206
+     *              },
+     *              "values": {
+     *                 "net": -1,
+     *                 "gross": 1
+     *              }
      *           },
-     *          "bpopd": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *            }
+     *           "oil": {
+     *             "value": {
+     *                  "net": 560563,
+     *                  "gross": 621935
+     *               },
+     *              "values": {
+     *                   "net": -1,
+     *                   "gross": -1
+     *                }
+     *             }
      *        },
      *       {
-     *          "production": "Onshore",
-     *          "mmscfd": {
-     *              "net": 12345,
-     *              "gross": 67890
+     *          "name": "Onshore",
+     *          "gas": {
+     *             "value": {
+     *                "net": 688120,
+     *                "gross": 688924
+     *              },
+     *              "values": {
+     *                 "net": -1,
+     *                 "gross": 1
+     *              }
      *           },
-     *          "bpopd": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *            }
-     *        },
+     *           "oil": {
+     *             "value": {
+     *                  "net": 719694,
+     *                  "gross": 974323
+     *               },
+     *              "values": {
+     *                   "net": 1,
+     *                   "gross": -1
+     *                }
+     *             }
+     *         },
      *       {
-     *          "production": "Offshore",
-     *          "mmscfd": {
-     *              "net": 12345,
-     *              "gross": 67890
+     *          "name": "Offshore",
+     *          "gas": {
+     *             "value": {
+     *                "net": 789175,
+     *                "gross": 531051
+     *              },
+     *              "values": {
+     *                 "net": 1,
+     *                 "gross": 1
+     *              }
      *           },
-     *          "bpopd": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *            }
-     *        },
+     *           "oil": {
+     *             "value": {
+     *                  "net": 790571,
+     *                  "gross": 517321
+     *               },
+     *              "values": {
+     *                   "net": -1,
+     *                   "gross": -1
+     *                }
+     *             }
+     *         },
      *       {
-     *          "production": "Noa",
-     *          "mmscfd": {
-     *              "net": 12345,
-     *              "gross": 67890
+     *          "name": "NOA",
+     *          "gas": {
+     *             "value": {
+     *                "net": 689997,
+     *                "gross": 990043
+     *              },
+     *              "values": {
+     *                 "net": 1,
+     *                 "gross": -1
+     *              }
      *           },
-     *          "bpopd": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *            }
-     *        },
+     *           "oil": {
+     *             "value": {
+     *                  "net": 917904,
+     *                  "gross": 987581
+     *               },
+     *              "values": {
+     *                   "net": 1,
+     *                   "gross": 1
+     *                }
+     *             }
+     *         },
      *       {
-     *          "production": "International",
-     *          "mmscfd": {
-     *              "net": 12345,
-     *              "gross": 67890
+     *          "name": "International",
+     *          "gas": {
+     *             "value": {
+     *                "net": 616501,
+     *                "gross": 560264
+     *              },
+     *              "values": {
+     *                 "net": 1,
+     *                 "gross": -1
+     *              }
      *           },
-     *          "bpopd": {
-     *              "net": 12345,
-     *              "gross": 67890
-     *            }
-     *        }
+     *           "oil": {
+     *             "value": {
+     *                  "net": 786467,
+     *                  "gross": 778249
+     *               },
+     *              "values": {
+     *                   "net": 1,
+     *                   "gross": -1
+     *                }
+     *             }
+     *         }
      *     ]
      * }
      */

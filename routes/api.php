@@ -81,10 +81,10 @@ Route::middleware(['private-api'])
             });
 
         Route::controller(ApiAssetsPageController::class)
-            ->prefix('assets-page')
+            ->prefix('assets-page/{main_id}')
             ->as('assets-page.')
             ->group(function () {
-                Route::get('/user-case-assets', 'userCaseMain')->name('user-case-assets');
+                Route::get('/user-case-assets', 'userCaseAssets')->name('user-case-assets');
                 Route::get('/assets-summary-production', 'assetsSummaryProduction')->name('assets-summary-production');
                 Route::get('/assets-chart-gas', 'assetsChartGas')->name('assets-chart-gas');
                 Route::get('/assets-chart-oil', 'assetsChartOil')->name('assets-chart-oil');

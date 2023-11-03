@@ -6,11 +6,15 @@ class MainPageService
 {
     public function userCaseMain()
     {
-        return [
+        $entries = [
             [
                 "value" => [
                     "net" => rand(500000, 1_000_000),
                     "gross" => rand(500000, 1_000_000),
+                ],
+                "values" => [
+                    "net" => rand(0, 1) == 1 ? 1 : -1,
+                    "gross" => rand(0, 1) == 1 ? 1 : -1,
                 ],
                 "title" => "MEDC.",
                 "date" => "2023-08-24",
@@ -20,6 +24,10 @@ class MainPageService
                     "net" => rand(500000, 1_000_000),
                     "gross" => rand(500000, 1_000_000),
                 ],
+                "values" => [
+                    "net" => rand(0, 1) == 1 ? 1 : -1,
+                    "gross" => rand(0, 1) == 1 ? 1 : -1,
+                ],
                 "title" => "Brent",
                 "date" => "2023-08-24",
             ],
@@ -28,11 +36,18 @@ class MainPageService
                     "net" => rand(500000, 1_000_000),
                     "gross" => rand(500000, 1_000_000),
                 ],
+                "values" => [
+                    "net" => rand(0, 1) == 1 ? 1 : -1,
+                    "gross" => rand(0, 1) == 1 ? 1 : -1,
+                ],
                 "title" => "CPI",
                 "date" => "2023-08-24",
             ],
         ];
+
+        return $entries;
     }
+
 
     public function mainSummaryProduction()
     {
@@ -48,6 +63,10 @@ class MainPageService
                         "net" => rand(500000, 1_000_000),
                         "gross" => rand(500000, 1_000_000),
                     ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
                 [
                     "title" => "YTD Production",
@@ -55,134 +74,278 @@ class MainPageService
                         "net" => rand(500000, 1_000_000),
                         "gross" => rand(500000, 1_000_000),
                     ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
             ],
         ];
     }
 
-    public function mainChartGas()
+    public function mainChartGas($filter = null)
     {
-        $data = [
-            [
-                "month" => "October",
-                "title" => "Budget",
-                "value" => [
-                    "net" => 12345,
-                    "gross" => 67890,
-                ],
-            ],
-            [
-                "month" => "November",
-                "title" => "Actual",
-                "value" => [
-                    "net" => 12345,
-                    "gross" => 67890,
-                ],
-            ],
-            [
-                "month" => "December",
-                "title" => "Outlook",
-                "value" => [
-                    "net" => 12345,
-                    "gross" => 67890,
-                ],
-            ]
+        $months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
         ];
+
+        $data = [];
+        $currentMonth = date("F");
+
+        $startMonth = "January";
+        $endMonth = "December";
+
+        // Inisialisasi $foundStartMonth
+        $foundStartMonth = false;
+
+        if ($filter === 'YTD') {
+            $endMonth = $currentMonth;
+        } elseif ($filter === '360daysago') {
+            // Hitung bulan akhir berdasarkan 360 hari yang lalu
+            $endDate = new \DateTime();
+            $endDate->sub(new \DateInterval('P360D'));
+            $endMonth = $endDate->format('F');
+
+            // Hitung bulan awal sesuai dengan bulan akhir
+            $startMonth = $endMonth;
+        }
+
+        foreach ($months as $month) {
+            if ($month === $startMonth) {
+                $foundStartMonth = true;
+            }
+
+            if ($foundStartMonth) {
+                $item = [
+                    "month" => $month,
+                    "items" => [
+                        [
+                            "title" => "Budget",
+                            "value" => [
+                                "net" => rand(500000, 1_000_000),
+                                "gross" => rand(500000, 1_000_000),
+                            ],
+                            "slug" => "budget",
+                            "code" => "1",
+                        ],
+                        [
+                            "title" => "Actual",
+                            "value" => [
+                                "net" => rand(500000, 1_000_000),
+                                "gross" => rand(500000, 1_000_000),
+                            ],
+                            "slug" => "actual",
+                            "code" => "2",
+                        ],
+                    ],
+                ];
+
+                $data[] = $item;
+
+                if ($month == $endMonth) {
+                    break;
+                }
+            }
+        }
 
         return $data;
     }
 
-    public function mainChartOil()
+
+
+
+
+    public function mainChartOil($filter = null)
     {
-        $data = [
-            [
-                "month" => "October",
-                "title" => "Budget",
-                "value" => [
-                    "net" => 12345,
-                    "gross" => 67890,
-                ],
-            ],
-            [
-                "month" => "November",
-                "title" => "Actual",
-                "value" => [
-                    "net" => 12345,
-                    "gross" => 67890,
-                ],
-            ],
-            [
-                "month" => "December",
-                "title" => "Outlook",
-                "value" => [
-                    "net" => 12345,
-                    "gross" => 67890,
-                ],
-            ]
+        $months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
         ];
+
+        $data = [];
+        $currentMonth = date("F");
+
+        $startMonth = "January";
+        $endMonth = "December";
+
+        // Inisialisasi $foundStartMonth
+        $foundStartMonth = false;
+
+        if ($filter === 'YTD') {
+            $endMonth = $currentMonth;
+        } elseif ($filter === '360daysago') {
+            // Hitung bulan akhir berdasarkan 360 hari yang lalu
+            $endDate = new \DateTime();
+            $endDate->sub(new \DateInterval('P360D'));
+            $endMonth = $endDate->format('F');
+
+            // Hitung bulan awal sesuai dengan bulan akhir
+            $startMonth = $endMonth;
+        }
+
+        foreach ($months as $month) {
+            if ($month === $startMonth) {
+                $foundStartMonth = true;
+            }
+
+            if ($foundStartMonth) {
+                $item = [
+                    "month" => $month,
+                    "items" => [
+                        [
+                            "title" => "Budget",
+                            "value" => [
+                                "net" => rand(500000, 1_000_000),
+                                "gross" => rand(500000, 1_000_000),
+                            ],
+                            "slug" => "budget",
+                            "code" => "1",
+                        ],
+                        [
+                            "title" => "Actual",
+                            "value" => [
+                                "net" => rand(500000, 1_000_000),
+                                "gross" => rand(500000, 1_000_000),
+                            ],
+                            "slug" => "actual",
+                            "code" => "2",
+                        ],
+                    ],
+                ];
+
+                $data[] = $item;
+
+                if ($month == $endMonth) {
+                    break;
+                }
+            }
+        }
 
         return $data;
     }
+
+
 
 
     public function mainDataList()
     {
         $dataList = [
             [
-                "production" => "Corridor",
-                "mmscfd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
+                "name" => "Corridor",
+                "gas" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
-                "bpopd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
-                ],
-            ],
-            [
-                "production" => "Onshore",
-                "mmscfd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
-                ],
-                "bpopd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
-                ],
-            ],
-            [
-                "production" => "Offshore",
-                "mmscfd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
-                ],
-                "bpopd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
+                "oil" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
             ],
             [
-                "production" => "Noa",
-                "mmscfd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
+                "name" => "Onshore",
+                "gas" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
-                "bpopd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
+                "oil" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
             ],
             [
-                "production" => "International",
-                "mmscfd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
+                "name" => "Offshore",
+                "gas" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
-                "bpopd" => [
-                    "net" => rand(500000, 1_000_000),
-                    "gross" => rand(500000, 1_000_000),
+                "oil" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
                 ],
             ],
+            [
+                "name" => "NOA",
+                "gas" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
+                ],
+                "oil" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
+                ],
+            ],
+            [
+                "name" => "International",
+                "gas" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
+                ],
+                "oil" => [
+                    "value" => [
+                        "net" => rand(500000, 1_000_000),
+                        "gross" => rand(500000, 1_000_000),
+                    ],
+                    "values" => [
+                        "net" => rand(0, 1) == 1 ? 1 : -1,
+                        "gross" => rand(0, 1) == 1 ? 1 : -1,
+                    ],
+                ],
+            ]
         ];
 
         return $dataList;
