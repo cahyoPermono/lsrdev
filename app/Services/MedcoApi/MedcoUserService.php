@@ -1,6 +1,10 @@
 <?php
 namespace App\Services\MedcoApi;
 
+use App\Enum\StatusCode;
+use App\Helpers\MedcoApi;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class MedcoUserService
@@ -25,19 +29,52 @@ class MedcoUserService
            */
           return collect(Storage::json('json/users-by-email.json'));
      }
+     public function __construct(
+          protected string $url
+     )
+     {
+          $this->url = Config::get('services.api.base_url');
+     }
      public function findUserByEmail($email)
      {
-          $user = self::fakeUsers()->where('email', $email)->first();
-          return $user ? (object) $user : null;
+          $apiUrl = $this->url . "MMAPSVC/PTS/GetDataByEmail?email=$email";
+          $response = Http::get($apiUrl);
+          $parseResponse = MedcoApi::successResponse($response);
+
+          if($parseResponse['status_code'] == StatusCode::SUCCESS) {
+               $user = $parseResponse['data']['email'];
+               return $user ? (object) $user : null;
+
+          }
+
+
+          return MedcoApi::notFoundResponse();
+          // $user = self::fakeUsers()->where('email', $email)->first();
+          // return $user ? (object) $user : null;
+
      }
 
      public function findUserByPersonId($personId)
      {
-          $user = self::fakeUsers()->where('person_id', $personId)->first();
-          $user =  $user ? (object) $user : null;
-          if($user && @$user->supervisor){
-               $user->supervisor = $this->findUserByPersonId($user->supervisor);
+          $apiUrl = $this->url . "MMAPSVC/PTS/GetDataByPersonId?personid=$personId";
+          $response = Http::get($apiUrl);
+          $parseResponse = MedcoApi::successResponse($response);
+
+          if($parseResponse['status_code'] == StatusCode::SUCCESS) {
+               $user = $parseResponse['data']['person_id'] ? (object) $parseResponse['data']['person_id'] : null;
+
+               if($user && @$user->supervisor){
+                    $user->supervisor = $this->findUserByPersonId($user->supervisor);
+               }
+               return $user;
+
           }
-          return $user;
+          return MedcoApi::notFoundResponse();
+          // $user = self::fakeUsers()->where('person_id', $personId)->first();
+          // $user =  $user ? (object) $user : null;
+          // if($user && @$user->supervisor){
+          //      $user->supervisor = $this->findUserByPersonId($user->supervisor);
+          // }
+          // return $user;
      }
 }
