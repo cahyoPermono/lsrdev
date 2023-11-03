@@ -1,54 +1,22 @@
 <?php
 
 namespace App\Services\MedcoApi;
+use App\Services\MedcoApi\MainPageService;
 
-
-class BlockPageService 
+class BlockPageService
 {
-     public function userCaseBlock($assets_id)
-     {
-          $entries = [
-               [
-                    "value" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "values" => [
-                         "net" => rand(0, 1) == 1 ? 1 : -1,
-                         "gross" => rand(0, 1) == 1 ? 1 : -1,
-                    ],
-                    "title" => "MEDC.",
-                    "date" => "2023-08-24",
-               ],
-               [
-                    "value" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "values" => [
-                         "net" => rand(0, 1) == 1 ? 1 : -1,
-                         "gross" => rand(0, 1) == 1 ? 1 : -1,
-                    ],
-                    "title" => "Brent",
-                    "date" => "2023-08-24",
-               ],
-               [
-                    "value" => [
-                         "net" => rand(500000, 1_000_000),
-                         "gross" => rand(500000, 1_000_000),
-                    ],
-                    "values" => [
-                         "net" => rand(0, 1) == 1 ? 1 : -1,
-                         "gross" => rand(0, 1) == 1 ? 1 : -1,
-                    ],
-                    "title" => "CPI",
-                    "date" => "2023-08-24",
-               ],
-          ];
+     private $mainPageService;
 
-          return $entries;
+     public function __construct(MainPageService $mainPageService)
+     {
+          $this->mainPageService = $mainPageService;
      }
 
+     public function userCaseBlock($assets_id)
+     {
+          $entries = $this->mainPageService->userCaseMain();
+          return $entries;
+     }
 
      public function blockSummaryProduction($assets_id)
      {
