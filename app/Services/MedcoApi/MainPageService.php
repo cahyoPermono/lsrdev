@@ -138,6 +138,15 @@ class MainPageService
                             "slug" => "actual",
                             "code" => "2",
                         ],
+                        [
+                            "title" => "Outlook",
+                            "value" => [
+                                "net" => rand(500000, 1_000_000),
+                                "gross" => rand(500000, 1_000_000),
+                            ],
+                            "slug" => "outlook",
+                            "code" => "3",
+                        ]
                     ],
                 ];
 
@@ -211,6 +220,15 @@ class MainPageService
                             "slug" => "actual",
                             "code" => "2",
                         ],
+                        [
+                            "title" => "Outlook",
+                            "value" => [
+                                "net" => rand(500000, 1_000_000),
+                                "gross" => rand(500000, 1_000_000),
+                            ],
+                            "slug" => "outlook",
+                            "code" => "3",
+                        ]
                     ],
                 ];
 
