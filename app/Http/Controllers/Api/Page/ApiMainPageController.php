@@ -132,7 +132,7 @@ class ApiMainPageController extends ApiController
      *     "message": "success",
      *     "data": [
      *         {
-     *             "month": "October",
+     *             "month": "November",
      *             "items": [
      *                 {
      *                     "title": "Budget",
@@ -193,7 +193,7 @@ class ApiMainPageController extends ApiController
      *     "message": "success",
      *     "data": [
      *       {
-     *          "month": "October",
+     *          "month": "November",
      *          "items": [
      *           {
      *              "title": "Budget",
