@@ -10,10 +10,15 @@ use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
 use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
-use App\Http\Controllers\Api\Page\ApiMainPageController;
 use App\Http\Controllers\Api\Page\ApiAssetsPageController;
 use App\Http\Controllers\Api\Page\ApiBlockPageController;
 use App\Http\Controllers\Api\Page\ApiFieldPageController;
+use App\Http\Controllers\Api\UseCase2\ApiMainPageController;
+use App\Http\Controllers\Api\UseCase2\ApiUseCase2AssetsController;
+use App\Http\Controllers\Api\UseCase2\ApiUseCase2BlockController;
+use App\Http\Controllers\Api\UseCase2\ApiUseCase2Controller;
+use App\Http\Controllers\Api\UseCase2\ApiUseCase2FieldController;
+use App\Http\Controllers\Api\UseCase2\ApiUseCaseCompanyController;
 use App\Http\Controllers\Api\User\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -71,49 +76,6 @@ Route::middleware(['private-api'])
                 Route::get('/competency', 'competency')->name('training');
             });
 
-        Route::controller(ApiMainPageController::class)
-            ->prefix('main-page')
-            ->as('main-page.')
-            ->group(function () {
-                Route::get('/user-case-main', 'userCaseMain')->name('user-case-main');
-                Route::get('/main-summary-production', 'mainSummaryProduction')->name('main-summary-production');
-                Route::get('/main-chart-gas', 'mainChartGas')->name('main-chart-gas');
-                Route::get('/main-chart-oil', 'mainChartOil')->name('main-chart-oil');
-                Route::get('/main-data-list', 'mainDataList')->name('main-data-list');
-            });
-
-        Route::controller(ApiAssetsPageController::class)
-            ->prefix('assets-page/{main_id}')
-            ->as('assets-page.')
-            ->group(function () {
-                Route::get('/user-case-assets', 'userCaseAssets')->name('user-case-assets');
-                Route::get('/assets-summary-production', 'assetsSummaryProduction')->name('assets-summary-production');
-                Route::get('/assets-chart-gas', 'assetsChartGas')->name('assets-chart-gas');
-                Route::get('/assets-chart-oil', 'assetsChartOil')->name('assets-chart-oil');
-                Route::get('/assets-data-list', 'assetsDataList')->name('assets-data-list');
-            });
-
-        Route::controller(ApiBlockPageController::class)
-            ->prefix('block-page/{assets_id}')
-            ->as('block-page.')
-            ->group(function () {
-                Route::get('/user-case-block', 'userCaseBlock')->name('user-case-block');
-                Route::get('/block-summary-production', 'blockSummaryProduction')->name('block-summary-production');
-                Route::get('/block-chart-gas', 'blockChartGas')->name('block-chart-gas');
-                Route::get('/block-chart-oil', 'blockChartOil')->name('block-chart-oil');
-                Route::get('/block-data-list', 'blockDataList')->name('block-data-list');
-            });
-        Route::controller(ApiFieldPageController::class)
-            ->prefix('field-page/{assets_id}')
-            ->as('field-page.')
-            ->group(function () {
-                Route::get('/user-case-field', 'userCaseField')->name('user-case-field');
-                Route::get('/field-summary-production', 'fieldSummaryProduction')->name('field-summary-production');
-                Route::get('/field-chart-gas', 'fieldChartGas')->name('field-chart-gas');
-                Route::get('/field-chart-oil', 'fieldChartOil')->name('field-chart-oil');
-                Route::get('/field-data-list', 'fieldDataList')->name('field-data-list');
-            });
-
         Route::controller(ApiOtherScreeningCertificateController::class)
             ->prefix('other-screening/{person_id}/certificate')
             ->as('other-screening.certificate.')
@@ -148,6 +110,61 @@ Route::middleware(['private-api'])
                 Route::get('/{code}/wl', 'wlList')->name('wl-list');
                 Route::put('/{code}/wl/update', 'updateWl')->name('wl-update');
             });
+
+
+
+        Route::prefix('use-case-2')
+            ->as('use-case-2.')
+            ->group(function () {
+                Route::get('/', [ApiUseCase2Controller::class, 'index'])->name('index');
+
+                Route::controller(ApiUseCaseCompanyController::class)
+                    ->prefix('main')
+                    ->as('main.')
+                    ->group(function () {
+                        Route::get('/summary', 'summary')->name('summary-production');
+                        Route::get('/chart/gas', 'gasChart')->name('chart-gas');
+                        Route::get('/chart/oil', 'oilChart')->name('chart-oil');
+                        Route::get('/data/production', 'productionData')->name('data-production');
+                        Route::get('/data/sales', 'salesData')->name('data-sales');
+                    });
+                Route::controller(ApiUseCase2AssetsController::class)
+                    ->prefix('assets/{code}')
+                    ->as('assets.')
+                    ->group(function () {
+                        Route::get('/summary', 'summary')->name('summary-production');
+                        Route::get('/chart/gas', 'gasChart')->name('chart-gas');
+                        Route::get('/chart/oil', 'oilChart')->name('chart-oil');
+                        Route::get('/data/production', 'productionData')->name('data-production');
+                        Route::get('/data/sales', 'salesData')->name('data-sales');
+                    });
+
+                Route::controller(ApiUseCase2BlockController::class)
+                    ->prefix('block/{code}')
+                    ->as('block.')
+                    ->group(function () {
+                        Route::get('/summary', 'summary')->name('summary-production');
+                        Route::get('/chart/gas', 'gasChart')->name('chart-gas');
+                        Route::get('/chart/oil', 'oilChart')->name('chart-oil');
+                        Route::get('/data/production', 'productionData')->name('data-production');
+                        Route::get('/data/sales', 'salesData')->name('data-sales');
+                    });
+
+                Route::controller(ApiUseCase2FieldController::class)
+                    ->prefix('field/{code}')
+                    ->as('field.')
+                    ->group(function () {
+                        Route::get('/summary', 'summary')->name('summary-production');
+                        Route::get('/chart/gas', 'gasChart')->name('chart-gas');
+                        Route::get('/chart/oil', 'oilChart')->name('chart-oil');
+                        Route::get('/data/production', 'productionData')->name('data-production');
+                        Route::get('/data/sales', 'salesData')->name('data-sales');
+                    });
+            });
+
+
+
+
     });
 
 Route::get('/key', function () {
