@@ -1,10 +1,21 @@
 <?php
 namespace App\Services\MedcoApi;
 
+use App\Enum\StatusCode;
+use App\Helpers\MedcoApi;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class CertificateUserService
 {
+     public function __construct(
+          protected string $url
+     )
+     {
+          $this->url = Config::get('services.api.base_url');
+          
+     }
      private static function fakeCertificate()
      {
           /**
@@ -28,51 +39,71 @@ class CertificateUserService
 
      public function certificate($personId)
      {
-          $certificates = self::fakeCertificate()->where('person_id', $personId)->values();
-          $medical = $this->findCertificateByCode($certificates, 'MCU')->first();
-          $orientation = $this->findCertificateByCode($certificates, 'HSEORI')->first();
-          $covid = $this->findCertificateByCode($certificates, 'COVID')->sortBy('certificate_code')->values();
-
-          $result = [];
-          if ($medical) {
-               $result[] = $this->certificateObject($medical);
+          // $certificates = self::fakeCertificate()->where('person_id', $personId)->values();
+          $apiUrl = $this->url . "MMAPSVC/PTS/GetListCertificate?personid=$personId";
+          $response = Http::get($apiUrl);
+          $parseResponse = MedcoApi::successResponse($response);
+          if ($parseResponse['status_code'] == StatusCode::SUCCESS) {
+               $certificates = $parseResponse['data']['certificate'];
+               $medical = $this->findCertificateByCode($certificates, 'MCU')->first();
+               $orientation = $this->findCertificateByCode($certificates, 'HSEORI')->first();
+               $covid = $this->findCertificateByCode($certificates, 'COVID')->sortBy('certificate_code')->values();
+     
+               $result = [];
+               if ($medical) {
+                    $result[] = $this->certificateObject($medical);
+               }
+               if ($orientation) {
+                    $result[] = $this->certificateObject($orientation);
+               }
+               if (count($covid)) {
+                    $result[] = [
+                         "name" => "Covid Vaccine",
+                         "valid_until" => null,
+                         "code" => "COVID",
+                         "items" => $covid->map(fn($row) => [
+                              'name' => $row['certificate_name'],
+                              'valid_until' => date('Y-m-d', strtotime($row['expire_date'])),
+                              'code' => $row['certificate_code'],
+                         ])
+                    ];
+               }
+     
+               return $result;
+               
+          } else {
+               return MedcoApi::notFoundResponse();
           }
-          if ($orientation) {
-               $result[] = $this->certificateObject($orientation);
-          }
-          if (count($covid)) {
-               $result[] = [
-                    "name" => "Covid Vaccine",
-                    "valid_until" => null,
-                    "code" => "COVID",
-                    "items" => $covid->map(fn($row) => [
-                         'name' => $row['certificate_name'],
-                         'valid_until' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['expire_date'])->format('Y-m-d'),
-                         'code' => $row['certificate_code'],
-                    ])
-               ];
-          }
-
-          return $result;
      }
 
      public function ptsCertificate($personId)
      {
-          $certificates = self::fakeCertificate()->where('person_id', $personId)->values();
-          $certificates = $certificates->filter(function ($row) {
-               $code = @$row['certificate_code'];
-               return !str_contains($code, 'MCU') && !str_contains($code, 'HSEORI') && !str_contains($code, 'COVID');
-          })->values();
-          return $certificates->map(fn($row) => [
-               'name' => $row['certificate_name'],
-               'valid_until' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['expire_date'])->format('Y-m-d'),
-               'issue_date' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['issue_date'])->format('Y-m-d'),
-               'registered_date' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['registered_date'])->format('Y-m-d'),
-               'changed_date' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['changed_date'])->format('Y-m-d'),
-               'code' => $row['certificate_code'],
-               'type' => $row['certificate_type'],
-               'clinic_doctor' => $row['clinic'],
-          ]);
+          $apiUrl = $this->url . "MMAPSVC/PTS/GetListCertificate?personid=$personId";
+          $response = Http::get($apiUrl);
+
+          $parseResponse = MedcoApi::successResponse($response);
+
+          if ($parseResponse['status_code'] == StatusCode::SUCCESS) {
+               // $certificates = self::fakeCertificate()->where('person_id', $personId)->values();
+               $certificates = $parseResponse['data']['certificate'];
+               $certificates = $certificates->filter(function ($row) {
+                    $code = @$row['certificate_code'];
+                    return !str_contains($code, 'MCU') && !str_contains($code, 'HSEORI') && !str_contains($code, 'COVID');
+               })->values();
+               return $certificates->map(fn($row) => [
+                    'name' => $row['certificate_name'],
+                    'valid_until' => date('Y-m-d', strtotime($row['expire_date'])),
+                    'issue_date' => date('Y-m-d', strtotime($row['issue_date'])),
+                    'registered_date' => date('Y-m-d', strtotime($row['registered_date'])),
+                    'changed_date' => date('Y-m-d', strtotime($row['changed_date'])),
+                    'code' => $row['certificate_code'],
+                    'type' => $row['certificate_type'],
+                    'clinic_doctor' => $row['clinic'],
+               ]);
+               
+          } else {
+               return MedcoApi::notFoundResponse();
+          }
      }
 
 
@@ -88,7 +119,7 @@ class CertificateUserService
      {
           return [
                'name' => $certificate['certificate_name'],
-               'valid_until' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($certificate['expire_date'])->format('Y-m-d'),
+               'valid_until' => date('Y-m-d', strtotime($certificate['expire_date'])),
                'code' => $certificate['certificate_code'],
                'items' => []
           ];

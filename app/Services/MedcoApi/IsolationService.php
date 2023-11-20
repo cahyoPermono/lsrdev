@@ -44,6 +44,7 @@ class IsolationService
 
      public function findIsolationAutomation($pid)
      {
+
           return [
                [
                     "id" => "GG-MU-21-21DE" . rand(111, 999),
