@@ -36,6 +36,11 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+            if(config('app.env')==='development'){
+                Route::middleware('api')
+                ->prefix('fake-rest')
+                ->group(base_path('routes/fake-rest.php'));
+            }
         });
     }
 }
