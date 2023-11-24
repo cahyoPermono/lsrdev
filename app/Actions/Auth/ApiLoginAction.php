@@ -43,8 +43,8 @@ class ApiLoginAction
           // Todo : send fcm force logout last user
           $user = $this->userService->createOrUpdateUser($ptsUser->email, [
                'email' => $ptsUser->email,
-               'workforce' => $ptsUser->department_name,
-               'identify_provider' => $ptsUser->company_name,
+               'workforce' => $ptsUser->department_name ?: '',
+               'identify_provider' => $ptsUser->company_name ?: '',
                'pts_id' => $ptsUser->person_id,
                'platform' => $request->header('platform'),
                'regid' => $request->header('regid'),
