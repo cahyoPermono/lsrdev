@@ -4,10 +4,10 @@ namespace App\Helpers;
 class Url
 {
      const ListCertificate = "MMAPSVC/PTS/GetListCertificate";
-     const ListCompetency = "MMAPSVC/CTMS/GetListCompetency";
-     const FindUserByEmail = "MMAPSVC/PTS/GetDataByEmail";
-     const FindUserByPersonId = "MMAPSVC/PTS/GetDataByPersonId";
-     const GetPermitDetail = "MMAPSVC/PTW/GetPermitDetail";
-     const GetWLDetail = "MMAPSVC/PTW/GetWLDetail";
-     const GetListTraining = "MMAPSVC/CTMS/GetListTraining";
+     const ListCompetency = "MMAPSVC2/api/CTMS/GetCompetencyList";
+     const FindUserByEmail = "MMAPSVC2/api/PTS/GetDataByEmail";
+     const FindUserByPersonId = "MMAPSVC2/api/PTS/GetDataByPersonId";
+     const GetPermitDetail = "MMAPSVC2/api/PTW/GetPermitDetail";
+     const GetWLDetail = "MMAPSVC2/api/PTW/GetWLDetail";
+     const GetListTraining = "MMAPSVC2/api/CTMS/GetTrainingList";
 }
