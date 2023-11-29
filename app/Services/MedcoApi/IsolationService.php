@@ -15,7 +15,7 @@ class IsolationService
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetListIsolation,
                query: [
-                    "pit" => $pid
+                    "pid" => $pid
                ]
           );
           if(!$restResponse){

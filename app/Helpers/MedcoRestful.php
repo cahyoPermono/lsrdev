@@ -17,7 +17,7 @@ class MedcoRestful
                ->get($url)
                ->json();
 
-          if ($result['status_code'] === Response::HTTP_OK) {
+          if (@$result['status_code'] === Response::HTTP_OK) {
                return @$result['data'] ?: $result;
           }
           return null;
