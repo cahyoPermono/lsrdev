@@ -4,23 +4,17 @@ use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
 use App\Http\Controllers\Api\Auth\ApiUserAuthorizationController;
 use App\Http\Controllers\Api\Isolation\ApiIsolationController;
-use App\Http\Controllers\Api\Issolation\ApiIssolationController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
 use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
-use App\Http\Controllers\Api\Page\ApiAssetsPageController;
-use App\Http\Controllers\Api\Page\ApiBlockPageController;
-use App\Http\Controllers\Api\Page\ApiFieldPageController;
-use App\Http\Controllers\Api\UseCase2\ApiMainPageController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCase2AssetsController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCase2BlockController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCase2Controller;
 use App\Http\Controllers\Api\UseCase2\ApiUseCase2FieldController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCaseCompanyController;
 use App\Http\Controllers\Api\User\ApiUserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -100,6 +94,12 @@ Route::middleware(['private-api'])
                 Route::get('/', 'index')->name('index');
                 Route::get('/method/{type}', 'method')->name('method')->whereIn('type', ['process', 'automation', 'electrical', 'esd', 'positive']);
                 Route::put('/method', 'updateMethod')->name('method.update');
+            });
+        Route::controller(ApiIsolationController::class)
+            ->prefix('isolation')
+            ->as('isolation.')
+            ->group(function () {
+                Route::get('/verificator/{ptsid}', 'verificator')->name('verificator');
             });
 
         Route::controller(ApiPwtIssuerController::class)

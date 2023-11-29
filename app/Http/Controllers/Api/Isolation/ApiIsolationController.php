@@ -80,10 +80,10 @@ class ApiIsolationController extends ApiController
      */
     public function method(Request $request, $pid, $type)
     {
-        $method = str_replace(' ', '', ucwords(str_replace("-", " ", $type)));
-        $function = "findIsolation{$method}";
-        $items = $this->isolationService->{$function}($pid);
-        return $this->sendSuccess($items);
+        // $method = str_replace(' ', '', ucwords(str_replace("-", " ", $type)));
+        // $function = "findIsolation{$method}";
+        // $items = $this->isolationService->{$function}($pid);
+        return $this->sendSuccess([]);
     }
 
     /**
@@ -106,5 +106,28 @@ class ApiIsolationController extends ApiController
     public function updateMethod(Request $request, $pid)
     {
         return $this->sendMessage("Successfully isolated and verified !");
+    }
+
+      /**
+     * Find Verificator
+     * 
+     * @authenticated
+     * @defaultParam
+     * @pathParam ptsid string required
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *       "pts_id": "4239849328943289342",
+     *       "name": "Test IC For issue",
+     *       "validity": "445 Kemmer Keys Suite 123\nDaughertyville, MI 45924",
+     *       "role_verificator": "445 Kemmer Keys Suite 123\nDaughertyville, MI 45924"
+     *   }
+     * }
+     */
+    public function verificator(Request $request,$ptsId){
+        $result = $this->isolationService->findVerificator($ptsId);
+        return $this->sendSuccess($result);
     }
 }

@@ -10,4 +10,6 @@ class Url
      const GetPermitDetail = "MMAPSVC2/api/PTW/GetPermitDetail";
      const GetWLDetail = "MMAPSVC2/api/PTW/GetWLDetail";
      const GetListTraining = "MMAPSVC2/api/CTMS/GetTrainingList";
+     const GetListIsolation = "MMAPSVC2/api/IC/GetDetail";
+     const GetVerificatorDetail = "MMAPSVC2/api/IC/GetVerificatorDetail";
 }
