@@ -26,14 +26,32 @@ class ApiIsolationController extends ApiController
      * @pathParam pid string required
      * 
      * @response {
-     *   "status": 200,
-     *   "message": "success",
-     *   "data": {
-     *       "pid": "4239849328943289342",
-     *       "ic_detail": "Test IC For issue",
-     *       "location": "445 Kemmer Keys Suite 123\nDaughertyville, MI 45924"
+     *       "status": 200,
+     *       "message": "success",
+     *       "data": {
+     *           "pid": 3503942,
+     *           "ic_detail": "Normal Shutdown RGC 24-CAE-101 & 24-CAE-201 (standby mode)",
+     *           "location": "Grissik Plant - Regen Gas Compressor",
+     *           "details": [
+     *               {
+     *                   "name": "Electrical Isolation",
+     *                   "items": [
+     *                       {
+     *                           "id": "I00001",
+     *                           "code": "ID-N-CG-MU-23-23DE506",
+     *                           "name": "MAIN BREAKER MOTOR RGC 1",
+     *                           "is_done": false,
+     *                           "ip": "I00001",
+     *                           "required": "BLO - Breaker Lock Out",
+     *                           "lock": "2",
+     *                           "is_isolated": false,
+     *                           "verified_by": null
+     *                       }
+     *                   ]
+     *               }
+     *           ]
+     *       }
      *   }
-     * }
      */
     public function index(Request $request, $pid)
     {
