@@ -51,7 +51,7 @@ class CertificateUserService
                     "valid_until" => null,
                     "code" => "COVID",
                     "items" => $covid->map(fn($row) => [
-                         'name' => !$row['certificate_name'],
+                         'name' => @$row['certificate_name'],
                          'valid_until' => date('Y-m-d', strtotime(@$row['expire_date'] ?: now())),
                          'code' => @$row['certificate_code'],
                     ])
