@@ -3,7 +3,7 @@ namespace App\Helpers;
 
 class Url
 {
-     const ListCertificate = "MMAPSVC/PTS/GetListCertificate";
+     const ListCertificate = "MMAPSVC2/api/PTS/GetCertificateList";
      const ListCompetency = "MMAPSVC2/api/CTMS/GetCompetencyList";
      const FindUserByEmail = "MMAPSVC2/api/PTS/GetDataByEmail";
      const FindUserByPersonId = "MMAPSVC2/api/PTS/GetDataByPersonId";
