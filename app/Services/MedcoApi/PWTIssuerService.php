@@ -26,9 +26,9 @@ class PWTIssuerService
 
           return [
                'pid' => strval(@$restResponse['pid']),
-               'wp_number' => @$restResponse['nomor_wp'],
-               'description' => @$restResponse['deskripsi'],
-               'job_location' => @$restResponse['lokasi_pekerjaan'],
+               'wp_number' => @$restResponse['number_wp'],
+               'description' => @$restResponse['description'],
+               'job_location' => @$restResponse['work_location'],
                'status' => @$restResponse['status'],
                'ic_number' => @$restResponse['ic_number'],
                'ic_status' => @$restResponse['ic_status'],
