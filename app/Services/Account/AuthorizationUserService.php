@@ -40,9 +40,11 @@ class AuthorizationUserService extends AdminService
 
     public function findUserModule($email)
     {
+        $excludeModuleKey = ['use-case-2'];
         $modules = $this->model::query()
             ->join('app_modules as module', 'module.id', 'authorization_users.modules_id')
             ->where('authorization_users.email', $email)
+            ->whereNotIn('module.key',$excludeModuleKey)
             ->select(['module.*'])
             ->orderBy('module.sorting', 'asc')
             ->get();
