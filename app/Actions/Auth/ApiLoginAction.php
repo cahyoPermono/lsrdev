@@ -2,12 +2,14 @@
 namespace App\Actions\Auth;
 
 use App\Enum\Status;
-use App\Helpers\Faker\UserDataFake;
 use App\Models\Settings;
-use App\Services\Account\UserActivityService;
+use Illuminate\Http\Request;
+use App\Models\AuthorizationUser;
+use App\Helpers\Faker\UserDataFake;
+use App\Models\AppModules;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
-use Illuminate\Http\Request;
+use App\Services\Account\UserActivityService;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ApiLoginAction
@@ -21,7 +23,6 @@ class ApiLoginAction
 
      public function handle(Request $request)
      {
-
           $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
 
@@ -51,10 +52,31 @@ class ApiLoginAction
                'status' => Status::Active,
                'last_login' => now(),
           ]);
+          
+          $this->validateModuleAccess($request,$user->id);
 
           $ptsUser->user_id = $user->id;
           $this->userActivityService->createActivity($user->id, 'login');
 
           return $ptsUser;
+     }
+
+
+     private function validateModuleAccess(Request $request, $userId)
+     {
+          $appsCategory = $request->header('apps-category');
+          if ($appsCategory === 'use-case-2') {
+               $module = AppModules::where('key', 'use-case-2')->first();
+               if (!$module) {
+                    throw new BadRequestException('Anda tidak mempunyai akses !');
+               }
+               $findModuleAccess = AuthorizationUser::query()
+                    ->where('user_id', $userId)
+                    ->where('modules_id',$module->id)
+                    ->first();
+               if(!$findModuleAccess){
+                    throw new BadRequestException('Anda tidak mempunyai akses !');
+               }
+          }
      }
 }
