@@ -23,4 +23,21 @@ class MedcoRestful
           return null;
      }
 
+     
+     public static function putAction($url, $query = null)
+     {
+          if ($query) {
+               $query = "?" . http_build_query($query);
+          }
+          $url = config('services.api.medco_rest_url') . $url . $query;
+          $result = Http::withoutVerifying()
+               ->get($url)
+               ->json();
+
+          if (@$result['status_code'] === Response::HTTP_OK) {
+               return @$result['data'] ?: $result;
+          }
+          return null;
+     }
+
 }
