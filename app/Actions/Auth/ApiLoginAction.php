@@ -26,6 +26,8 @@ class ApiLoginAction
           $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
 
+          
+          $this->validateModuleAccess($request,$request->email);
           if (!$ptsUser = $this->medcoUserService->findUserByEmail($request->email)) {
                throw new BadRequestException(__('alert.email_not_found'));
           }
@@ -51,8 +53,6 @@ class ApiLoginAction
                'status' => Status::Active,
                'last_login' => now(),
           ]);
-          
-          $this->validateModuleAccess($request,$user->id);
 
           $ptsUser->user_id = $user->id;
           $this->userActivityService->createActivity($user->id, 'login');
@@ -61,7 +61,7 @@ class ApiLoginAction
      }
 
 
-     private function validateModuleAccess(Request $request, $userId)
+     private function validateModuleAccess(Request $request, $email)
      {
           $appsCategory = $request->header('apps-category');
           if ($appsCategory === 'use-case-2') {
@@ -70,7 +70,7 @@ class ApiLoginAction
                     throw new BadRequestException('Anda tidak mempunyai akses !');
                }
                $findModuleAccess = AuthorizationUser::query()
-                    ->where('user_id', $userId)
+                    ->where('email', $email)
                     ->where('modules_id',$module->id)
                     ->first();
                if(!$findModuleAccess){
