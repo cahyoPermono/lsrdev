@@ -17,13 +17,14 @@ class MedcoRestful
                ->get($url)
                ->json();
 
-          if (@$result['status_code'] === Response::HTTP_OK) {
+          $statusCode = @$result['status_code'] ?: @$result['status'];
+          if ($statusCode === Response::HTTP_OK) {
                return @$result['data'] ?: $result;
           }
           return null;
      }
 
-     
+
      public static function putAction($url, $query = null)
      {
           if ($query) {
@@ -34,7 +35,8 @@ class MedcoRestful
                ->get($url)
                ->json();
 
-          if (@$result['status_code'] === Response::HTTP_OK) {
+          $statusCode = @$result['status_code'] ?: @$result['status'];
+          if (@$statusCode === Response::HTTP_OK) {
                return @$result['data'] ?: $result;
           }
           return null;
