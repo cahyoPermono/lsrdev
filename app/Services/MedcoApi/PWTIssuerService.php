@@ -43,24 +43,24 @@ class PWTIssuerService
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetWLDetail,
                query: [
-                    "ptsid_wl" => $pid
+                    "ptsid" => $pid
                ]
           );
           if(!$restResponse){
                return null;
           }
-          $header = @$restResponse['header'] ?: [];
-          $detail = @$restResponse['detail'] ?: [];
+          $data = $restResponse;
+          $detail = @$data['wan_details'] ?: [];
           return [
-               'date' => date('Y-m-d', strtotime(@$header['validity_wl']?:now())),
-               'image' => @$header['foto_wl'],
+               'date' => date('Y-m-d', strtotime(@$data['validity_wl']?:now())),
+               'image' => @$data['photo_wl'],
                'items' => [
                     [
-                         'permit_wan' => @$detail['pid_wan'],
+                         'permit_wan' => null,//@$detail['pid_wan'],
                          'status' => @$detail['status'],
                          'pid' => @$detail['pid'],
                          'permit_no' => @$detail['permit_no'],
-                         'wan_no' => @$detail['wan_no'],
+                         'wan_no' => null//@$detail['wan_no'],
                     ]
                ]
                // 'items' => $this->findAllWlItem($pid, $code)

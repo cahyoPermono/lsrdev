@@ -31,12 +31,12 @@ class IsolationService
                          "items" => collect($row['data'])->map(function($item){
                               return [
                                    "id" => @$item['ip_number'],
-                                   "code" => "ID-N-CG-MU-23-23DE" . rand(111, 999),
+                                   "code" => null,
                                    "name" => @$item['ip_detail'],
                                    "is_done" => false,
                                    "ip" => @$item['ip_number'],
                                    "required" => @$item['ip_type'],
-                                   "lock" => "2",
+                                   "lock" => null,
                                    "is_isolated" => false,
                                    "verified_by" => null
                               ];
