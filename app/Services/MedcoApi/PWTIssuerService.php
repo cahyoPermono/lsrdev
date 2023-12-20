@@ -20,7 +20,7 @@ class PWTIssuerService
                     "pid" => $pid
                ]
           );
-          if(!$restResponse){
+          if (!$restResponse) {
                return null;
           }
 
@@ -37,7 +37,7 @@ class PWTIssuerService
 
      public function findAllWLByPidAndCode($pid, $code)
      {
-           /**
+          /**
            * Fetch API Request
            */
           $restResponse = MedcoRestful::fetchData(
@@ -46,23 +46,21 @@ class PWTIssuerService
                     "ptsid" => $pid
                ]
           );
-          if(!$restResponse){
+          if (!$restResponse) {
                return null;
           }
           $data = $restResponse;
           $detail = @$data['wan_details'] ?: [];
           return [
-               'date' => date('Y-m-d', strtotime(@$data['validity_wl']?:now())),
+               'date' => date('Y-m-d', strtotime(@$data['validity_wl'] ?: now())),
                'image' => @$data['photo_wl'],
-               'items' => [
-                    [
-                         'permit_wan' => null,//@$detail['pid_wan'],
-                         'status' => @$detail['status'],
-                         'pid' => @$detail['pid'],
-                         'permit_no' => @$detail['permit_no'],
-                         'wan_no' => null//@$detail['wan_no'],
-                    ]
-               ]
+               'items' => collect($detail)->map(fn($row) => [
+                    'permit_wan' => null, //@$detail['pid_wan'],
+                    'status' => @$row['status'],
+                    'pid' => @$row['pid'],
+                    'permit_no' => @$row['permit_no'],
+                    'wan_no' => null //@$detail['wan_no'],
+               ])
                // 'items' => $this->findAllWlItem($pid, $code)
           ];
      }
