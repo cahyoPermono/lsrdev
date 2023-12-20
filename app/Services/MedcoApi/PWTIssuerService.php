@@ -55,11 +55,11 @@ class PWTIssuerService
                'date' => date('Y-m-d', strtotime(@$data['validity_wl'] ?: now())),
                'image' => @$data['photo_wl'],
                'items' => collect($detail)->map(fn($row) => [
-                    'permit_wan' => null, //@$detail['pid_wan'],
+                    'permit_wan' => "", //@$detail['pid_wan'],
                     'status' => @$row['status'],
-                    'pid' => @$row['pid'],
+                    'pid' => strval(@$row['pid']),
                     'permit_no' => @$row['permit_no'],
-                    'wan_no' => null //@$detail['wan_no'],
+                    'wan_no' => "" //@$detail['wan_no'],
                ])
                // 'items' => $this->findAllWlItem($pid, $code)
           ];
