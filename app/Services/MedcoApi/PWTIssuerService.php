@@ -43,7 +43,7 @@ class PWTIssuerService
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetWLDetail,
                query: [
-                    "ptsid" => $pid
+                    "ptsid" => $code
                ]
           );
           if (!$restResponse) {
