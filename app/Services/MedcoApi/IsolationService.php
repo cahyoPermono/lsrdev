@@ -76,7 +76,8 @@ class IsolationService
                     url : Url::PutIcDetail,
                     query : [
                          "pid" => $pid,
-                         "ipNumber" => $ipNumber
+                         "ipNumber" => $ipNumber,
+                         "request" => "-"
                     ],
                     body : [
                          "isolator_onoff" => "Isolate",
