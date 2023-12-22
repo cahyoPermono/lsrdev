@@ -19,6 +19,7 @@ class LoginResponseResource extends JsonResource
         $token = JwtToken::setData([
             'session_id' => $this->user_id,
             'email' => $this->email,
+            'name' => $this->name,
             'person_id' => $this->person_id,
             'regid' => request()->header('regid'),
             'authorization' => []

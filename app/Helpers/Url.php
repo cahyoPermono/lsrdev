@@ -12,6 +12,7 @@ class Url
      const GetListTraining = "MMAPSVC2/api/CTMS/GetTrainingList";  // [✅]
      const GetListIsolation = "MMAPSVC2/api/IC/GetDetail";  // [✅]
      const GetVerificatorDetail = "MMAPSVC2/api/IC/GetVerificatorDetail"; // [✅]
+     const PutIcDetail = "MMAPSVC2/api/IC/PutICDetail"; // [✅]
      const PutPermitDetail = "MMAPSVC2/api/PTW/PutPermitDetail"; // [✅]
      const GetMedcoStockPrice = "MMAPPrice/api/Stock/GetStockPrices"; // [✅]
      const GetCrudeBrentStockPrice = "MMAPPrice/api/Brent/GetBrentCrudeData"; // [✅]

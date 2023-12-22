@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Isolation;
 
 use App\Http\Controllers\Controller;
 use App\Services\MedcoApi\IsolationService;
+use App\Services\MedcoApi\MedcoUserService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 /**
  * @group Isolation
@@ -14,7 +16,8 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
 class ApiIsolationController extends ApiController
 {
     public function __construct(
-        private IsolationService $isolationService
+        private IsolationService $isolationService,
+        private MedcoUserService $medcoUserService
     ) {
     }
 
@@ -32,6 +35,8 @@ class ApiIsolationController extends ApiController
      *           "pid": 3503942,
      *           "ic_detail": "Normal Shutdown RGC 24-CAE-101 & 24-CAE-201 (standby mode)",
      *           "location": "Grissik Plant - Regen Gas Compressor",
+     *           "ic_no" : "IC0000000174",
+     *           "ic_status" : "Non-Positive Isolation and Verification",
      *           "details": [
      *               {
      *                   "name": "Electrical Isolation",
@@ -45,7 +50,9 @@ class ApiIsolationController extends ApiController
      *                           "required": "BLO - Breaker Lock Out",
      *                           "lock": "2",
      *                           "is_isolated": false,
-     *                           "verified_by": null
+     *                           "verified_by": null,
+     *                           "status" : "Done",
+     *                           "isolator" : "Mahfud"
      *                       }
      *                   ]
      *               }
@@ -112,6 +119,7 @@ class ApiIsolationController extends ApiController
      * 
      * @requestBody application/x-www-form-urlencoded
      * @bodyParam isolated_id string required
+     * @bodyParam ip_number string required
      * @bodyParam is_isolated boolean required
      * @bodyParam verifier_name string required
      * @bodyParam verifier_id string required person id
@@ -123,10 +131,30 @@ class ApiIsolationController extends ApiController
      */
     public function updateMethod(Request $request, $pid)
     {
-        return $this->sendMessage("Successfully isolated and verified !");
+        try {
+            $this->validates([
+                'ip_number' => 'required',
+                'verifier_name' => 'required',
+                'verifier_id' => 'required',
+            ]);
+
+            $user = $this->auth();
+
+            $this->isolationService->postUpdateIsolation(
+                pid: $pid,
+                ipNumber: $request->ip_number,
+                userPtsId: $user->person_id,
+                userPtsName: $user->name,
+                verificatorId: $request->verifier_id,
+                verificatorName: $request->verifier_name
+            );
+            return $this->sendMessage("Successfully isolated and verified !");
+        } catch (BadRequestException $e) {
+            return $this->badRequest($e->getMessage());
+        }
     }
 
-      /**
+    /**
      * Find Verificator
      * 
      * @authenticated
@@ -144,7 +172,8 @@ class ApiIsolationController extends ApiController
      *   }
      * }
      */
-    public function verificator(Request $request,$ptsId){
+    public function verificator(Request $request, $ptsId)
+    {
         $result = $this->isolationService->findVerificator($ptsId);
         return $this->sendSuccess($result);
     }

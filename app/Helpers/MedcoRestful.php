@@ -25,14 +25,14 @@ class MedcoRestful
      }
 
 
-     public static function putAction($url, $query = null)
+     public static function putAction($url, $query = null,$body = [])
      {
           if ($query) {
                $query = "?" . http_build_query($query);
           }
           $url = config('services.api.medco_rest_url') . $url . $query;
           $result = Http::withoutVerifying()
-               ->get($url)
+               ->put($url,$body)
                ->json();
 
           $statusCode = @$result['status_code'] ?: @$result['status'];
