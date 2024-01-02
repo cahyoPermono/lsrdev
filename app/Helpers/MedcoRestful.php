@@ -29,16 +29,10 @@ class MedcoRestful
      {
 
           $url = config('services.api.medco_rest_url') . $url;
-          $result = Http::withoutVerifying()
+          return Http::withoutVerifying()
                ->put($url, $body)
                ->withQuery($query)
                ->json();
-
-          $statusCode = @$result['status_code'] ?: @$result['status'];
-          if (@$statusCode === Response::HTTP_OK) {
-               return @$result['data'] ?: $result;
-          }
-          return $result;
      }
 
 }
