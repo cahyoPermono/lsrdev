@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\MedcoApi\IsolationService;
 use App\Services\MedcoApi\MedcoUserService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Laililmahfud\Adminportal\Controllers\ApiController;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
@@ -140,7 +141,7 @@ class ApiIsolationController extends ApiController
 
             $user = $this->auth();
 
-            $this->isolationService->postUpdateIsolation(
+            $result = $this->isolationService->postUpdateIsolation(
                 pid: $pid,
                 ipNumber: $request->ip_number,
                 userPtsId: $user->person_id,
@@ -148,7 +149,12 @@ class ApiIsolationController extends ApiController
                 verificatorId: $request->verifier_id,
                 verificatorName: $request->verifier_name
             );
-            return $this->sendMessage("Successfully isolated and verified !");
+            $statusCode = @$result['status_code'] ?: @$result['status'];
+            if(in_array($statusCode,[Response::HTTP_OK,Response::HTTP_CREATED])){
+                return $this->sendMessage("Successfully isolated and verified !");
+            }else{
+                return $this->badRequest(@$result['message']);
+            }
         } catch (BadRequestException $e) {
             return $this->badRequest($e->getMessage());
         }

@@ -90,9 +90,11 @@ class IsolationService
                );
                logger("PUT IC DETAIL RESULT");
                logger(json_encode($result));
+               return $result;
           }catch(\Exception $e){
                throw new BadRequestException('Error hit api put ic detail');
           }
+          return null;
      }
 
 }
