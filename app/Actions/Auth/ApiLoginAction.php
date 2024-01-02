@@ -54,7 +54,9 @@ class ApiLoginAction
                'last_login' => now(),
           ]);
 
+          $userName = [$ptsUser->first_name,$ptsUser->middle_name,$ptsUser->last_name];
           $ptsUser->user_id = $user->id;
+          $ptsUser->name = implode(" ",$userName);
           $this->userActivityService->createActivity($user->id, 'login');
 
           return $ptsUser;
