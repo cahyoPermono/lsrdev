@@ -38,7 +38,7 @@ class MedcoRestful
           if (@$statusCode === Response::HTTP_OK) {
                return @$result['data'] ?: $result;
           }
-          return null;
+          return $result;
      }
 
 }
