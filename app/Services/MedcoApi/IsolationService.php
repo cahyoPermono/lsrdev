@@ -92,9 +92,9 @@ class IsolationService
                logger(json_encode($result));
                return $result;
           }catch(\Exception $e){
+               logger($e);
                throw new BadRequestException('Error hit api put ic detail');
           }
-          return null;
      }
 
 }
