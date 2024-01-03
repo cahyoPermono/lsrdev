@@ -11,6 +11,8 @@ class UseCase2CompanyService
     public function __construct(
         private $useCase2CompanyDataService = new UseCase2CompanyDataService
     ){}
+
+    
     public function summary()
     {
         return [
