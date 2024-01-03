@@ -4,10 +4,16 @@ namespace App\Services\MedcoApi;
 
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Str;
+use App\Services\UseCase2\UseCase2AssetDataService;
 
 
 class UseCase2AssetsService
 {
+     public function __construct(
+          private $useCase2AssetDataService = new UseCase2AssetDataService
+     ) {
+     }
+
      public function summary($code)
      {
           return [
@@ -32,7 +38,7 @@ class UseCase2AssetsService
           ];
      }
 
-     public function gasChart($code,$filter)
+     public function gasChart($code, $filter)
      {
           $period = @$filter['period'] ?: 'YTD';
           $currentDate = date('Y-m-d');
@@ -89,7 +95,7 @@ class UseCase2AssetsService
           return $result;
      }
 
-     public function oilChart($code,$filter)
+     public function oilChart($code, $filter)
      {
           $period = @$filter['period'] ?: 'YTD';
           $currentDate = date('Y-m-d');
@@ -146,62 +152,36 @@ class UseCase2AssetsService
           return $result;
      }
 
-     public function productionData($code,$limit = 10)
+     public function productionData($code, $limit = 10)
      {
-          $labels = ['Block A', 'Dayung', 'Sumpal', 'Rawa Letang', 'Gelam'];
-
-          return collect($labels)->map(fn($label) => [
-               'code' => Str::slug($label),
-               'name' => $label,
+          $date = now()->subDays(1)->format('Y-m-d');
+          return $this->useCase2AssetDataService->findAllByDateAndType($date,$code, 'production')->map(fn($row) => [
+               'code' => $row->code,
+               'name' => $row->name,
                'gas' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->gas_net,
+                    "gross" => $row->gas_gross
                ],
                'oil' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->oil_net,
+                    "gross" => $row->oil_gross
                ],
           ]);
      }
 
-     public function salesData($code,$limit = 10)
+     public function salesData($code, $limit = 10)
      {
-          $labels = ['Block A', 'Dayung', 'Sumpal', 'Rawa Letang', 'Gelam'];
-
-          return collect($labels)->map(fn($label) => [
-               'code' => Str::slug($label),
-               'name' => $label,
+          $date = now()->subDays(1)->format('Y-m-d');
+          return $this->useCase2AssetDataService->findAllByDateAndType($date,$code, 'sales')->map(fn($row) => [
+               'code' => $row->code,
+               'name' => $row->name,
                'gas' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->gas_net,
+                    "gross" => $row->gas_gross
                ],
                'oil' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->oil_net,
+                    "gross" => $row->oil_gross
                ],
           ]);
      }

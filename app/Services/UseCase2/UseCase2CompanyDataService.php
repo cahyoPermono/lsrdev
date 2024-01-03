@@ -12,16 +12,16 @@ class UseCase2CompanyDataService
      }
 
 
-     public function findAllByDateAndType($date, $type)
+     public function findAllByDateAndType($date, $type, $try = false)
      {
           $dataItems = $this->model::query()
                ->where('date', $date)
                ->where('type', $type)
                ->get();
-               
-          if (!count($dataItems)) {
+
+          if (!count($dataItems) && !$try) {
                Artisan::call('use-case-2:insert-company-dashboard-data');
-               return $this->findAllByDateAndType($date,$type);
+               return $this->findAllByDateAndType($date, $type, true);
           }
 
           return $dataItems;

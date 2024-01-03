@@ -22,4 +22,8 @@ class Url
      const GetCPIStockPrice = "MMAPPrice/api/ICP/GetICPData"; // [✅]
      const GetProductionCompanyDashboardData = "MMAPDashboard/v1/Company/Production"; // [✅]
      const GetSalesCompanyDashboardData = "MMAPDashboard/v1/Company/Sales"; // [✅]
+     const GetProductionAssetDashboardData = "MMAPDashboard/v1/Asset/Production"; // [✅]
+     const GetSalesAssetDashboardData = "MMAPDashboard/v1/Asset/Sales"; // [✅]
+     const GetProductionBlockDashboardData = "MMAPDashboard/v1/Block/Production"; // [✅]
+     const GetSalesBlockDashboardData = "MMAPDashboard/v1/Block/Sales"; // [✅]
 }

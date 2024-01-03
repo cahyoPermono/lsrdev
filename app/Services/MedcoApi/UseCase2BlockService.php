@@ -4,9 +4,16 @@ namespace App\Services\MedcoApi;
 
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Str;
+use App\Services\UseCase2\UseCase2BlockDataService;
 
 class UseCase2BlockService
 {
+
+     public function __construct(
+          private $useCase2BlockDataService = new UseCase2BlockDataService
+     ) {
+     }
+
      public function summary($code)
      {
           return [
@@ -147,60 +154,34 @@ class UseCase2BlockService
 
      public function productionData($code,$limit = 10)
      {
-          $labels = ['Block A', 'Dayung', 'Sumpal', 'Rawa Letang', 'Gelam'];
-
-          return collect($labels)->map(fn($label) => [
-               'code' => Str::slug($label),
-               'name' => $label,
+          $date = now()->subDays(1)->format('Y-m-d');
+          return $this->useCase2BlockDataService->findAllByDateAndType($date,$code, 'production')->map(fn($row) => [
+               'code' => $row->code,
+               'name' => $row->name,
                'gas' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->gas_net,
+                    "gross" => $row->gas_gross
                ],
                'oil' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->oil_net,
+                    "gross" => $row->oil_gross
                ],
           ]);
      }
 
      public function salesData($code,$limit = 10)
      {
-          $labels = ['Block A', 'Dayung', 'Sumpal', 'Rawa Letang', 'Gelam'];
-
-          return collect($labels)->map(fn($label) => [
-               'code' => Str::slug($label),
-               'name' => $label,
+          $date = now()->subDays(1)->format('Y-m-d');
+          return $this->useCase2BlockDataService->findAllByDateAndType($date,$code, 'sales')->map(fn($row) => [
+               'code' => $row->code,
+               'name' => $row->name,
                'gas' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->gas_net,
+                    "gross" => $row->gas_gross
                ],
                'oil' => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
+                    "net" => $row->oil_net,
+                    "gross" => $row->oil_gross
                ],
           ]);
      }

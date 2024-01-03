@@ -3,27 +3,26 @@
 namespace App\Console\Commands\UseCase2;
 
 use App\Helpers\Url;
-use Illuminate\Support\Str;
 use App\Helpers\MedcoRestful;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use App\Models\UseCase2\UseCase2CompanyData;
+use App\Models\UseCase2\UseCase2BlockData;
 
-class InsertCompanyDashboardData extends Command
+class InsertBlockDashboardData extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'use-case-2:insert-company-dashboard-data';
+    protected $signature = 'use-case-2:insert-block-dashboard-data';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Use Case 2 - Insert Production & Sales Company Data [1]';
+    protected $description = 'Use Case 2 - Insert Production & Sales Block Data [2]';
 
     /**
      * Execute the console command.
@@ -32,12 +31,12 @@ class InsertCompanyDashboardData extends Command
     {
 
         $this->fetchAndInsertData(
-            url: Url::GetProductionCompanyDashboardData,
+            url: Url::GetProductionBlockDashboardData,
             type: 'production'
         );
 
         $this->fetchAndInsertData(
-            url: Url::GetSalesCompanyDashboardData,
+            url: Url::GetSalesBlockDashboardData,
             type: 'sales'
         );
     }
@@ -51,8 +50,9 @@ class InsertCompanyDashboardData extends Command
                 $this->deleteUseCase2Data($datePeriod, $type);
 
                 $itemData = collect($itemData)
+                    ->whereNotNull('field_name')
                     ->map(function ($row) use ($type) {
-                        $name = @$row['asset_kind'];
+                        $name = @$row['field_name'];
                         $gas = @$row['gas'];
                         $oil = @$row['oil'];
                         return [
@@ -61,6 +61,9 @@ class InsertCompanyDashboardData extends Command
                             'date' => @$row['date'],
                             'name' => $name,
                             'code' => $name,
+                            'company_code' => @$row['asset_kind'],
+                            'asset_code' => @$row['block_code'],
+                            'productivity_index' => @$row['productivity_index'] ?: 1,
                             'country_code' => @$row['country_code'],
                             'gas_net' => json_encode([
                                 'delta' => @$gas['nett']['today'],
@@ -81,13 +84,13 @@ class InsertCompanyDashboardData extends Command
                         ];
                     })
                     ->toArray();
-                UseCase2CompanyData::insert($itemData);
+                UseCase2BlockData::insert($itemData);
             });
         }
     }
     private function deleteUseCase2Data($date, $type)
     {
-        return UseCase2CompanyData::query()
+        return UseCase2BlockData::query()
             ->where('date', $date)
             ->where('type', $type)
             ->delete();
