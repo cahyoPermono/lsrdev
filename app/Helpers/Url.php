@@ -26,4 +26,6 @@ class Url
      const GetSalesAssetDashboardData = "MMAPDashboard/v1/Asset/Sales"; // [✅]
      const GetProductionBlockDashboardData = "MMAPDashboard/v1/Block/Production"; // [✅]
      const GetSalesBlockDashboardData = "MMAPDashboard/v1/Block/Sales"; // [✅]
+     
+     const GetProductionFieldDashboardData = "MMAPDashboard/v1/Field/Production"; // [✅]
 }

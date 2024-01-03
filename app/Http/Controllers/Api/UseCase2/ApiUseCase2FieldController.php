@@ -283,7 +283,7 @@ class ApiUseCase2FieldController extends ApiController
      */
     public function salesData(Request $request, $code)
     {
-        $items = $this->useCase2FieldService->salesData($code);
-        return $this->sendSuccess($items);
+        // $items = $this->useCase2FieldService->salesData($code);
+        return $this->sendSuccess([]);
     }
 }

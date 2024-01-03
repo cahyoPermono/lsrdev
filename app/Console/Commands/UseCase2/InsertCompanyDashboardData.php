@@ -75,8 +75,8 @@ class InsertCompanyDashboardData extends Command
                                 'percent' => @$oil['nett']['percent']
                             ]),
                             'oil_gross' => json_encode([
-                                'delta' => @$oil['nett']['today'],
-                                'percent' => @$oil['nett']['percent']
+                                'delta' => @$oil['gross']['today'],
+                                'percent' => @$oil['gross']['percent']
                             ]),
                         ];
                     })

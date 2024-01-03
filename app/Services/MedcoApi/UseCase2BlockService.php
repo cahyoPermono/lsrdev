@@ -8,7 +8,6 @@ use App\Services\UseCase2\UseCase2BlockDataService;
 
 class UseCase2BlockService
 {
-
      public function __construct(
           private $useCase2BlockDataService = new UseCase2BlockDataService
      ) {
