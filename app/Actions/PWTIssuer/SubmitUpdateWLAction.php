@@ -10,7 +10,7 @@ class SubmitUpdateWLAction
      public function handle(Request $request, $personId, $pid, $code)
      {
           try {
-               MedcoRestful::putAction(
+               $result = MedcoRestful::putAction(
                     url: Url::PutPermitDetail,
                     query: [
                          "pid" => $pid,
@@ -19,6 +19,8 @@ class SubmitUpdateWLAction
                          "ptsid" => $code
                     ]
                );
+               logger("PUT PERMIT DETAIL RESULT");
+               logger(json_encode($result));
           } catch (\Exception $e) {
                logger("ERROR UPDATE WL PERMIT DETAIL");
                logger($e);
