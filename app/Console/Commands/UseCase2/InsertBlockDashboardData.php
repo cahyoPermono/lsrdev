@@ -67,19 +67,19 @@ class InsertBlockDashboardData extends Command
                             'country_code' => @$row['country_code'],
                             'gas_net' => json_encode([
                                 'delta' => @$gas['nett']['today'],
-                                'percent' => @$gas['nett']['percent']
+                                'percent' => @$gas['nett']['delta']
                             ]),
                             'gas_gross' => json_encode([
                                 'delta' => @$gas['gross']['today'],
-                                'percent' => @$gas['gross']['percent']
+                                'percent' => @$gas['gross']['delta']
                             ]),
                             'oil_net' => json_encode([
                                 'delta' => @$oil['nett']['today'],
-                                'percent' => @$oil['nett']['percent']
+                                'percent' => @$oil['nett']['delta']
                             ]),
                             'oil_gross' => json_encode([
                                 'delta' => @$oil['gross']['today'],
-                                'percent' => @$oil['gross']['percent']
+                                'percent' => @$oil['gross']['delta']
                             ]),
                         ];
                     })

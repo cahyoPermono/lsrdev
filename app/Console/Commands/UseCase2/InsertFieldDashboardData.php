@@ -61,19 +61,19 @@ class InsertFieldDashboardData extends Command
                             'country_code' => '',
                             'gas_net' => json_encode([
                                 'delta' => @$gas['today'],
-                                'percent' => @$gas['percent']
+                                'percent' => @$gas['delta']
                             ]),
                             'gas_gross' => json_encode([
                                 'delta' => @$gas['today'],
-                                'percent' => @$gas['percent']
+                                'percent' => @$gas['delta']
                             ]),
                             'oil_net' => json_encode([
                                 'delta' => @$oil['today'],
-                                'percent' => @$oil['percent']
+                                'percent' => @$oil['delta']
                             ]),
                             'oil_gross' => json_encode([
                                 'delta' => @$oil['today'],
-                                'percent' => @$oil['percent']
+                                'percent' => @$oil['delta']
                             ]),
                         ];
                     })
