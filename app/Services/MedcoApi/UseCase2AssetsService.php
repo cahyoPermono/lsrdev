@@ -155,7 +155,7 @@ class UseCase2AssetsService
      public function productionData($code, $limit = 10)
      {
           $date = now()->subDays(1)->format('Y-m-d');
-          return $this->useCase2AssetDataService->findAllByDateAndType($date,$code, 'production')->map(fn($row) => [
+          return $this->useCase2AssetDataService->findAllByDateAndType($date, 'production')->map(fn($row) => [
                'code' => $row->code,
                'name' => $row->name,
                'gas' => [
@@ -172,7 +172,7 @@ class UseCase2AssetsService
      public function salesData($code, $limit = 10)
      {
           $date = now()->subDays(1)->format('Y-m-d');
-          return $this->useCase2AssetDataService->findAllByDateAndType($date,$code, 'sales')->map(fn($row) => [
+          return $this->useCase2AssetDataService->findAllByDateAndType($date, 'sales')->map(fn($row) => [
                'code' => $row->code,
                'name' => $row->name,
                'gas' => [
