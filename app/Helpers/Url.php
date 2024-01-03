@@ -3,6 +3,7 @@ namespace App\Helpers;
 
 class Url
 {
+     // USE CASE 1
      const ListCertificate = "MMAPSVC2/api/PTS/GetCertificateList"; // [✅]
      const ListCompetency = "MMAPSVC2/api/CTMS/GetCompetencyList"; // [✅]
      const FindUserByEmail = "MMAPSVC2/api/PTS/GetDataByEmail"; // [✅]
@@ -14,7 +15,11 @@ class Url
      const GetVerificatorDetail = "MMAPSVC2/api/IC/GetVerificatorDetail"; // [✅]
      const PutIcDetail = "MMAPSVC2/api/IC/PutICDetail"; // [✅]
      const PutPermitDetail = "MMAPSVC2/api/PTW/PutPermitDetail"; // [✅]
+
+     // USE CASE 2
      const GetMedcoStockPrice = "MMAPPrice/api/Stock/GetStockPrices"; // [✅]
      const GetCrudeBrentStockPrice = "MMAPPrice/api/Brent/GetBrentCrudeData"; // [✅]
      const GetCPIStockPrice = "MMAPPrice/api/ICP/GetICPData"; // [✅]
+     const GetProductionCompanyDashboardData = "MMAPDashboard/v1/Company/Production"; // [✅]
+     const GetSalesCompanyDashboardData = "MMAPDashboard/v1/Company/Sales"; // [✅]
 }
