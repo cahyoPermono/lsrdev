@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Services\MedcoApi\PWTIssuerService;
 use App\Actions\PWTIssuer\SubmitUpdateWLAction;
 use Laililmahfud\Adminportal\Controllers\ApiController;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 /**
  * @group PWT Issuer
@@ -92,12 +93,16 @@ class ApiPwtIssuerController extends ApiController
      *   "message": "Update Status 'Issued' has Successfully saved"
      * }
      */
-    public function updateWl(Request $request,SubmitUpdateWLAction $submitUpdateWLAction, $pid, $code)
+    public function updateWl(Request $request, SubmitUpdateWLAction $submitUpdateWLAction, $pid, $code)
     {
-        $status = $request->get('status');
-        $person_id = $this->auth()->person_id;
-        $submitUpdateWLAction->handle($request,$person_id,$pid,$code);
+        try {
+            $status = $request->get('status');
+            $person_id = $this->auth()->person_id;
+            $submitUpdateWLAction->handle($request, $person_id, $pid, $code);
 
-        return $this->sendMessage("Update Status '{$status}' has Successfully saved");
+            return $this->sendMessage("Update Status '{$status}' has Successfully saved");
+        } catch (BadRequestException $e) {
+            return $this->badRequest($e->getMessage());
+        }
     }
 }
