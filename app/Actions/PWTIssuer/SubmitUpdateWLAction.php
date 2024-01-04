@@ -26,7 +26,7 @@ class SubmitUpdateWLAction
 
                $statusCode = @$result['status_code'] ?: @$result['status'];
                if (!in_array($statusCode, [Response::HTTP_OK, Response::HTTP_CREATED])) {
-                    throw new BadRequestException(@$result['message']);
+                    throw new BadRequestException("Put Permit Detail Error : ".@$result['message']);
                }
           } catch (BadRequestException $e) {
                throw new BadRequestException($e->getMessage());
