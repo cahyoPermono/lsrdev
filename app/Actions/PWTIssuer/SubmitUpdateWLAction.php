@@ -28,6 +28,8 @@ class SubmitUpdateWLAction
                if (!in_array($statusCode, [Response::HTTP_OK, Response::HTTP_CREATED])) {
                     throw new BadRequestException(@$result['message']);
                }
+          } catch (BadRequestException $e) {
+               throw new BadRequestException($e->getMessage());
           } catch (\Exception $e) {
                logger("ERROR UPDATE WL PERMIT DETAIL");
                logger($e);
