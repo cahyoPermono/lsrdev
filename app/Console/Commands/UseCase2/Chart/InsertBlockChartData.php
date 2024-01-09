@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class InsertBlockChartData extends Command
 {
-   
+
     /**
      * The name and signature of the console command.
      *
@@ -31,58 +31,59 @@ class InsertBlockChartData extends Command
     public function handle()
     {
         $this->fetchAndInsertData(
-            url : Url::GetChartBlockGasData,
-            type : 'gas'
+            url: Url::GetChartBlockGasData,
+            type: 'gas'
         );
 
         $this->fetchAndInsertData(
-            url : Url::GetChartBlockOilData,
-            type : 'oil'
+            url: Url::GetChartBlockOilData,
+            type: 'oil'
         );
     }
 
     private function fetchAndInsertData($url, $type)
     {
-        $datePeriod = now()->subDays(1)->format('Y-m-d');
         if ($itemData = MedcoRestful::fetchData($url)) {
-            DB::transaction(function () use ($itemData, $datePeriod, $type) {
-                $this->deleteUseCase2Data($datePeriod, $type);
-                $itemData = collect($itemData)
-                    ->map(function ($row) use ($type) {
-                        $items = @$row['items'];
-                        $actual = @$items['actual'];
-                        $budget = @$items['budget'];
-                        $outlook = @$items['outlook'];
-                        return [
-                            'created_at' => now(),
-                            'type' => $type,
-                            'asset_code' => @$row['block_name'],
-                            'date' => @$row['date'],
-                            'actual' => json_encode([
-                                'net' => @$actual['net'],
-                                'gross' => @$actual['gross']
-                            ]),
-                            'budget' => json_encode([
-                                'net' => @$budget['net'],
-                                'gross' => @$budget['gross']
-                            ]),
-                            'outlook' => json_encode([
-                                'net' => @$outlook['net'],
-                                'gross' => @$outlook['gross']
-                            ]),
-                        ];
-                    })
-                    ->toArray();
-                UseCase2BlockChartData::insert($itemData);
+            DB::transaction(function () use ($itemData, $type) {
+                $this->deleteUseCase2Data($type);
+
+                $items = collect($itemData)->chunk(200);
+                foreach ($items as $data) {
+                    $itemData = $data->map(function ($row) use ($type) {
+                            $items = @$row['items'];
+                            $actual = @$items['actual'];
+                            $budget = @$items['budget'];
+                            $outlook = @$items['outlook'];
+                            return [
+                                'created_at' => now(),
+                                'type' => $type,
+                                'asset_code' => @$row['block_name'],
+                                'date' => @$row['date'],
+                                'actual' => json_encode([
+                                    'net' => @$actual['net'],
+                                    'gross' => @$actual['gross']
+                                ]),
+                                'budget' => json_encode([
+                                    'net' => @$budget['net'],
+                                    'gross' => @$budget['gross']
+                                ]),
+                                'outlook' => json_encode([
+                                    'net' => @$outlook['net'],
+                                    'gross' => @$outlook['gross']
+                                ]),
+                            ];
+                        })
+                        ->toArray();
+                    UseCase2BlockChartData::insert($itemData);
+                }
             });
         }
     }
 
 
-    private function deleteUseCase2Data($date, $type)
+    private function deleteUseCase2Data($type)
     {
         return UseCase2BlockChartData::query()
-            ->where('date', $date)
             ->where('type', $type)
             ->delete();
     }

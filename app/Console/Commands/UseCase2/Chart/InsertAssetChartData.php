@@ -30,24 +30,25 @@ class InsertAssetChartData extends Command
     public function handle()
     {
         $this->fetchAndInsertData(
-            url : Url::GetChartAssetGasData,
-            type : 'gas'
+            url: Url::GetChartAssetGasData,
+            type: 'gas'
         );
 
         $this->fetchAndInsertData(
-            url : Url::GetChartAssetOilData,
-            type : 'oil'
+            url: Url::GetChartAssetOilData,
+            type: 'oil'
         );
     }
 
     private function fetchAndInsertData($url, $type)
     {
-        $datePeriod = now()->subDays(1)->format('Y-m-d');
         if ($itemData = MedcoRestful::fetchData($url)) {
-            DB::transaction(function () use ($itemData, $datePeriod, $type) {
-                $this->deleteUseCase2Data($datePeriod, $type);
-                $itemData = collect($itemData)
-                    ->map(function ($row) use ($type) {
+            DB::transaction(function () use ($itemData, $type) {
+                $this->deleteUseCase2Data($type);
+
+                $items = collect($itemData)->chunk(200);
+                foreach ($items as $data) {
+                    $itemData = $data->map(function ($row) use ($type) {
                         $items = @$row['items'];
                         $actual = @$items['actual'];
                         $budget = @$items['budget'];
@@ -71,17 +72,18 @@ class InsertAssetChartData extends Command
                             ]),
                         ];
                     })
-                    ->toArray();
-                UseCase2AssetChartData::insert($itemData);
+                        ->toArray();
+                    UseCase2AssetChartData::insert($itemData);
+                }
+
             });
         }
     }
 
 
-    private function deleteUseCase2Data($date, $type)
+    private function deleteUseCase2Data($type)
     {
         return UseCase2AssetChartData::query()
-            ->where('date', $date)
             ->where('type', $type)
             ->delete();
     }
