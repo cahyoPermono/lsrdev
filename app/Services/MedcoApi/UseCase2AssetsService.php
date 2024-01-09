@@ -4,6 +4,7 @@ namespace App\Services\MedcoApi;
 
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use App\Services\UseCase2\UseCase2AssetDataService;
 
 
@@ -41,115 +42,75 @@ class UseCase2AssetsService
      public function gasChart($code, $filter)
      {
           $period = @$filter['period'] ?: 'YTD';
-          $currentDate = date('Y-m-d');
+          $endDate = date('Y-m-d');
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
-          $periods = CarbonPeriod::create($startDate, $currentDate)->month();
 
-          $result = [];
-          foreach ($periods as $date) {
-               $result[] = [
-                    'date' => $date->format('Y-m'),
-                    'date_label' => $date->format('M Y'),
-                    'month' => $date->format('M'),
-                    'year' => $date->format('Y'),
-                    'items' => [
-                         [
-                              'label' => "Budget",
-                              'slug' => 'budget',
-                              'value' => [
-                                   "net" => rand(2_000_000, 10_000_000),
-                                   "gross" => rand(2_000_000, 10_000_000),
-                              ],
-                              "percent" => [
-                                   "net" => rand(2, 99),
-                                   "gross" => rand(1, 80),
-                              ]
-                         ],
-                         [
-                              'label' => "Actual",
-                              'slug' => 'actual',
-                              'value' => [
-                                   "net" => rand(2_000_000, 10_000_000),
-                                   "gross" => rand(2_000_000, 10_000_000),
-                              ],
-                              "percent" => [
-                                   "net" => rand(2, 99),
-                                   "gross" => rand(1, 80),
-                              ]
-                         ],
-                         [
-                              'label' => "Outlook",
-                              'slug' => 'outlook',
-                              'value' => [
-                                   "net" => rand(2_000_000, 10_000_000),
-                                   "gross" => rand(2_000_000, 10_000_000),
-                              ],
-                              "percent" => [
-                                   "net" => rand(2, 99),
-                                   "gross" => rand(1, 80),
-                              ]
-                         ]
-                    ]
+          return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate,$code, 'gas')->map(function ($row) {
+               $date = Carbon::parse($row->date);
+               return [
+                   'date' => $date->format('Y-m'),
+                   'date_label' => $date->format('M Y'),
+                   'month' => $date->format('M'),
+                   'year' => $date->format('Y'),
+                   'items' => [
+                       [
+                           'label' => "Budget",
+                           'slug' => 'budget',
+                           'value' => $row->budget,
+                           "percent" => $row->budget
+                       ],
+                       [
+                           'label' => "Actual",
+                           'slug' => 'actual',
+                           'value' => $row->actual,
+                           "percent" => $row->actual
+                       ],
+                       [
+                           'label' => "Outlook",
+                           'slug' => 'outlook',
+                           'value' => $row->outlook,
+                           "percent" => $row->outlook
+                       ]
+                   ]
                ];
-          }
-          return $result;
+           });
      }
 
      public function oilChart($code, $filter)
      {
           $period = @$filter['period'] ?: 'YTD';
-          $currentDate = date('Y-m-d');
+          $endDate = date('Y-m-d');
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
-          $periods = CarbonPeriod::create($startDate, $currentDate)->month();
 
-          $result = [];
-          foreach ($periods as $date) {
-               $result[] = [
-                    'date' => $date->format('Y-m'),
-                    'date_label' => $date->format('M Y'),
-                    'month' => $date->format('M'),
-                    'year' => $date->format('Y'),
-                    'items' => [
-                         [
-                              'label' => "Budget",
-                              'slug' => 'budget',
-                              'value' => [
-                                   "net" => rand(2_000_000, 10_000_000),
-                                   "gross" => rand(2_000_000, 10_000_000),
-                              ],
-                              "percent" => [
-                                   "net" => rand(2, 99),
-                                   "gross" => rand(1, 80),
-                              ]
-                         ],
-                         [
-                              'label' => "Actual",
-                              'slug' => 'actual',
-                              'value' => [
-                                   "net" => rand(2_000_000, 10_000_000),
-                                   "gross" => rand(2_000_000, 10_000_000),
-                              ],
-                              "percent" => [
-                                   "net" => rand(2, 99),
-                                   "gross" => rand(1, 80),
-                              ]
-                         ],
-                         [
-                              'label' => "Outlook",
-                              'slug' => 'outlook',
-                              'value' => [
-                                   "net" => rand(2_000_000, 10_000_000),
-                                   "gross" => rand(2_000_000, 10_000_000),
-                              ],
-                              "percent" => [
-                                   "net" => rand(2, 99),
-                                   "gross" => rand(1, 80),
-                              ]
-                         ]
-                    ]
+          return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate,$code, 'oil')->map(function ($row) {
+               $date = Carbon::parse($row->date);
+               return [
+                   'date' => $date->format('Y-m'),
+                   'date_label' => $date->format('M Y'),
+                   'month' => $date->format('M'),
+                   'year' => $date->format('Y'),
+                   'items' => [
+                       [
+                           'label' => "Budget",
+                           'slug' => 'budget',
+                           'value' => $row->budget,
+                           "percent" => $row->budget
+                       ],
+                       [
+                           'label' => "Actual",
+                           'slug' => 'actual',
+                           'value' => $row->actual,
+                           "percent" => $row->actual
+                       ],
+                       [
+                           'label' => "Outlook",
+                           'slug' => 'outlook',
+                           'value' => $row->outlook,
+                           "percent" => $row->outlook
+                       ]
+                   ]
                ];
-          }
-          return $result;
+           });
      }
 
      public function productionData($code, $limit = 10)

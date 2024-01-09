@@ -60,15 +60,15 @@ class InsertBlockChartData extends Command
                                 'asset_code' => @$row['block_name'],
                                 'date' => @$row['date'],
                                 'actual' => json_encode([
-                                    'net' => @$actual['net'],
+                                    'net' => @$actual['nett'],
                                     'gross' => @$actual['gross']
                                 ]),
                                 'budget' => json_encode([
-                                    'net' => @$budget['net'],
+                                    'net' => @$budget['nett'],
                                     'gross' => @$budget['gross']
                                 ]),
                                 'outlook' => json_encode([
-                                    'net' => @$outlook['net'],
+                                    'net' => @$outlook['nett'],
                                     'gross' => @$outlook['gross']
                                 ]),
                             ];

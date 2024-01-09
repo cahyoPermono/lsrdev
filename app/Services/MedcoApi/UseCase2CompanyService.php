@@ -2,6 +2,7 @@
 namespace App\Services\MedcoApi;
 
 use App\Services\UseCase2\UseCase2CompanyDataService;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Str;
 
@@ -10,9 +11,10 @@ class UseCase2CompanyService
 {
     public function __construct(
         private $useCase2CompanyDataService = new UseCase2CompanyDataService
-    ){}
+    ) {
+    }
 
-    
+
     public function summary()
     {
         return [
@@ -40,13 +42,12 @@ class UseCase2CompanyService
     public function gasChart($filter)
     {
         $period = @$filter['period'] ?: 'YTD';
-        $currentDate = date('Y-m-d');
-        $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
-        $periods = CarbonPeriod::create($startDate, $currentDate)->month();
+        $endDate = date('Y-m-d');
+        $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
 
-        $result = [];
-        foreach ($periods as $date) {
-            $result[] = [
+        return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'gas')->map(function ($row) {
+            $date = Carbon::parse($row->date);
+            return [
                 'date' => $date->format('Y-m'),
                 'date_label' => $date->format('M Y'),
                 'month' => $date->format('M'),
@@ -55,55 +56,35 @@ class UseCase2CompanyService
                     [
                         'label' => "Budget",
                         'slug' => 'budget',
-                        'value' => [
-                            "net" => rand(2_000_000, 10_000_000),
-                            "gross" => rand(2_000_000, 10_000_000),
-                        ],
-                        "percent" => [
-                            "net" => rand(2, 99),
-                            "gross" => rand(1, 80),
-                        ]
+                        'value' => $row->budget,
+                        "percent" => $row->budget
                     ],
                     [
                         'label' => "Actual",
                         'slug' => 'actual',
-                        'value' => [
-                            "net" => rand(2_000_000, 10_000_000),
-                            "gross" => rand(2_000_000, 10_000_000),
-                        ],
-                        "percent" => [
-                            "net" => rand(2, 99),
-                            "gross" => rand(1, 80),
-                        ]
+                        'value' => $row->actual,
+                        "percent" => $row->actual
                     ],
                     [
                         'label' => "Outlook",
                         'slug' => 'outlook',
-                        'value' => [
-                            "net" => rand(2_000_000, 10_000_000),
-                            "gross" => rand(2_000_000, 10_000_000),
-                        ],
-                        "percent" => [
-                            "net" => rand(2, 99),
-                            "gross" => rand(1, 80),
-                        ]
+                        'value' => $row->outlook,
+                        "percent" => $row->outlook
                     ]
                 ]
             ];
-        }
-        return $result;
+        });
     }
 
     public function oilChart($filter)
     {
         $period = @$filter['period'] ?: 'YTD';
-        $currentDate = date('Y-m-d');
-        $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
-        $periods = CarbonPeriod::create($startDate, $currentDate)->month();
+        $endDate = date('Y-m-d');
+        $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
 
-        $result = [];
-        foreach ($periods as $date) {
-            $result[] = [
+        return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'oil')->map(function ($row) {
+            $date = Carbon::parse($row->date);
+            return [
                 'date' => $date->format('Y-m'),
                 'date_label' => $date->format('M Y'),
                 'month' => $date->format('M'),
@@ -112,49 +93,30 @@ class UseCase2CompanyService
                     [
                         'label' => "Budget",
                         'slug' => 'budget',
-                        'value' => [
-                            "net" => rand(2_000_000, 10_000_000),
-                            "gross" => rand(2_000_000, 10_000_000),
-                        ],
-                        "percent" => [
-                            "net" => rand(2, 99),
-                            "gross" => rand(1, 80),
-                        ]
+                        'value' => $row->budget,
+                        "percent" => $row->budget
                     ],
                     [
                         'label' => "Actual",
                         'slug' => 'actual',
-                        'value' => [
-                            "net" => rand(2_000_000, 10_000_000),
-                            "gross" => rand(2_000_000, 10_000_000),
-                        ],
-                        "percent" => [
-                            "net" => rand(2, 99),
-                            "gross" => rand(1, 80),
-                        ]
+                        'value' => $row->actual,
+                        "percent" => $row->actual
                     ],
                     [
                         'label' => "Outlook",
                         'slug' => 'outlook',
-                        'value' => [
-                            "net" => rand(2_000_000, 10_000_000),
-                            "gross" => rand(2_000_000, 10_000_000),
-                        ],
-                        "percent" => [
-                            "net" => rand(2, 99),
-                            "gross" => rand(1, 80),
-                        ]
+                        'value' => $row->outlook,
+                        "percent" => $row->outlook
                     ]
                 ]
             ];
-        }
-        return $result;
+        });
     }
 
     public function productionData($limit = 10)
     {
         $date = now()->subDays(1)->format('Y-m-d');
-        return $this->useCase2CompanyDataService->findAllByDateAndType($date,'production')->map(fn($row)=>[
+        return $this->useCase2CompanyDataService->findAllByDateAndType($date, 'production')->map(fn($row) => [
             'code' => $row->code,
             'name' => $row->name,
             'gas' => [
@@ -171,7 +133,7 @@ class UseCase2CompanyService
     public function salesData($limit = 10)
     {
         $date = now()->subDays(1)->format('Y-m-d');
-        return $this->useCase2CompanyDataService->findAllByDateAndType($date,'sales')->map(fn($row)=>[
+        return $this->useCase2CompanyDataService->findAllByDateAndType($date, 'sales')->map(fn($row) => [
             'code' => $row->code,
             'name' => $row->name,
             'gas' => [

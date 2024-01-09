@@ -59,15 +59,15 @@ class InsertAssetChartData extends Command
                             'company_code' => @$row['asset_kind'],
                             'date' => @$row['date'],
                             'actual' => json_encode([
-                                'net' => @$actual['net'],
+                                'net' => @$actual['nett'],
                                 'gross' => @$actual['gross']
                             ]),
                             'budget' => json_encode([
-                                'net' => @$budget['net'],
+                                'net' => @$budget['nett'],
                                 'gross' => @$budget['gross']
                             ]),
                             'outlook' => json_encode([
-                                'net' => @$outlook['net'],
+                                'net' => @$outlook['nett'],
                                 'gross' => @$outlook['gross']
                             ]),
                         ];
