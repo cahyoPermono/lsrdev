@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('use_case2_company_chart_data', function (Blueprint $table) {
             $table->id();
             $table->date('date')->index();
+            $table->enum('type', ['gas', 'oil'])->index();
             $table->json('actual');
             $table->json('budget');
             $table->json('outlook');

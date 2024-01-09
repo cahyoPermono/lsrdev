@@ -20,12 +20,23 @@ class Url
      const GetMedcoStockPrice = "MMAPPrice/api/Stock/GetStockPrices"; // [✅]
      const GetCrudeBrentStockPrice = "MMAPPrice/api/Brent/GetBrentCrudeData"; // [✅]
      const GetCPIStockPrice = "MMAPPrice/api/ICP/GetICPData"; // [✅]
+
+
      const GetProductionCompanyDashboardData = "MMAPDashboard/v1/Company/Production"; // [✅]
      const GetSalesCompanyDashboardData = "MMAPDashboard/v1/Company/Sales"; // [✅]
+     const GetChartCompanyGasData = "MMAPDashboard/v1/Company/GasChart"; // [✅]
+     const GetChartCompanyOilData = "MMAPDashboard/v1/Company/OilChart"; // [✅]
+
      const GetProductionAssetDashboardData = "MMAPDashboard/v1/Asset/Production"; // [✅]
      const GetSalesAssetDashboardData = "MMAPDashboard/v1/Asset/Sales"; // [✅]
+     const GetChartAssetGasData = "MMAPDashboard/v1/Asset/GasChart"; // [✅]
+     const GetChartAssetOilData = "MMAPDashboard/v1/Asset/OilChart"; // [✅]
+
      const GetProductionBlockDashboardData = "MMAPDashboard/v1/Block/Production"; // [✅]
      const GetSalesBlockDashboardData = "MMAPDashboard/v1/Block/Sales"; // [✅]
-     
+     const GetChartBlockGasData = "MMAPDashboard/v1/Block/GasChart"; // [✅]
+     const GetChartBlockOilData = "MMAPDashboard/v1/Block/OilChart"; // [✅]
+
+
      const GetProductionFieldDashboardData = "MMAPDashboard/v1/Field/Production"; // [✅]
 }
