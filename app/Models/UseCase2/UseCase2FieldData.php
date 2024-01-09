@@ -11,6 +11,7 @@ class UseCase2FieldData extends Model
 
     protected $table = "use_case2_field_data";
 
+    protected $guarded = [];
     protected $casts = [
         'gas_net' => 'array',
         'gas_gross' => 'array',
