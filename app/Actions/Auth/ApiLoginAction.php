@@ -31,6 +31,9 @@ class ApiLoginAction
           if (!$ptsUser = $this->medcoUserService->findUserByEmail($request->email)) {
                throw new BadRequestException(__('alert.email_not_found'));
           }
+          if($ptsUser->person_status==='I'){
+               throw new BadRequestException('Anda tidak ditperbolehkan masuk !');
+          }
           if ($user = $this->userService->findUserByEmail($ptsUser->email)) {
                // Validate date last login
                $lastLoginDays = $user->last_login->diffInDays(now());
