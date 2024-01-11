@@ -44,6 +44,9 @@ class ApiPwtIssuerController extends ApiController
     public function index(Request $request, $pid)
     {
         $items = $this->pwtIssuerService->findByPid($pid);
+        if(!$items){
+            return $this->badRequest('Data tidak ditemukan !');
+        }
         return $this->sendSuccess($items);
     }
 
