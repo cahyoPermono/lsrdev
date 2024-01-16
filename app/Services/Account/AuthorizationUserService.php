@@ -4,6 +4,7 @@ namespace App\Services\Account;
 use Illuminate\Http\Request;
 use App\Models\AuthorizationUser;
 use Illuminate\Support\Str;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 use Laililmahfud\Adminportal\Services\AdminService;
 
 class AuthorizationUserService extends AdminService
@@ -67,6 +68,9 @@ class AuthorizationUserService extends AdminService
     }
     public function store(Request $request)
     {
+        if(!$request->permissions){
+            throw new BadRequestException('Mohon menambahkan permission terlebih dahulu !');
+        }
         $email = $request->email;
         $this->model::where('email', $email)->delete();
 

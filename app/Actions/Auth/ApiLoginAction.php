@@ -32,7 +32,7 @@ class ApiLoginAction
                throw new BadRequestException(__('alert.email_not_found'));
           }
           if($ptsUser->person_status==='I'){
-               throw new BadRequestException('Anda tidak ditperbolehkan masuk !');
+               throw new BadRequestException('Anda tidak diperbolehkan masuk !');
           }
           if ($user = $this->userService->findUserByEmail($ptsUser->email)) {
                // Validate date last login

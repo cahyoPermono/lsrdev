@@ -22,7 +22,6 @@ class AdminAuthorizationUserController extends AdminController
 
     protected $rules = [
         "email" => "required|min:3|max:150",
-        "permissions" => "required"
     ];
 
 
