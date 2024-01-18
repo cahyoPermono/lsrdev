@@ -53,23 +53,19 @@ class InsertAssetChartData extends Command
                         $actual = @$items['actual'];
                         $budget = @$items['budget'];
                         $outlook = @$items['outlook'];
+                        $date = @$row['date'];
                         return [
                             'created_at' => now(),
                             'type' => $type,
                             'company_code' => @$row['asset_kind'],
-                            'date' => @$row['date'],
-                            'actual' => json_encode([
-                                'net' => @$actual['nett'],
-                                'gross' => @$actual['gross']
-                            ]),
-                            'budget' => json_encode([
-                                'net' => @$budget['nett'],
-                                'gross' => @$budget['gross']
-                            ]),
-                            'outlook' => json_encode([
-                                'net' => @$outlook['nett'],
-                                'gross' => @$outlook['gross']
-                            ]),
+                            'date' => $date,
+                            'date_label' => date('Y-m',strtotime($date)),
+                            'actual_net' => @$actual['nett'],
+                            'actual_gross' => @$actual['gross'],
+                            'budget_net' => @$budget['nett'],
+                            'budget_gross' => @$budget['gross'],
+                            'outlook_net' => @$outlook['nett'],
+                            'outlook_gross' => @$outlook['gross'],
                         ];
                     })
                         ->toArray();
