@@ -47,6 +47,18 @@ class UseCase2CompanyService
 
         return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'gas')->map(function ($row) {
             $date = Carbon::parse($row->date);
+            $budget = [
+                'net' => (double) $row->budget_net,
+                'gross' => (double) $row->budget_gross,
+            ];
+            $actual = [
+                'net' => (double) $row->actual_net,
+                'gross' => (double) $row->actual_gross,
+            ];
+            $outlook = [
+                'net' => (double) $row->outlook_net,
+                'gross' => (double) $row->outlook_gross,
+            ];
             return [
                 'date' => $date->format('Y-m'),
                 'date_label' => $date->format('M Y'),
@@ -56,20 +68,20 @@ class UseCase2CompanyService
                     [
                         'label' => "Budget",
                         'slug' => 'budget',
-                        'value' => $row->budget,
-                        "percent" => $row->budget
+                        'value' => $budget,
+                        "percent" => $budget
                     ],
                     [
                         'label' => "Actual",
                         'slug' => 'actual',
-                        'value' => $row->actual,
-                        "percent" => $row->actual
+                        'value' => $actual,
+                        "percent" => $actual
                     ],
                     [
                         'label' => "Outlook",
                         'slug' => 'outlook',
-                        'value' => $row->outlook,
-                        "percent" => $row->outlook
+                        'value' => $outlook,
+                        "percent" => $outlook
                     ]
                 ]
             ];
@@ -84,6 +96,18 @@ class UseCase2CompanyService
 
         return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'oil')->map(function ($row) {
             $date = Carbon::parse($row->date);
+            $budget = [
+                'net' => (double) $row->budget_net,
+                'gross' => (double) $row->budget_gross,
+            ];
+            $actual = [
+                'net' => (double) $row->actual_net,
+                'gross' => (double) $row->actual_gross,
+            ];
+            $outlook = [
+                'net' => (double) $row->outlook_net,
+                'gross' => (double) $row->outlook_gross,
+            ];
             return [
                 'date' => $date->format('Y-m'),
                 'date_label' => $date->format('M Y'),
@@ -93,20 +117,20 @@ class UseCase2CompanyService
                     [
                         'label' => "Budget",
                         'slug' => 'budget',
-                        'value' => $row->budget,
-                        "percent" => $row->budget
+                        'value' => $budget,
+                        "percent" => $budget
                     ],
                     [
                         'label' => "Actual",
                         'slug' => 'actual',
-                        'value' => $row->actual,
-                        "percent" => $row->actual
+                        'value' => $actual,
+                        "percent" => $actual
                     ],
                     [
                         'label' => "Outlook",
                         'slug' => 'outlook',
-                        'value' => $row->outlook,
-                        "percent" => $row->outlook
+                        'value' => $outlook,
+                        "percent" => $outlook
                     ]
                 ]
             ];

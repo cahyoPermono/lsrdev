@@ -4,6 +4,7 @@ namespace App\Services\UseCase2;
 use App\Models\UseCase2\UseCase2AssetChartData;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\UseCase2\UseCase2AssetData;
+use Illuminate\Support\Facades\DB;
 
 class UseCase2AssetDataService
 {
@@ -30,18 +31,29 @@ class UseCase2AssetDataService
           return $dataItems;
      }
 
-     public function findAllChartByDateRangeAndType($start, $end,$companyCode,$type, $try = false)
+     public function findAllChartByDateRangeAndType($start, $end, $companyCode, $type, $try = false)
      {
-          $dataItems = $this->chartModel::query()
+          $query = $this->chartModel::query()
                ->whereBetween('date', [$start, $end])
                ->where('type', $type)
-               ->where('company_code', $companyCode)
-               ->get();
+               ->where('company_code', $companyCode);
 
-          if (!count($dataItems) && !$try) {
+          if (!$query->clone()->count() && !$try) {
                Artisan::call('use-case-2:insert-asset-chart-data');
-               return $this->findAllChartByDateRangeAndType($start, $end,$companyCode,$type, true);
+               return $this->findAllChartByDateRangeAndType($start, $end, $companyCode, $type, true);
           }
+          $dataItems = $query->clone()
+               ->select([
+                    'date_label',
+                    DB::raw("sum(actual_net) as actual_net"),
+                    DB::raw("sum(actual_gross) as actual_gross"),
+                    DB::raw("sum(budget_net) as budget_net"),
+                    DB::raw("sum(budget_gross) as budget_gross"),
+                    DB::raw("sum(outlook_net) as outlook_net"),
+                    DB::raw("sum(outlook_gross) as outlook_gross"),
+               ])
+               ->groupBy('date_label')
+               ->get();
 
           return $dataItems;
      }

@@ -61,12 +61,12 @@ class InsertBlockChartData extends Command
                                 'asset_code' => @$row['block_name'],
                                 'date' => $date,
                                 'date_label' => date('Y-m',strtotime($date)),
-                                'actual_net' => @$actual['nett'],
-                                'actual_gross' => @$actual['gross'],
-                                'budget_net' => @$budget['nett'],
-                                'budget_gross' => @$budget['gross'],
-                                'outlook_net' => @$outlook['nett'],
-                                'outlook_gross' => @$outlook['gross'],
+                                'actual_net' => (double) @$actual['nett'],
+                                'actual_gross' => (double) @$actual['gross'],
+                                'budget_net' => (double) @$budget['nett'],
+                                'budget_gross' => (double) @$budget['gross'],
+                                'outlook_net' => (double) @$outlook['nett'],
+                                'outlook_gross' => (double) @$outlook['gross'],
                             ];
                         })
                         ->toArray();

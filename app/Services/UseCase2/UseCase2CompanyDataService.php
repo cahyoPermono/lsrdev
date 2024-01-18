@@ -1,9 +1,10 @@
 <?php
 namespace App\Services\UseCase2;
 
-use App\Models\UseCase2\UseCase2CompanyChartData;
-use App\Models\UseCase2\UseCase2CompanyData;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\UseCase2\UseCase2CompanyData;
+use App\Models\UseCase2\UseCase2CompanyChartData;
 
 class UseCase2CompanyDataService
 {
@@ -31,15 +32,26 @@ class UseCase2CompanyDataService
 
      public function findAllChartByDateRangeAndType($start, $end, $type, $try = false)
      {
-          $dataItems = $this->chartModel::query()
+          $query = $this->chartModel::query()
                ->whereBetween('date', [$start, $end])
-               ->where('type', $type)
-               ->get();
+               ->where('type', $type);
 
-          if (!count($dataItems) && !$try) {
+          if (!$query->clone()->count() && !$try) {
                Artisan::call('use-case-2:insert-company-chart-data');
                return $this->findAllChartByDateRangeAndType($start, $end, $type, true);
           }
+          $dataItems = $query->clone()
+               ->select([
+                    'date_label',
+                    DB::raw("sum(actual_net) as actual_net"),
+                    DB::raw("sum(actual_gross) as actual_gross"),
+                    DB::raw("sum(budget_net) as budget_net"),
+                    DB::raw("sum(budget_gross) as budget_gross"),
+                    DB::raw("sum(outlook_net) as outlook_net"),
+                    DB::raw("sum(outlook_gross) as outlook_gross"),
+               ])
+               ->groupBy('date_label')
+               ->get();
 
           return $dataItems;
      }
