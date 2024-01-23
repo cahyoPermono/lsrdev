@@ -21,3 +21,5 @@ yarn-error.log
 .note
 /storage/blacklist-token
 /public/uploads
+
+/.notes
