@@ -89,7 +89,7 @@ class InsertAssetDashboardData extends Command
     private function deleteUseCase2Data($date, $type)
     {
         return UseCase2AssetData::query()
-            ->where('date', $date)
+            // ->where('date', $date)
             ->where('type', $type)
             ->delete();
     }

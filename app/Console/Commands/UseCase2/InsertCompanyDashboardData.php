@@ -89,7 +89,7 @@ class InsertCompanyDashboardData extends Command
     {
         return UseCase2CompanyData::query()
             ->where('date', $date)
-            ->where('type', $type)
+            // ->where('type', $type)
             ->delete();
     }
 }

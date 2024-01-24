@@ -85,7 +85,7 @@ class InsertFieldDashboardData extends Command
     private function deleteUseCase2Data($date, $type)
     {
         return UseCase2FieldData::query()
-            ->where('date', $date)
+            // ->where('date', $date)
             ->where('type', $type)
             ->delete();
     }
