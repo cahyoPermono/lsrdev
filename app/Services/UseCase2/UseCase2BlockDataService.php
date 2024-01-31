@@ -4,13 +4,15 @@ namespace App\Services\UseCase2;
 use App\Models\UseCase2\UseCase2BlockChartData;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\UseCase2\UseCase2BlockData;
+use App\Models\UseCase2\UseCase2BlockSummary;
 use Illuminate\Support\Facades\DB;
 
 class UseCase2BlockDataService
 {
      public function __construct(
           public $model = UseCase2BlockData::class,
-          public $chartModel = UseCase2BlockChartData::class
+          public $chartModel = UseCase2BlockChartData::class,
+          public $summaryModel = UseCase2BlockSummary::class
      ) {
      }
 
@@ -29,6 +31,20 @@ class UseCase2BlockDataService
           }
 
           return $dataItems;
+     }
+
+     public function findSummary($assetCode, $try = false)
+     {
+          $data = $this->summaryModel::query()
+               ->where('asset_code', $assetCode)
+               ->first();
+
+          if (!$data && !$try) {
+               Artisan::call('use-case-2:insert-block-summary-data');
+               return $this->findSummary($assetCode,true);
+          }
+
+          return $data;
      }
 
      

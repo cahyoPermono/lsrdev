@@ -5,12 +5,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\UseCase2\UseCase2CompanyData;
 use App\Models\UseCase2\UseCase2CompanyChartData;
+use App\Models\UseCase2\UseCase2CompanySummary;
 
 class UseCase2CompanyDataService
 {
      public function __construct(
           public $model = UseCase2CompanyData::class,
-          public $chartModel = UseCase2CompanyChartData::class
+          public $chartModel = UseCase2CompanyChartData::class,
+          public $summaryModel = UseCase2CompanySummary::class,
      ) {
      }
 
@@ -28,6 +30,18 @@ class UseCase2CompanyDataService
           }
 
           return $dataItems;
+     }
+
+     public function findSummary($try = false)
+     {
+          $data = $this->summaryModel::query()->first();
+
+          if (!$data && !$try) {
+               Artisan::call('use-case-2:insert-company-summary-data');
+               return $this->findSummary(true);
+          }
+
+          return $data;
      }
 
      public function findAllChartByDateRangeAndType($start, $end, $type, $try = false)

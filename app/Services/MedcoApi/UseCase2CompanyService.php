@@ -19,28 +19,27 @@ class UseCase2CompanyService
 
     public function summary()
     {
-        $data = MedcoRestful::fetchData(Url::GetSummaryCompanyDashboardData);
-        $data = @$data[0];
-        $gross = @$data['gross'];
-        $nett = @$data['nett'];
+        $data = $this->useCase2CompanyDataService->findSummary();
+        $gross = $data ? $data->gross : [];
+        $nett = $data ? $data->net : [];
         return [
             "total" => [
-                "net" => @$nett['total_today'] ?: 0,
-                "gross" => @$gross['total_today'] ?: 0,
+                "net" => @$nett['total'] ?: 0,
+                "gross" => @$gross['total'] ?: 0,
             ],
             "day_variance" => [
                 "net" => [
-                    "delta" => @$nett['total_delta'] ?: 0,
-                    "percent" => @$nett["total_percent"] ?: 0,
+                    "delta" => @$nett['day_variance_delta'] ?: 0,
+                    "percent" => @$nett["day_variance_percent"] ?: 0,
                 ],
                 "gross" => [
-                    "delta" => @$gross['total_delta'] ?: 0,
-                    "percent" => @$gross["total_percent"] ?: 0,
+                    "delta" => @$gross['day_variance_delta'] ?: 0,
+                    "percent" => @$gross["day_variance_percent"] ?: 0,
                 ]
             ],
             "ytd_production" => [
-                "net" => @$nett['total_ytd'] ?: 0,
-                "gross" => @$gross['total_ytd'] ?: 0,
+                "net" => @$nett['ytd_production'] ?: 0,
+                "gross" => @$gross['ytd_production'] ?: 0,
             ],
         ];
     }

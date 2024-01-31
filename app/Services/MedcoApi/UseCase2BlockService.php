@@ -16,25 +16,28 @@ class UseCase2BlockService
 
      public function summary($code)
      {
+          $data = $this->useCase2BlockDataService->findSummary($code);
+          $gross = $data ? $data->gross : [];
+          $nett = $data ? $data->net : [];
           return [
-               "total" => [
-                    "net" => rand(2_000_000, 10_000_000),
-                    "gross" => rand(2_000_000, 10_000_000),
-               ],
-               "day_variance" => [
-                    "net" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ],
-                    "gross" => [
-                         "delta" => rand(2_000_000, 10_000_000),
-                         "percent" => rand(0, 100)
-                    ]
-               ],
-               "ytd_production" => [
-                    "net" => rand(2_000_000, 10_000_000),
-                    "gross" => rand(2_000_000, 10_000_000),
-               ]
+              "total" => [
+                  "net" => @$nett['total'] ?: 0,
+                  "gross" => @$gross['total'] ?: 0,
+              ],
+              "day_variance" => [
+                  "net" => [
+                      "delta" => @$nett['day_variance_delta'] ?: 0,
+                      "percent" => @$nett["day_variance_percent"] ?: 0,
+                  ],
+                  "gross" => [
+                      "delta" => @$gross['day_variance_delta'] ?: 0,
+                      "percent" => @$gross["day_variance_percent"] ?: 0,
+                  ]
+              ],
+              "ytd_production" => [
+                  "net" => @$nett['ytd_production'] ?: 0,
+                  "gross" => @$gross['ytd_production'] ?: 0,
+              ],
           ];
      }
 
