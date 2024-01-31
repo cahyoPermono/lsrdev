@@ -23,6 +23,7 @@ class Url
 
 
      const GetProductionCompanyDashboardData = "MMAPDashboard/v1/Company/Production"; // [✅]
+     const GetSummaryCompanyDashboardData = "MMAPDashboard/v1/Company/Summary"; // [✅]
      const GetSalesCompanyDashboardData = "MMAPDashboard/v1/Company/Sales"; // [✅]
      const GetChartCompanyGasData = "MMAPDashboard/v1/Company/GasChart"; // [✅]
      const GetChartCompanyOilData = "MMAPDashboard/v1/Company/OilChart"; // [✅]

@@ -1,6 +1,8 @@
 <?php
 namespace App\Services\MedcoApi;
 
+use App\Helpers\MedcoRestful;
+use App\Helpers\Url;
 use App\Services\UseCase2\UseCase2CompanyDataService;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -17,25 +19,29 @@ class UseCase2CompanyService
 
     public function summary()
     {
+        $data = MedcoRestful::fetchData(Url::GetSummaryCompanyDashboardData);
+        $data = @$data[0];
+        $gross = @$data['gross'];
+        $nett = @$data['nett'];
         return [
             "total" => [
-                "net" => rand(2_000_000, 10_000_000),
-                "gross" => rand(2_000_000, 10_000_000),
+                "net" => @$nett['total_today'] ?: 0,
+                "gross" => @$gross['total_today'] ?: 0,
             ],
             "day_variance" => [
                 "net" => [
-                    "delta" => rand(2_000_000, 10_000_000),
-                    "percent" => rand(0, 100)
+                    "delta" => @$nett['total_delta'] ?: 0,
+                    "percent" => @$nett["total_percent"] ?: 0,
                 ],
                 "gross" => [
-                    "delta" => rand(2_000_000, 10_000_000),
-                    "percent" => rand(0, 100)
+                    "delta" => @$gross['total_delta'] ?: 0,
+                    "percent" => @$gross["total_percent"] ?: 0,
                 ]
             ],
             "ytd_production" => [
-                "net" => rand(2_000_000, 10_000_000),
-                "gross" => rand(2_000_000, 10_000_000),
-            ]
+                "net" => @$nett['total_ytd'] ?: 0,
+                "gross" => @$gross['total_ytd'] ?: 0,
+            ],
         ];
     }
 
