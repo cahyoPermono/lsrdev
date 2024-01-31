@@ -30,6 +30,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('use-case-2:insert-block-dashboard-data')->hourly(); 
         $schedule->command('use-case-2:insert-field-dashboard-data')->hourly(); 
 
+        $schedule->command('use-case-2:insert-company-summary-data')->hourly(); 
+        $schedule->command('use-case-2:insert-asset-summary-data')->hourly(); 
+        $schedule->command('use-case-2:insert-block-summary-data')->hourly(); 
+        $schedule->command('use-case-2:insert-field-summary-data')->hourly(); 
+
 
         $schedule->command('use-case-2:insert-company-chart-data')->hourly(); 
         $schedule->command('use-case-2:insert-asset-chart-data')->hourly(); 

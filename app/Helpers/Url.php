@@ -28,16 +28,21 @@ class Url
      const GetChartCompanyGasData = "MMAPDashboard/v1/Company/GasChart"; // [✅]
      const GetChartCompanyOilData = "MMAPDashboard/v1/Company/OilChart"; // [✅]
 
+
      const GetProductionAssetDashboardData = "MMAPDashboard/v1/Asset/Production"; // [✅]
+     const GetSummaryAssetDashboardData = "MMAPDashboard/v1/Asset/Summary"; // [✅]
      const GetSalesAssetDashboardData = "MMAPDashboard/v1/Asset/Sales"; // [✅]
      const GetChartAssetGasData = "MMAPDashboard/v1/Asset/GasChart"; // [✅]
      const GetChartAssetOilData = "MMAPDashboard/v1/Asset/OilChart"; // [✅]
 
+
      const GetProductionBlockDashboardData = "MMAPDashboard/v1/Block/Production"; // [✅]
+     const GetSummaryBlockDashboardData = "MMAPDashboard/v1/Block/Summary"; // [✅]
      const GetSalesBlockDashboardData = "MMAPDashboard/v1/Block/Sales"; // [✅]
      const GetChartBlockGasData = "MMAPDashboard/v1/Block/GasChart"; // [✅]
      const GetChartBlockOilData = "MMAPDashboard/v1/Block/OilChart"; // [✅]
 
 
      const GetProductionFieldDashboardData = "MMAPDashboard/v1/Field/Production"; // [✅]
+     const GetSummaryFieldDashboardData = "MMAPDashboard/v1/Field/Summary"; // [✅]
 }
