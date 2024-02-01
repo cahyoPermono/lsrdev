@@ -88,8 +88,8 @@ class InsertCompanyDashboardData extends Command
     private function deleteUseCase2Data($date, $type)
     {
         return UseCase2CompanyData::query()
-            ->where('date', $date)
-            // ->where('type', $type)
+            // ->where('date', $date)
+            ->where('type', $type)
             ->delete();
     }
 }
