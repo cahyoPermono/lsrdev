@@ -51,7 +51,7 @@ class UseCase2CompanyService
         $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
 
         return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'gas')->map(function ($row) {
-            $date = Carbon::parse($row->date);
+            $date = Carbon::parse($row->date_label);
             $budget = [
                 'net' => (double) $row->budget_net,
                 'gross' => (double) $row->budget_gross,
@@ -100,7 +100,7 @@ class UseCase2CompanyService
         $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
 
         return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'oil')->map(function ($row) {
-            $date = Carbon::parse($row->date);
+            $date = Carbon::parse($row->date_label);
             $budget = [
                 'net' => (double) $row->budget_net,
                 'gross' => (double) $row->budget_gross,

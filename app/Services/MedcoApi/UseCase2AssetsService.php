@@ -49,7 +49,7 @@ class UseCase2AssetsService
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
 
           return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'gas')->map(function ($row) {
-               $date = Carbon::parse($row->date);
+               $date = Carbon::parse($row->date_label);
                $budget = [
                     'net' => (double) $row->budget_net,
                     'gross' => (double) $row->budget_gross,
@@ -98,7 +98,7 @@ class UseCase2AssetsService
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
 
           return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'oil')->map(function ($row) {
-               $date = Carbon::parse($row->date);
+               $date = Carbon::parse($row->date_label);
                $budget = [
                     'net' => (double) $row->budget_net,
                     'gross' => (double) $row->budget_gross,
