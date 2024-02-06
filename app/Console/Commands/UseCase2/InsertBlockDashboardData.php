@@ -62,7 +62,7 @@ class InsertBlockDashboardData extends Command
                             'name' => $name,
                             'code' => $name,
                             'company_code' => @$row['asset_kind'],
-                            'asset_code' => @$row['block_code'],
+                            'asset_code' => @$row['block_name'],
                             'productivity_index' => @$row['productivity_index'] ?: 1,
                             'country_code' => @$row['country_code'],
                             'gas_net' => json_encode([

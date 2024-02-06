@@ -10,7 +10,7 @@ return [
  
     'path' => 'api-documentation',
 
-    'enable_documentation' => env('APP_DEBUG'),
+    'enable_documentation' => true,
 
     'domain' => null,
 
@@ -31,6 +31,10 @@ return [
         [
             'url' => env('APP_URL', 'http://localhost'),
             'description' => 'LOCAL',
+        ],
+        [
+            'url' => 'https://114.5.237.90/medco-sa/public',
+            'description' => 'MEDCO',
         ],
     ],
 
