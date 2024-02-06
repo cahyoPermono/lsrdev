@@ -56,7 +56,7 @@ class InsertFieldDashboardData extends Command
                             'date' => @$row['date'],
                             'name' => $name,
                             'code' => $name,
-                            'asset_code' => @$row['block_code'],
+                            'asset_code' => @$row['block_name'],
                             'block_code' => @$row['field_name'],
                             'country_code' => '',
                             'gas_net' => json_encode([
