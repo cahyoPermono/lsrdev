@@ -20,6 +20,7 @@ class UseCase2FieldDataService
                ->where('date', $date)
                ->where('type', $type)
                ->where('block_code', $blockCode)
+               ->orderBy('date','asc')
                ->get();
 
           if (!count($dataItems) && !$try) {

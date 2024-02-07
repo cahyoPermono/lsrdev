@@ -23,6 +23,7 @@ class UseCase2BlockDataService
                ->where('date', $date)
                ->where('type', $type)
                ->where('asset_code', $assetCode)
+               ->orderBy('date','asc')
                ->get();
 
           if (!count($dataItems) && !$try) {
@@ -69,6 +70,7 @@ class UseCase2BlockDataService
                     DB::raw("sum(outlook_net) as outlook_net"),
                     DB::raw("sum(outlook_gross) as outlook_gross"),
                ])
+               ->orderBy('date_label','asc')
                ->groupBy('date_label')
                ->get();
 

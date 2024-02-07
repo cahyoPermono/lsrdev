@@ -23,6 +23,7 @@ class UseCase2AssetDataService
                ->where('date', $date)
                ->where('type', $type)
                ->where('company_code', $companyCode)
+               ->orderBy('date','asc')
                ->get();
 
           if (!count($dataItems) && !$try) {
@@ -69,6 +70,7 @@ class UseCase2AssetDataService
                     DB::raw("sum(outlook_gross) as outlook_gross"),
                ])
                ->groupBy('date_label')
+               ->orderBy('date_label','asc')
                ->get();
 
           return $dataItems;
