@@ -32,9 +32,9 @@ class CompetencyService
                     "competency_name" => @$row['competency_name'],
                     "valid_until" => date('Y-m-d', strtotime(@$row['valid_date'] ?: now())),
                     "assessment_result" => @$row['assessement_result'],
-                    "assessor" => @$restResponse['data']['name'],
-                    "company" => @$restResponse['data']['company'],
-                    "location" => @$restResponse['data']['location_title'],
+                    "assessor" => @$restResponse['name'],
+                    "company" => @$restResponse['company'],
+                    "location" => @$restResponse['location_title'],
                     "assessment_date" => date('Y-m-d', strtotime(@$row['assessment_date'] ?: now())),
                     "assessment_method" => @$row['assessement_method'],
                ]
