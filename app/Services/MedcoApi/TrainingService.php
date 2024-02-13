@@ -30,7 +30,7 @@ class TrainingService
           return $trainings->map(fn($row) => [
                "training_name" => @$row['requirement_title'],
                "validity" => @$row['validity'],
-               "valid_until" => date('Y-m-d', strtotime(@$row['expired_date'] ?: now()->subDays(1))),
+               "valid_until" => @$row['expired_date'] ? date('Y-m-d', strtotime(@$row['expired_date'])) : null,
                "contract_number" => @$row['contract_number'],
                "status" => @$row['status'],
                "contact_owner" => @$row['contract_owner'],
