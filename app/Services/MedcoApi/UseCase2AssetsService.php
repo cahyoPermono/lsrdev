@@ -63,10 +63,11 @@ class UseCase2AssetsService
                     'gross' => (double) $row->outlook_gross,
                ];
                return [
-                    'date' => $date->format('Y-m'),
-                    'date_label' => $date->format('M Y'),
+                    'date' => $date->format('Y-m-d'),
+                    'date_label' => $date->format('d M Y'),
                     'month' => $date->format('M'),
                     'year' => $date->format('Y'),
+                    'day' => $date->format('d'),
                     'items' => [
                          [
                               'label' => "Budget",
@@ -112,10 +113,11 @@ class UseCase2AssetsService
                     'gross' => (double) $row->outlook_gross,
                ];
                return [
-                    'date' => $date->format('Y-m'),
-                    'date_label' => $date->format('M Y'),
+                    'date' => $date->format('Y-m-d'),
+                    'date_label' => $date->format('d M Y'),
                     'month' => $date->format('M'),
                     'year' => $date->format('Y'),
+                    'day' => $date->format('d'),
                     'items' => [
                          [
                               'label' => "Budget",
