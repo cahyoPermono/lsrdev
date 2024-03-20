@@ -47,6 +47,7 @@ class AuthorizationUserService extends AdminService
             ->where('authorization_users.email', $email)
             ->whereNotIn('module.key',$excludeModuleKey)
             ->select(['module.*'])
+            ->distinct()
             ->orderBy('module.sorting', 'asc')
             ->get();
 
