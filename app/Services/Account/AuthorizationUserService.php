@@ -39,6 +39,14 @@ class AuthorizationUserService extends AdminService
     }
 
 
+    public function findFirstByEmail($email)
+    {
+        return $this->model::query()
+            ->where('email', $email)
+            ->first();
+    }
+
+
     public function findUserModule($email)
     {
         $excludeModuleKey = ['use-case-2'];
