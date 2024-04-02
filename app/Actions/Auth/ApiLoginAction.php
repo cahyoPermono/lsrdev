@@ -29,7 +29,7 @@ class ApiLoginAction
           $email = $request->email;
 
           $authorization = $this->authorizationUserService->findFirstByEmail($email);
-          if ($authorization) {
+          if (!$authorization) {
                throw new BadRequestException('Anda tidak diperbolehkan masuk !');
           }
           $this->validateModuleAccess($request, $request->email);
@@ -53,7 +53,7 @@ class ApiLoginAction
                'last_login' => now(),
           ];
 
-          if ($ptsUser = $this->medcoUserService->findUserByEmail($request->email)) {
+          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
                if($ptsUser->person_status==='I'){
                     throw new BadRequestException('Anda tidak diperbolehkan masuk !');
                }
@@ -67,12 +67,11 @@ class ApiLoginAction
                ];
           }
 
-          $user = $this->userService->createOrUpdateUser($ptsUser->email, $userProperties);
+          $user = $this->userService->createOrUpdateUser($email, $userProperties);
 
-          $userName = [$ptsUser->first_name, $ptsUser->middle_name, $ptsUser->last_name];
           $user->person_id = $ptsUser?->person_id;
           $user->user_id = $user->id;
-          $user->name = implode(" ", $userName);
+          $user->name = $ptsUser ? implode(" ", [$ptsUser?->first_name, $ptsUser?->middle_name, $ptsUser?->last_name]) : $email;
           $this->userActivityService->createActivity($user->id, 'login');
 
           return $user;
