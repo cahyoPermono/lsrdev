@@ -5,6 +5,7 @@ use App\Helpers\Url;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminUsersController;
 use App\Http\Controllers\Admin\AdminAppModulesController;
+use App\Http\Controllers\Admin\AdminAuthorizationUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Route::get('/', function () {
 Route::group(['prefix' => portalconfig('admin_path'), 'as' => "admin.", 'middleware' => ['portal-admin']], function () {
     Route::post('/modules/sorting-menu', [AdminAppModulesController::class, 'sortingMenu'])->name('modules.sorting-menu');
     Route::post('/user/sync-status', [AdminUsersController::class, 'syncStatus'])->name('users.sync-status');
+
+    Route::post('/authorization-user/import',[AdminAuthorizationUserController::class,'import'])->name('authorization-user.import');
 });
 
 Route::get('test-api-connection',function(){

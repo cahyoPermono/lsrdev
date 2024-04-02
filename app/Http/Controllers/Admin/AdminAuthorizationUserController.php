@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Imports\AuthorizationUserImport;
 use App\Models\AuthorizationUser;
 use App\Services\Account\AuthorizationUserService;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class AdminAuthorizationUserController extends AdminController
     protected $pageTitle = "Authorization User";
     protected $resourcePath = "admin.authorization-user";
     protected $moduleService = AuthorizationUserService::class;
-
+    protected $import = true;
+    protected $importExcel = AuthorizationUserImport::class;
 
     protected $tableColumns = [
         ["label" => "Email", "name" => "email"],
