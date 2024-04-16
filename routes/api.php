@@ -57,6 +57,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiSelfScreeningCertificateController::class)
             ->prefix('self-screening/certificate')
             ->as('self-screening.certificate.')
+            ->middleware(['authorization:self-screening'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/pts', 'ptsCertificate')->name('pts-certificate');
@@ -65,6 +66,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiSelfScreeningController::class)
             ->prefix('self-screening')
             ->as('self-screening.')
+            ->middleware(['authorization:self-screening'])
             ->group(function () {
                 Route::get('/training', 'training')->name('training');
                 Route::get('/competency', 'competency')->name('training');
@@ -73,6 +75,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiOtherScreeningCertificateController::class)
             ->prefix('other-screening/{person_id}/certificate')
             ->as('other-screening.certificate.')
+            ->middleware(['authorization:other-screening'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/pts', 'ptsCertificate')->name('pts-certificate');
@@ -81,6 +84,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiOtherScreeningController::class)
             ->prefix('other-screening/{person_id}')
             ->as('other-screening.')
+            ->middleware(['authorization:other-screening'])
             ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
                 Route::get('/training', 'training')->name('training');
@@ -90,6 +94,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiIsolationController::class)
             ->prefix('isolation/{pid}')
             ->as('isolation.')
+            ->middleware(['authorization:isolation'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/method/{type}', 'method')->name('method')->whereIn('type', ['process', 'automation', 'electrical', 'esd', 'positive']);
@@ -98,6 +103,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiIsolationController::class)
             ->prefix('isolation')
             ->as('isolation.')
+            ->middleware(['authorization:isolation'])
             ->group(function () {
                 Route::get('/verificator/{ptsid}', 'verificator')->name('verificator');
             });
@@ -105,6 +111,7 @@ Route::middleware(['private-api'])
         Route::controller(ApiPwtIssuerController::class)
             ->prefix('ptw-issuer/{pid}')
             ->as('ptw-issuer.')
+            ->middleware(['authorization:ptw-issuer'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/{code}/wl', 'wlList')->name('wl-list');
@@ -115,6 +122,7 @@ Route::middleware(['private-api'])
 
         Route::prefix('use-case-2')
             ->as('use-case-2.')
+            ->middleware(['authorization:use-case-2'])
             ->group(function () {
                 Route::get('/', [ApiUseCase2Controller::class, 'index'])->name('index');
 
