@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Actions\Auth\ApiLogoutAction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Auth\ProfileResource;
+use App\Models\Account\User;
 use App\Services\MedcoApi\MedcoUserService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
@@ -48,12 +49,31 @@ class ApiProfileController extends ApiController
      */
     public function index(Request $request)
     {
+        $user_id = $this->auth()->session_id;
         $person_id = $this->auth()->person_id;
-        abort_if(!$person_id, 401);
-        $user = $this->medcoUserService->findUserByPersonId($person_id);
-        abort_if(!$user, 404);
+        $medcoUser = $this->medcoUserService->findUserByPersonId($person_id);
+        $user = User::where('id', $user_id)->first();
 
-        return $this->sendSuccess(new ProfileResource($user));
+
+        $spv = $medcoUser?->supervisor ?: null;
+        if ($spv) {
+            $spv = "{$spv->first_name} {$spv->middle_name} {$spv->last_name}";
+        }
+        return $this->sendSuccess([
+            'person_id' => $medcoUser?->person_id ?: '',
+            'email' => $user->email,
+            'first_name' => $medcoUser?->first_name ?: '',
+            'middle_name' => $medcoUser?->middle_name ?: '', 
+            'last_name' => $medcoUser?->last_name ?: '',
+            'sex' => $medcoUser?->sex ?: '',
+            'nationality' => $medcoUser?->nationality ?: '',
+            'department' => $medcoUser?->department_name ?: '',
+            'company' => $medcoUser?->company_name ?: '',
+            'entity' => ":TODO",
+            'person_status' => $medcoUser?->person_status ?: '',
+            'supervisor' => $spv,
+            'qr_code' => $medcoUser ? "https://chart.googleapis.com/chart?chl={$medcoUser?->person_id}&chs=500x500&cht=qr&chld=H%7C0" : ''
+        ]);
     }
 
 }
