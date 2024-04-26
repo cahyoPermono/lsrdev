@@ -19,7 +19,7 @@ class UseCase2Service
           );
 
           return [
-               $this->putObject($medcoPrice, "MEDCO"),
+               $this->putObject($medcoPrice, "MEDC"),
                $this->putObject($brentPrice, "Brent"),
                $this->putObject($cpiPrice, "CPI")
           ];
@@ -30,7 +30,7 @@ class UseCase2Service
           $date = $json ? $json['Date'] : now();
           return [
                "title" => $title,
-               "date" => date('Y-m-d', strtotime($date)),
+               "date" => date('Y-m-d H:i:s', strtotime($date)),
                "value" => @$json['Value'] ?: 0,
                "delta" => @$json['Delta'] ?: 0,
                "percent" => @$json['PCT'] ?: 0,
