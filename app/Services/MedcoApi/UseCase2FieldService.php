@@ -47,6 +47,7 @@ class UseCase2FieldService
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
           $periods = CarbonPeriod::create($startDate, $currentDate)->month();
 
+          return [];
           $result = [];
           foreach ($periods as $date) {
                $result[] = [
@@ -104,6 +105,7 @@ class UseCase2FieldService
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
           $periods = CarbonPeriod::create($startDate, $currentDate)->month();
 
+          return [];
           $result = [];
           foreach ($periods as $date) {
                $result[] = [
