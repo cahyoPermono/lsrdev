@@ -38,7 +38,7 @@ Route::middleware(['private-api'])
     ->group(function () {
 
 
-        Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile');
+        Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile')->middleware(['authorization:other-screening']);
 
         Route::controller(ApiUserAuthorizationController::class)
             ->prefix('auth/')
