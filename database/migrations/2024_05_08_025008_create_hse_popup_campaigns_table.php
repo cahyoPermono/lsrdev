@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('hse_popup_campaigns', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('file');
+            $table->string('title');
             $table->text('description');
+            $table->string('url');
+            $table->string('keyword');
             $table->string('author');
             $table->dateTime('start_at');
             $table->dateTime('end_at');
