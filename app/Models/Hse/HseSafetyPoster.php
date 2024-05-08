@@ -11,4 +11,9 @@ class HseSafetyPoster extends Model
     protected $table = "hse_safety_posters";
 
     protected $guarded = [];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

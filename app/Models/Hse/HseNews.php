@@ -11,4 +11,9 @@ class HseNews extends Model
     protected $table = "hse_news";
 
     protected $guarded = [];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

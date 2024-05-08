@@ -11,4 +11,9 @@ class HseLeasonLearned extends Model
     protected $table = "hse_leason_learned";
 
     protected $guarded = [];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

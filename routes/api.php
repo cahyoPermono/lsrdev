@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
 use App\Http\Controllers\Api\Auth\ApiUserAuthorizationController;
+use App\Http\Controllers\Api\Hse\ApiUtilityHseController;
 use App\Http\Controllers\Api\Isolation\ApiIsolationController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
@@ -171,7 +172,25 @@ Route::middleware(['private-api'])
             });
 
 
-
+        Route::get('/hse/utility/slider',[ApiUtilityHseController::class,'slider'])->name('hse.utility.slider');
+        Route::prefix('hse')
+            ->as('hse.')
+            ->middleware(['authorization:hse'])
+            ->group(function () {
+                Route::controller(ApiUtilityHseController::class)
+                    ->prefix('utility')
+                    ->as('utility.')
+                    ->group(function () {
+                        Route::get('/popup-campaign', 'popupCampaign')->name('popup-campaign');
+                        Route::get('/event/upcoming', 'upcomingEvent')->name('upcoming-event');
+                        Route::get('/events', 'events')->name('events');
+                        Route::get('/documents', 'documents')->name('documents');
+                        Route::get('/quizz', 'quizz')->name('quizz');
+                        Route::get('/news', 'news')->name('news');
+                        Route::get('/safety-poster', 'safetyPoster')->name('safety-poster');
+                        Route::get('/leasson-learned', 'leassonLearned')->name('leasson-learned');
+                    });
+            });
 
     });
 

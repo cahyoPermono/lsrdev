@@ -30,7 +30,7 @@ class InsertHseQuizzData extends Command
     public function handle()
     {
         $itemData = MedcoRestful::fetchData(
-            url : Url::GetHsePoster
+            url : Url::GetHseQuizz
         );
         if ($itemData) {
             DB::transaction(function () use ($itemData) {
