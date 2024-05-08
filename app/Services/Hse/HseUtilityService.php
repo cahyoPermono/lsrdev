@@ -102,4 +102,24 @@ class HseUtilityService
                ->paginate($limit)
                ->items();
      }
+
+     public function findHasNewData()
+     {
+          $document = $this->document::query()
+               ->latest('start_at')
+               ->whereRaw('extract(day from now() - start_at)<=30')
+               ->pluck('id')
+               ->first();
+
+          $quizz = $this->quizz::query()
+               ->latest('start_at')
+               ->whereRaw('extract(day from now() - start_at)<=30')
+               ->pluck('id')
+               ->first();
+
+          return [
+               'document' => $document ? true : false,
+               'quizz' => $quizz ? true : false,
+          ];
+     }
 }

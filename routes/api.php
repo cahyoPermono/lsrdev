@@ -181,6 +181,7 @@ Route::middleware(['private-api'])
                     ->prefix('utility')
                     ->as('utility.')
                     ->group(function () {
+                        Route::get('/new-data', 'newData')->name('new-data');
                         Route::get('/popup-campaign', 'popupCampaign')->name('popup-campaign');
                         Route::get('/event/upcoming', 'upcomingEvent')->name('upcoming-event');
                         Route::get('/events', 'events')->name('events');

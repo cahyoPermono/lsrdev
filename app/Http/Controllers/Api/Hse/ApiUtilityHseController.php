@@ -42,6 +42,26 @@ class ApiUtilityHseController extends ApiController
         return $this->sendSuccess($result);
     }
 
+     /**
+     * HSE : Has New Data
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *       "document": true,
+     *       "quizz": false
+     *   }
+     *   }     
+     */
+    public function newData(Request $request){
+        $result = $this->hseUtilityService->findHasNewData();
+        return $this->sendSuccess($result);
+    }
+
 
     /**
      * HSE : Popup Campaign
