@@ -46,6 +46,8 @@ class InsertHseNewsData extends Command
                             'date' => dateTimeFromString(@$row['Publication_x0020_Date']) ?: '',
                             'content_en' => @$row['Body'] ?: '',
                             'content_id' => @$row['Content_x0020__x002d__x0020_ID'] ?: '',
+                            'start_at' => dateTimeFromString(@$row['Start_x0020_Date']) ?: '',
+                            'end_at' => dateTimeFromString(@$row['End_x0020_Date']) ?: '',
                         ];
                     })->toArray();
                     HseNews::insert($itemData);

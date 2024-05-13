@@ -84,7 +84,10 @@ class HseUtilityService
           return $this->leassonLearned::query()
                ->latest('id')
                ->paginate($limit)
-               ->items();
+               ->transform(function ($row) {
+                    $row->is_new = now()->diffInDays($row->start_at) <= 30 ? true : false;
+                    return $row;
+               });
      }
 
      public function findAllSafetyPoster($limit = 10)
@@ -92,7 +95,10 @@ class HseUtilityService
           return $this->safetyPoster::query()
                ->latest('id')
                ->paginate($limit)
-               ->items();
+               ->transform(function ($row) {
+                    $row->is_new = now()->diffInDays($row->start_at) <= 30 ? true : false;
+                    return $row;
+               });
      }
 
      public function findAllNews($limit = 10)
@@ -100,7 +106,10 @@ class HseUtilityService
           return $this->news::query()
                ->latest('id')
                ->paginate($limit)
-               ->items();
+               ->transform(function ($row) {
+                    $row->is_new = now()->diffInDays($row->start_at) <= 30 ? true : false;
+                    return $row;
+               });
      }
 
      public function findHasNewData()

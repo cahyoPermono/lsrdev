@@ -47,6 +47,8 @@ class InsertHseLeasonLearnedData extends Command
                             'incident_location' => @$row['Incident_x0020_Location'] ?: '',
                             'leason_learned' => @$row['Body'] ?: '',
                             'asset_action' => @$row['Asset_x0020_Actions'] ?: '',
+                            'start_at' => dateTimeFromString(@$row['Start_x0020_Date']) ?: '',
+                            'end_at' => dateTimeFromString(@$row['End_x0020_Date']) ?: '',
                         ];
                     })->toArray();
                     HseLeasonLearned::insert($itemData);

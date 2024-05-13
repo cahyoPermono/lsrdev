@@ -242,7 +242,8 @@ class ApiUtilityHseController extends ApiController
      *              "risk_ranking": "",
      *              "incident_location": "Onshore Asset â€“ DRECO Rig at Matra 2023 ",
      *              "leason_learned": "stringHTMLcontent",
-     *              "asset_action": "stringHTMLcontent"
+     *              "asset_action": "stringHTMLcontent",
+     *              "is_new" : false
      *          }
      *      ]
      *  }
@@ -271,7 +272,8 @@ class ApiUtilityHseController extends ApiController
      *               "id": 8,
      *               "title": "",
      *               "author": "Ramzi Nilwarman Limboro",
-     *               "file": "base64filestring"
+     *               "file": "base64filestring",
+     *              "is_new" : false
      *           }
      *       ]
      * }
@@ -304,7 +306,8 @@ class ApiUtilityHseController extends ApiController
      *              "contributor": "Astrid Astari",
      *              "date": "2024-04-03 17:00:00",
      *              "content_en": "stringHTMLcontent",
-     *              "content_id": "stringHTMLcontent"
+     *              "content_id": "stringHTMLcontent",
+     *              "is_new" : false
      *          }
      *      ]
      *  }
