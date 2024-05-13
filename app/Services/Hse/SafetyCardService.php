@@ -118,6 +118,14 @@ class SafetyCardService
           );
           return $this->makeResult($result);
      }
+     public function recomendationPriority()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetRecommendationPriority
+          );
+          return $this->makeResult($result);
+     }
+
 
      private function makeResult($result)
      {

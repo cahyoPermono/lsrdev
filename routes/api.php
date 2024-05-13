@@ -210,6 +210,8 @@ Route::middleware(['private-api'])
                         Route::get('/life-saving-rules', 'lifeSavingRules')->name('life-saving-rules');
                         Route::get('/recomendation/category', 'recomendationCategory')->name('recomendation.category');
                         Route::get('/recomendation/priority', 'recomendationPriority')->name('recomendation.priority');
+                        Route::get('/recomendation/position', 'recomendationPosition')->name('recomendation.position');
+                        Route::post('/store', 'store')->name('store');
                     });
             });
 

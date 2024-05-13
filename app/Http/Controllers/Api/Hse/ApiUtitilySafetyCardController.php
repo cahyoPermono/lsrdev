@@ -396,5 +396,14 @@ class ApiUtitilySafetyCardController extends ApiController
         $result = $this->safetyCardService->recomendationPriority();
         return $this->sendMessage($result);
     }
+
+    
+    public function recomendationPosition(Request $request){
+
+    }
+    
+    public function store(Request $request){
+
+    }
     
 }
