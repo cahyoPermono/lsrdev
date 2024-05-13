@@ -54,6 +54,54 @@ class SafetyCardService
           );
           return $this->makeResult($result);
      }
+     
+     public function reportType()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetReportType
+          );
+          return $this->makeResult($result);
+     }
+
+     public function positibilyOfEvent()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetPossibilityOfEvent
+          );
+          return $this->makeResult($result);
+     }
+
+     public function unsafeBehaviour()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetUnsafeBehaviour
+          );
+          return $this->makeResult($result);
+     }
+
+     public function unsafeCondition()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetUnsafeCondition
+          );
+          return $this->makeResult($result);
+     }
+
+     public function unsafeReason()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetUnsafeReason
+          );
+          return $this->makeResult($result);
+     }
+
+     public function lifeSavingRules()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetLifeSavingRules
+          );
+          return $this->makeResult($result);
+     }
 
      private function makeResult($result)
      {

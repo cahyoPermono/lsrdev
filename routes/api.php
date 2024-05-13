@@ -202,6 +202,12 @@ Route::middleware(['private-api'])
                         Route::get('/location', 'location')->name('location');
                         Route::get('/division', 'division')->name('division');
                         Route::get('/department', 'department')->name('department');
+                        Route::get('/report-type', 'reportType')->name('report-type');
+                        Route::get('/posibility-of-event', 'positibilyOfEvent')->name('posibility-of-event');
+                        Route::get('/unsafe-behaviour', 'unsafeBehaviour')->name('unsafe-behaviour');
+                        Route::get('/unsafe-condition', 'unsafeCondition')->name('unsafe-condition');
+                        Route::get('/unsafe-reason', 'unsafeReason')->name('unsafe-reason');
+                        Route::get('/life-saving-rules', 'lifeSavingRules')->name('life-saving-rules');
                     });
             });
 

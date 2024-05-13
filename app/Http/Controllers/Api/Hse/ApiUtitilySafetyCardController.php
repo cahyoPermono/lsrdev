@@ -183,4 +183,164 @@ class ApiUtitilySafetyCardController extends ApiController
         $result = $this->safetyCardService->department();
         return $this->sendMessage($result);
     }
+
+
+    /**
+     * [6] SC : Report Type
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": {
+     *       "en": [
+     *       "1.1 Safe Behaviour",
+     *       "1.2 Unsafe Behaviour"
+     *       ],
+     *       "id": [
+     *       "1.1 Perilaku Aman",
+     *       "1.2 Perilaku Tidak Aman"
+     *       ]
+     *   }
+     *   }
+     */
+    public function reportType(Request $request)
+    {
+        $result = $this->safetyCardService->reportType();
+        return $this->sendMessage($result);
+    }
+
+    /**
+     * [7] SC : Positibily Of Event
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "2.1 Struck against/by",
+     *               "2.2 Fall/Trapped"
+     *           ],
+     *           "id": [
+     *               "2.1 Menabrak / Tertabrak",
+     *               "2.2 Terjatuh / Terperangkap"
+     *           ]
+     *       }
+     *   }
+     */
+    public function positibilyOfEvent(Request $request)
+    {
+        $result = $this->safetyCardService->positibilyOfEvent();
+        return $this->sendMessage($result);
+    }
+
+    /**
+     * [8] SC : Unsafe Behaviour
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "3.1.1 Operating Equipment without Authority",
+     *               "3.1.2 Failure to Secure / Warn"
+     *           ],
+     *           "id": [
+     *               "3.1.1 Mengoperasikan Tanpa Izin",
+     *               "3.1.2 Gagal Mengingatkan / Mengamankan"
+     *           ]
+     *       }
+     *   }
+     */
+    public function unsafeBehaviour(Request $request)
+    {
+        $result = $this->safetyCardService->unsafeBehaviour();
+        return $this->sendMessage($result);
+    }
+
+    /**
+     * [9] SC : Unsafe Condition
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "3.2.1 Inadequate barrier/warning sign",
+     *               "3.2.2 Defective/degraded/Corrosion of Equipment/Tools/Material"
+     *           ],
+     *           "id": [
+     *               "3.2.1 Kurang Penghalang/Tanda Peringatan",
+     *               "3.2.2 Peralatan/Alat/Material"
+     *           ]
+     *       }
+     *   }
+     */
+    public function unsafeCondition(Request $request)
+    {
+        $result = $this->safetyCardService->unsafeCondition();
+        return $this->sendMessage($result);
+    }
+
+    
+    /**
+     * [10] SC : Unsafe Reason
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "4.1 Lack of Awareness",
+     *               "4.2 Lack of training/experience"
+     *           ],
+     *           "id": [
+     *               "4.1 Kurang Peduli",
+     *               "4.2 Kurang Pelatihan / Pengalaman"
+     *           ]
+     *       }
+     *   }
+     */
+    public function unsafeReason(Request $request)
+    {
+        $result = $this->safetyCardService->unsafeReason();
+        return $this->sendMessage($result);
+    }
+
+
+     /**
+     * [11] SC : Life Saving Rules
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "5.1 Fit for Duty",
+     *               "5.2 Work Authorization"
+     *           ],
+     *           "id": [
+     *               "5.1 Dalam Kondisi Sehat untuk Bekerja",
+     *               "5.2 Otorisasi untuk Bekerja"
+     *           ]
+     *       }
+     *   }
+     */
+    public function lifeSavingRules(Request $request)
+    {
+        $result = $this->safetyCardService->lifeSavingRules();
+        return $this->sendMessage($result);
+    }
+    
 }

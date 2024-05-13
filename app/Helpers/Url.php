@@ -64,4 +64,10 @@ class Url
      const SafetyCardGetLocation = "MMAPSafetyCard/api/SafetyCard/GetLocation";
      const SafetyCardGetDivision = "MMAPSafetyCard/api/SafetyCard/GetDivision";
      const SafetyCardGetDepartment = "MMAPSafetyCard/api/SafetyCard/GetDepartment";
+     const SafetyCardGetReportType = "MMAPSafetyCard/api/SafetyCard/GetReportType";
+     const SafetyCardGetPossibilityOfEvent = "MMAPSafetyCard/api/SafetyCard/GetPossibilityOfEvent";
+     const SafetyCardGetUnsafeBehaviour = "MMAPSafetyCard/api/SafetyCard/GetUnsafeBehaviour";
+     const SafetyCardGetUnsafeCondition = "MMAPSafetyCard/api/SafetyCard/GetUnsafeCondition";
+     const SafetyCardGetUnsafeReason = "MMAPSafetyCard/api/SafetyCard/GetUnsafeReason";
+     const SafetyCardGetLifeSavingRules = "MMAPSafetyCard/api/SafetyCard/GetLifeSavingRules";
 }
