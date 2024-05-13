@@ -208,6 +208,8 @@ Route::middleware(['private-api'])
                         Route::get('/unsafe-condition', 'unsafeCondition')->name('unsafe-condition');
                         Route::get('/unsafe-reason', 'unsafeReason')->name('unsafe-reason');
                         Route::get('/life-saving-rules', 'lifeSavingRules')->name('life-saving-rules');
+                        Route::get('/recomendation/category', 'recomendationCategory')->name('recomendation.category');
+                        Route::get('/recomendation/priority', 'recomendationPriority')->name('recomendation.priority');
                     });
             });
 

@@ -342,5 +342,59 @@ class ApiUtitilySafetyCardController extends ApiController
         $result = $this->safetyCardService->lifeSavingRules();
         return $this->sendMessage($result);
     }
+
+    
+     /**
+     * [12] SC : Recomendation Category
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "Safety",
+     *               "Health"
+     *           ],
+     *           "id": [
+     *               "Safety",
+     *               "Health"
+     *           ]
+     *       }
+     *   }
+     */
+    public function recomendationCategory(Request $request)
+    {
+        $result = $this->safetyCardService->recomendationCategory();
+        return $this->sendMessage($result);
+    }
+
+        
+     /**
+     * [13] SC : Recomendation Priority
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": {
+     *           "en": [
+     *               "Low",
+     *               "Medium"
+     *           ],
+     *           "id": [
+     *               "Rendah",
+     *               "Sedang"
+     *           ]
+     *       }
+     *   }
+     */
+    public function recomendationPriority(Request $request)
+    {
+        $result = $this->safetyCardService->recomendationPriority();
+        return $this->sendMessage($result);
+    }
     
 }
