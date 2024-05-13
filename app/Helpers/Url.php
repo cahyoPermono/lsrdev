@@ -56,4 +56,12 @@ class Url
      const GetHseBannerCampaign = "MMAPHSECampaign/api/Data/GetPosterCampaigns";
      const GetHsePoster = "MMAPHSECampaign/api/Data/GetPosters";
      const GetHseQuizz = "MMAPHSECampaign/api/Data/GetQuizzes";
+
+     // Safety Card
+     const SafetyCardGetRiskRank = "MMAPSafetyCard/api/SafetyCard/GetRiskRank";
+     const SafetyCardGetCategory = "MMAPSafetyCard/api/SafetyCard/GetCategory";
+     const SafetyCardGetBlockFunction = "MMAPSafetyCard/api/SafetyCard/GetBlockFunction";
+     const SafetyCardGetLocation = "MMAPSafetyCard/api/SafetyCard/GetLocation";
+     const SafetyCardGetDivision = "MMAPSafetyCard/api/SafetyCard/GetDivision";
+     const SafetyCardGetDepartment = "MMAPSafetyCard/api/SafetyCard/GetDepartment";
 }

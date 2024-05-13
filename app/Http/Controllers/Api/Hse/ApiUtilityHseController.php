@@ -9,6 +9,7 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
 
 /**
  * @group HSE
+ * @sorting 14
  */
 class ApiUtilityHseController extends ApiController
 {

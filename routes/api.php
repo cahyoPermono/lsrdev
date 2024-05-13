@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
 use App\Http\Controllers\Api\Auth\ApiUserAuthorizationController;
 use App\Http\Controllers\Api\Hse\ApiUtilityHseController;
+use App\Http\Controllers\Api\Hse\ApiUtitilySafetyCardController;
 use App\Http\Controllers\Api\Isolation\ApiIsolationController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
@@ -172,7 +173,7 @@ Route::middleware(['private-api'])
             });
 
 
-        Route::get('/hse/utility/slider',[ApiUtilityHseController::class,'slider'])->name('hse.utility.slider');
+        Route::get('/hse/utility/slider', [ApiUtilityHseController::class, 'slider'])->name('hse.utility.slider');
         Route::prefix('hse')
             ->as('hse.')
             ->middleware(['authorization:hse'])
@@ -190,6 +191,17 @@ Route::middleware(['private-api'])
                         Route::get('/news', 'news')->name('news');
                         Route::get('/safety-poster', 'safetyPoster')->name('safety-poster');
                         Route::get('/leasson-learned', 'leassonLearned')->name('leasson-learned');
+                    });
+                Route::controller(ApiUtitilySafetyCardController::class)
+                    ->prefix('safety-card')
+                    ->as('safety-card.')
+                    ->group(function () {
+                        Route::get('/risk-rank', 'riskRank')->name('risk-rank');
+                        Route::get('/category', 'category')->name('category');
+                        Route::get('/block-function', 'blockFunction')->name('block-function');
+                        Route::get('/location', 'location')->name('location');
+                        Route::get('/division', 'division')->name('division');
+                        Route::get('/department', 'department')->name('department');
                     });
             });
 
