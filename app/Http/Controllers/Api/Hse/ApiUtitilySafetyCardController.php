@@ -25,7 +25,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *   "status": 200,
-     *   "message": {
+     *   "data": {
      *       "en": [
      *       "Low",
      *       "Medium",
@@ -42,7 +42,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function riskRank(Request $request)
     {
         $result = $this->safetyCardService->riskRank();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -53,7 +53,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *   "status": 200,
-     *   "message": {
+     *   "data": {
      *       "en": [
      *       "Occupational Safety",
      *       "Process Safety"
@@ -68,7 +68,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function category(Request $request)
     {
         $result = $this->safetyCardService->category();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -79,7 +79,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *   "status": 200,
-     *   "message": {
+     *   "data": {
      *       "en": [
      *       "Bangkanai",
      *       "Block A"
@@ -94,7 +94,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function blockFunction(Request $request)
     {
         $result = $this->safetyCardService->blockFunction();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -105,7 +105,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               {
      *                   "block_or_function": "Bangkanai",
@@ -124,7 +124,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function location(Request $request)
     {
         $result = $this->safetyCardService->location();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
 
@@ -136,7 +136,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "E&P FINANCIAL SERVICES",
      *               "SURFACE ENGINEERING OFFSHORE"
@@ -151,7 +151,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function division(Request $request)
     {
         $result = $this->safetyCardService->division();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -162,7 +162,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               {
      *                   "division": "E&P FINANCIAL SERVICES",
@@ -181,7 +181,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function department(Request $request)
     {
         $result = $this->safetyCardService->department();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
 
@@ -193,7 +193,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *   "status": 200,
-     *   "message": {
+     *   "data": {
      *       "en": [
      *       "1.1 Safe Behaviour",
      *       "1.2 Unsafe Behaviour"
@@ -208,7 +208,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function reportType(Request $request)
     {
         $result = $this->safetyCardService->reportType();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -219,7 +219,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "2.1 Struck against/by",
      *               "2.2 Fall/Trapped"
@@ -234,7 +234,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function positibilyOfEvent(Request $request)
     {
         $result = $this->safetyCardService->positibilyOfEvent();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -245,7 +245,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "3.1.1 Operating Equipment without Authority",
      *               "3.1.2 Failure to Secure / Warn"
@@ -260,7 +260,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function unsafeBehaviour(Request $request)
     {
         $result = $this->safetyCardService->unsafeBehaviour();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     /**
@@ -271,7 +271,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "3.2.1 Inadequate barrier/warning sign",
      *               "3.2.2 Defective/degraded/Corrosion of Equipment/Tools/Material"
@@ -286,7 +286,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function unsafeCondition(Request $request)
     {
         $result = $this->safetyCardService->unsafeCondition();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     
@@ -298,7 +298,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "4.1 Lack of Awareness",
      *               "4.2 Lack of training/experience"
@@ -313,7 +313,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function unsafeReason(Request $request)
     {
         $result = $this->safetyCardService->unsafeReason();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
 
@@ -325,7 +325,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "5.1 Fit for Duty",
      *               "5.2 Work Authorization"
@@ -340,7 +340,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function lifeSavingRules(Request $request)
     {
         $result = $this->safetyCardService->lifeSavingRules();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     
@@ -352,7 +352,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "Safety",
      *               "Health"
@@ -367,7 +367,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function recomendationCategory(Request $request)
     {
         $result = $this->safetyCardService->recomendationCategory();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
         
@@ -379,7 +379,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * 
      * @response {
      *       "status": 200,
-     *       "message": {
+     *       "data": {
      *           "en": [
      *               "Low",
      *               "Medium"
@@ -394,7 +394,7 @@ class ApiUtitilySafetyCardController extends ApiController
     public function recomendationPriority(Request $request)
     {
         $result = $this->safetyCardService->recomendationPriority();
-        return $this->sendMessage($result);
+        return $this->sendSuccess($result);
     }
 
     
