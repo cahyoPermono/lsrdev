@@ -28,13 +28,13 @@ class AuthorizationUserService extends AdminService
 
     public function deleteByUuid($email)
     {
-        return $this->model::where('email', $email)->delete();
+        return $this->model::where('email', 'ilike', $email)->delete();
     }
 
     public function findModuleIdByEmail($email)
     {
         return $this->model::query()
-            ->where('email', $email)
+            ->where('email', 'ilike', $email)
             ->pluck('modules_id');
     }
 
@@ -44,7 +44,7 @@ class AuthorizationUserService extends AdminService
         $excludeModuleKey = ['use-case-2'];
         $modules = $this->model::query()
             ->join('app_modules as module', 'module.id', 'authorization_users.modules_id')
-            ->where('authorization_users.email', $email)
+            ->where('authorization_users.email', "ilike", $email)
             ->whereNotIn('module.key',$excludeModuleKey)
             ->select(['module.*'])
 			->distinct()
