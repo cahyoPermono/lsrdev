@@ -1,0 +1,36 @@
+{
+     "status_code": 200,
+     "message": "Success",
+     "data": {
+         "pid": 3503942,
+         "ic_detail": "Normal Shutdown RGC 24-CAE-101 & 24-CAE-201 (standby mode)",
+         "location": "Grissik Plant - Regen Gas Compressor",
+         "detail": [
+             {
+                 "isolation_method": "Electrical Isolation",
+                 "data": [
+                     {
+                         "ip_type": "BLO - Breaker Lock Out",
+                         "ip_number": "I00001",
+                         "ip_detail": "MAIN BREAKER MOTOR RGC 1"
+                     }
+                 ]
+             },
+             {
+                 "isolation_method": "Process Isolation",
+                 "data": [
+                     {
+                         "ip_type": "CLS - Chain Lock Shut",
+                         "ip_number": "I00002",
+                         "ip_detail": "MAIN BREAKER MOTOR RGC 1"
+                     },
+                     {
+                         "ip_type": "CLS - Chain Lock Shut",
+                         "ip_number": "I00003",
+                         "ip_detail": "6 INCH DISCHARGE VALVE COMPRESSOR,REGENERATION GAS\n\"1\""
+                     }
+                 ]
+             }
+         ]
+     }
+ }

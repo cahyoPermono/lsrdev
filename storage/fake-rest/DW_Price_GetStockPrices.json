@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "Date": "2023-10-25T06:00:53",
+    "Value": 1470.0,
+    "Delta": -30.0,
+    "PCT": -2.0
+  }
+}
