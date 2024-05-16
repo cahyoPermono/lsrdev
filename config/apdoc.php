@@ -25,8 +25,12 @@ return [
 
     'servers' => [
         [
-            'url' => 'https://saturn.crocodic.net/medco/public',
+            'url' => 'https://tenmma1901t.medcoenergi.com/medco-sa/public',
             'description' => 'DEV',
+        ],
+        [
+            'url' => 'https://saturn.crocodic.net/medco/public',
+            'description' => 'SATURN',
         ],
         [
             'url' => env('APP_URL', 'http://localhost'),

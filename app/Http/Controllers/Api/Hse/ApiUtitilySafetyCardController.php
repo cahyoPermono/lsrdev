@@ -397,9 +397,41 @@ class ApiUtitilySafetyCardController extends ApiController
         return $this->sendSuccess($result);
     }
 
-    
-    public function recomendationPosition(Request $request){
 
+          
+     /**
+     * [14] SC : Recomendation Position
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+            "status": 200,
+            "message": "success",
+            "data": {
+                "en": [
+                    {
+                        "payroll_id": "20070019",
+                        "payroll_name": "HENDRA SAPUTRA",
+                        "position_id": "0000000139",
+                        "position_name": "BPM ADMIN"
+                    }
+                ],
+                "id": [
+                    {
+                        "payroll_id": "20070019",
+                        "payroll_name": "HENDRA SAPUTRA",
+                        "position_id": "0000000139",
+                        "position_name": "BPM ADMIN"
+                    }
+                ]
+            }
+        }
+     */
+    public function recomendationPosition(Request $request){
+        $user = $this->auth();
+        $result = $this->safetyCardService->recomendationPosition($user->email);
+        return $this->sendSuccess($result);
     }
     
     public function store(Request $request){

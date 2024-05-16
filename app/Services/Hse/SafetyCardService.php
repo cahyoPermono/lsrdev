@@ -120,6 +120,22 @@ class SafetyCardService
      }
 
 
+     public function recomendationPosition($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetPosition,
+               query: [
+                    'email' => $email
+               ]
+          );
+          $data = @$result['list_answer'];
+          return [
+               'en' => $data ?: [],
+               'id' => $data ?: [],
+          ];
+     }
+
+
      private function makeResult($result)
      {
           return [
