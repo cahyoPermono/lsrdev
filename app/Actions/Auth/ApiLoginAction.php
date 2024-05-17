@@ -72,14 +72,14 @@ class ApiLoginAction
           if ($appsCategory === 'use-case-2') {
                $module = AppModules::where('key', 'use-case-2')->first();
                if (!$module) {
-                    throw new BadRequestException('Anda tidak mempunyai akses !');
+                    throw new BadRequestException('Dashboard module not found');
                }
                $findModuleAccess = AuthorizationUser::query()
                     ->where('email', 'ILIKE', $email)
                     ->where('modules_id',$module->id)
                     ->first();
                if(!$findModuleAccess){
-                    throw new BadRequestException('Anda tidak mempunyai akses !');
+                    throw new BadRequestException('You are not authorized to use the Production Dashboard');
                }
           }
      }
