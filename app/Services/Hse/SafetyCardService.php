@@ -136,6 +136,21 @@ class SafetyCardService
           ];
      }
 
+     public function list($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetSafetyCardList,
+               query: [
+                    'email' => $email
+               ]
+          );
+          $data = @$result['list_answer'];
+          return [
+               'en' => $data ?: [],
+               'id' => $data ?: [],
+          ];
+     }
+
      public function postSafetyCard($params){
           try{
                $result = MedcoRestful::postAction(

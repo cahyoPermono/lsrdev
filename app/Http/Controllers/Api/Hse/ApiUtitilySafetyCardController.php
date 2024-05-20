@@ -18,6 +18,14 @@ class ApiUtitilySafetyCardController extends ApiController
         private SafetyCardService $safetyCardService
     ) {
     }
+
+    public function index(Request $request){
+
+    }
+
+    public function statistic(Request $request){
+        
+    }
     /**
      * [1] SC : Risk Rank
      * 
