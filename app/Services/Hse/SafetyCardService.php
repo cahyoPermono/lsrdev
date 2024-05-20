@@ -3,6 +3,7 @@ namespace App\Services\Hse;
 
 use App\Helpers\MedcoRestful;
 use App\Helpers\Url;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class SafetyCardService
 {
@@ -135,6 +136,20 @@ class SafetyCardService
           ];
      }
 
+     public function postSafetyCard($params){
+          try{
+               $result = MedcoRestful::postAction(
+                    url : Url::SafetyCardPostSafetyCard,
+                    body : $params
+               );
+               logger("POST SAFETY CARD");
+               logger(json_encode($result));
+               return $result;
+          }catch(\Exception $e){
+               logger($e);
+               throw new BadRequestException('Error hit api put ic detail');
+          }
+     }
 
      private function makeResult($result)
      {

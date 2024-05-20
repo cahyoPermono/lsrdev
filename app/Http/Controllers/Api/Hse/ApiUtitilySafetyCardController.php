@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Hse;
 
+use App\Actions\Hse\SubmitHseSafetyCardAction;
 use App\Http\Controllers\Controller;
 use App\Services\Hse\SafetyCardService;
 use Illuminate\Http\Request;
@@ -400,33 +401,33 @@ class ApiUtitilySafetyCardController extends ApiController
 
           
      /**
-     * [14] SC : Recomendation Position
+     * [14] SC : Position
      * 
      * @authenticated
      * @defaultParam
      * 
      * @response {
-            "status": 200,
-            "message": "success",
-            "data": {
-                "en": [
-                    {
-                        "payroll_id": "20070019",
-                        "payroll_name": "HENDRA SAPUTRA",
-                        "position_id": "0000000139",
-                        "position_name": "BPM ADMIN"
-                    }
-                ],
-                "id": [
-                    {
-                        "payroll_id": "20070019",
-                        "payroll_name": "HENDRA SAPUTRA",
-                        "position_id": "0000000139",
-                        "position_name": "BPM ADMIN"
-                    }
-                ]
-            }
-        }
+     *       "status": 200,
+     *       "message": "success",
+     *       "data": {
+     *           "en": [
+     *               {
+     *                   "payroll_id": "20070019",
+     *                   "payroll_name": "HENDRA SAPUTRA",
+     *                   "position_id": "0000000139",
+     *                   "position_name": "BPM ADMIN"
+     *               }
+     *           ],
+     *           "id": [
+     *               {
+     *                   "payroll_id": "20070019",
+     *                   "payroll_name": "HENDRA SAPUTRA",
+     *                   "position_id": "0000000139",
+     *                   "position_name": "BPM ADMIN"
+     *               }
+     *           ]
+     *       }
+     *   }
      */
     public function recomendationPosition(Request $request){
         $user = $this->auth();
@@ -434,8 +435,48 @@ class ApiUtitilySafetyCardController extends ApiController
         return $this->sendSuccess($result);
     }
     
-    public function store(Request $request){
-
+    /**
+     * [15] SC : Submit Safety Card
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @requestBody multipart/form-data
+     * @bodyParam date string required Y-m-d Format
+     * @bodyParam category string required 
+     * @bodyParam position_id string required 
+     * @bodyParam block_function string required 
+     * @bodyParam location string required 
+     * @bodyParam observation_location string required 
+     * @bodyParam company string required 
+     * @bodyParam division string required 
+     * @bodyParam department string required 
+     * @bodyParam report_type string required 
+     * @bodyParam posibility_event string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
+     * @bodyParam other_posibility_event string optional if input other 
+     * @bodyParam unsafe_behaivour string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
+     * @bodyParam other_unsafe_behaivour string optional if input other 
+     * @bodyParam unsafe_condition string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
+     * @bodyParam other_unsafe_condition string optional if input other 
+     * @bodyParam unsafe_reason string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
+     * @bodyParam other_unsafe_reason string optional if input other 
+     * @bodyParam life_saving_rule string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
+     * @bodyParam risk_rank string required 
+     * @bodyParam brief_desc string required 
+     * @bodyParam recomendation_category[0] string required 
+     * @bodyParam recomendation_finding[0] string required 
+     * @bodyParam recomendation_position_name[0] string required 
+     * @bodyParam recomendation_position_payroll_name[0] string required 
+     * @bodyParam recomendation_position_id[0] string required 
+     * @bodyParam recomendation_priority[0] string required 
+     * @bodyParam recomendation[0] string required 
+     * @bodyParam recomendation_attachments[0][0] file required 
+     * @bodyParam recomendation_attachments[0][1] file required 
+     * @bodyParam recomendation_attachments[0][2] file required 
+     */
+    public function store(Request $request,SubmitHseSafetyCardAction $submitHseSafetyCardAction){
+        $submitHseSafetyCardAction->handle($request,$this->auth());
+        dd($request->all());
     }
     
 }

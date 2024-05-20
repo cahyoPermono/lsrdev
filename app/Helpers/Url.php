@@ -73,4 +73,5 @@ class Url
      const SafetyCardGetRecommendationCategory = "MMAPSafetyCard/api/SafetyCard/GetRecommendationCategory";
      const SafetyCardGetRecommendationPriority = "MMAPSafetyCard/api/SafetyCard/GetRecommendationPriority";
      const SafetyCardGetPosition = "MMAPSafetyCard/api/SafetyCard/GetPosition";
+     const SafetyCardPostSafetyCard = "MMAPSafetyCard/api/SafetyCard/PostSafetyCard";
 }
