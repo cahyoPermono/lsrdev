@@ -11,25 +11,36 @@ class SafetyCardService
      {
           $result = MedcoRestful::fetchData(
                url: Url::SafetyCardGetSafetyCardList,
-               query : [
+               query: [
                     "email" => $email
                ]
           );
-          return collect($result)->map(fn($row)=>[
+          return collect($result)->map(fn($row) => [
                'id' => $row['safetycard_id'],
                'report_type' => @$row['report_type'] ?: '-',
                'block_or_function' => @$row['block_or_function'] ?: '-',
                'location' => @$row['location'] ?: '-',
-               'date' => dateTimeFromString(@$row['date'],'d M Y'),
+               'date' => dateTimeFromString(@$row['date'], 'd M Y'),
                'brief_desc' => @$row['brief_desc'] ?: '-',
           ]);
+     }
+
+     public function detil($id)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetSafetyCardDetail,
+               query : [
+                    "safetyCardId" => $id
+               ]
+          );
+          return $result;
      }
 
      public function statistic($email)
      {
           $result = MedcoRestful::fetchData(
                url: Url::SafetyCardGetStatistic,
-               query : [
+               query: [
                     "email" => $email
                ]
           );
@@ -90,7 +101,7 @@ class SafetyCardService
           );
           return $this->makeResult($result);
      }
-     
+
      public function reportType()
      {
           $result = MedcoRestful::fetchData(
@@ -172,16 +183,17 @@ class SafetyCardService
      }
 
 
-     public function postSafetyCard($params){
-          try{
+     public function postSafetyCard($params)
+     {
+          try {
                $result = MedcoRestful::postAction(
-                    url : Url::SafetyCardPostSafetyCard,
-                    body : $params
+                    url: Url::SafetyCardPostSafetyCard,
+                    body: $params
                );
                logger("POST SAFETY CARD");
                logger(json_encode($result));
                return $result;
-          }catch(\Exception $e){
+          } catch (\Exception $e) {
                logger($e);
                throw new BadRequestException('Error hit api put ic detail');
           }

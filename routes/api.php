@@ -197,6 +197,7 @@ Route::middleware(['private-api'])
                     ->as('safety-card.')
                     ->group(function () {
                         Route::get('/', 'index')->name('index');
+                        Route::get('/{id}/detail', 'detail')->name('detail');
                         Route::get('/statistic', 'statistic')->name('statistic');
                         Route::get('/risk-rank', 'riskRank')->name('risk-rank');
                         Route::get('/category', 'category')->name('category');

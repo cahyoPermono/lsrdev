@@ -44,6 +44,20 @@ class ApiUtitilySafetyCardController extends ApiController
         $result = $this->safetyCardService->list($this->auth()->email);
         return $this->sendSuccess($result);
     }
+
+    /**
+     * [18] SC : Detail Safety Card
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @pathParam id string required id list safety card
+     */
+    public function detail(Request $request,$id){
+        $result = $this->safetyCardService->detil($id);
+        return $this->sendSuccess($result);
+    }
+
     /**
      * [16] SC : Statistic
      * 
