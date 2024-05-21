@@ -7,6 +7,41 @@ use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class SafetyCardService
 {
+     public function list($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetSafetyCardList,
+               query : [
+                    "email" => $email
+               ]
+          );
+          return collect($result)->map(fn($row)=>[
+               'id' => $row['safetycard_id'],
+               'report_type' => @$row['report_type'] ?: '-',
+               'block_or_function' => @$row['block_or_function'] ?: '-',
+               'location' => @$row['location'] ?: '-',
+               'date' => dateTimeFromString(@$row['date'],'d M Y'),
+               'brief_desc' => @$row['brief_desc'] ?: '-',
+          ]);
+     }
+
+     public function statistic($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetStatistic,
+               query : [
+                    "email" => $email
+               ]
+          );
+          return [
+               "today" => @$result['today'] ?: 0,
+               "this_week" => @$result['this_week'] ?: 0,
+               "this_month" => @$result['this_month'] ?: 0,
+               "this_year" => @$result['this_year'] ?: 0,
+               "overall" => 0,
+          ];
+     }
+
      public function riskRank()
      {
           $result = MedcoRestful::fetchData(
@@ -136,20 +171,6 @@ class SafetyCardService
           ];
      }
 
-     public function list($email)
-     {
-          $result = MedcoRestful::fetchData(
-               url: Url::SafetyCardGetSafetyCardList,
-               query: [
-                    'email' => $email
-               ]
-          );
-          $data = @$result['list_answer'];
-          return [
-               'en' => $data ?: [],
-               'id' => $data ?: [],
-          ];
-     }
 
      public function postSafetyCard($params){
           try{

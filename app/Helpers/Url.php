@@ -58,6 +58,7 @@ class Url
      const GetHseQuizz = "MMAPHSECampaign/api/Data/GetQuizzes";
 
      // Safety Card
+     const SafetyCardGetStatistic = "MMAPSafetyCard/api/SafetyCard/GetStatistic";
      const SafetyCardGetRiskRank = "MMAPSafetyCard/api/SafetyCard/GetRiskRank";
      const SafetyCardGetCategory = "MMAPSafetyCard/api/SafetyCard/GetCategory";
      const SafetyCardGetBlockFunction = "MMAPSafetyCard/api/SafetyCard/GetBlockFunction";
@@ -75,6 +76,5 @@ class Url
      const SafetyCardGetPosition = "MMAPSafetyCard/api/SafetyCard/GetPosition";
      const SafetyCardPostSafetyCard = "MMAPSafetyCard/api/SafetyCard/PostSafetyCard";
      const SafetyCardGetSafetyCardList = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardList";
-     const SafetyCardGetStatistic = "MMAPSafetyCard/api/SafetyCard/GetStatistic";
      const SafetyCardGetSafetyCardDetail = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardDetail";
 }

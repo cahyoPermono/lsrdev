@@ -11,10 +11,10 @@ if (!function_exists('diffDays')) {
 }
 
 if (!function_exists('dateTimeFromString')) {
-     function dateTimeFromString($string): mixed
+     function dateTimeFromString($string,$format = null): mixed
      {
           if($string){
-               return Carbon::parse($string)->format('Y-m-d H:i:s');
+               return Carbon::parse($string)->format($format ?: 'Y-m-d H:i:s');
           }
           return null;
      }

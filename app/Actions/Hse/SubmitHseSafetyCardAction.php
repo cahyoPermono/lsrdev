@@ -9,34 +9,34 @@ class SubmitHseSafetyCardAction
 {
      public function handle(Request $request, $user)
      {
-          // $request->validate([
-          //      'position_id' => 'required',
-          //      'category' => 'required',
-          //      'date' => 'required',
-          //      'block_function' => 'required',
-          //      'location' => 'required',
-          //      'observation_location' => 'required',
-          //      'company' => 'required',
-          //      'division' => 'required',
-          //      'department' => 'required',
-          //      'report_type' => 'required',
-          //      'posibility_event' => 'required',
-          //      'unsafe_behaivour' => 'required',
-          //      'unsafe_condition' => 'required',
-          //      'unsafe_reason' => 'required',
-          //      'life_saving_rule' => 'required',
-          //      'risk_rank' => 'required',
-          //      'brief_description' => 'required',
-          //      'recomendation_category' => 'required',
-          //      'recomendation_finding' => 'required',
-          //      'recomendation' => 'required',
-          //      'recomendation_target_date' => 'required',
-          //      'recomendation_position_id' => 'required',
-          //      'recomendation_position_name' => 'required',
-          //      'recomendation_position_payroll_name' => 'required',
-          //      'recomendation_position_payroll_id' => 'required',
-          //      'recomendation_priority' => 'required',
-          // ]);
+          $request->validate([
+               'position_id' => 'required',
+               'category' => 'required',
+               'date' => 'required',
+               'block_function' => 'required',
+               'location' => 'required',
+               'observation_location' => 'required',
+               'company' => 'required',
+               'division' => 'required',
+               'department' => 'required',
+               'report_type' => 'required',
+               'posibility_event' => 'required',
+               'unsafe_behaivour' => 'required',
+               'unsafe_condition' => 'required',
+               'unsafe_reason' => 'required',
+               'life_saving_rule' => 'required',
+               'risk_rank' => 'required',
+               'brief_description' => 'required',
+               'recomendation_category' => 'required',
+               'recomendation_finding' => 'required',
+               'recomendation' => 'required',
+               'recomendation_target_date' => 'required',
+               'recomendation_position_id' => 'required',
+               'recomendation_position_name' => 'required',
+               'recomendation_position_payroll_name' => 'required',
+               'recomendation_position_payroll_id' => 'required',
+               'recomendation_priority' => 'required',
+          ]);
 
           $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
                $recomendation_finding = $request->recomendation_finding;
@@ -57,16 +57,16 @@ class SubmitHseSafetyCardAction
                });
      
                return [
-                    "finding" => @$recomendation_finding[$index][0] ?: '',
-                    "recommendation" => @$recomendation[$index][0] ?: '',
-                    "target_completed_date" => @$recomendation_target_date[$index][0] ?: '2024-05-08T06:51:32.849Z',
-                    "recommendation_category" => $category[0],
+                    "finding" => @$recomendation_finding[$index] ?: '',
+                    "recommendation" => @$recomendation[$index] ?: '',
+                    "target_completed_date" => @$recomendation_target_date[$index] ?: '',
+                    "recommendation_category" => $category,
                     "block" => $request->block_function,
                     "location" => $request->location,
-                    "resp_person_name" => @$recomendation_position_name[$index][0] ?: '',
-                    "resp_person_payroll" => @$recomendation_position_payroll_name[$index][0] ?: '',
-                    "resp_person_positionid" => @$recomendation_position_id[$index][0] ?: '',
-                    "priority" => @$recomendation_priority[$index][0] ?: '',
+                    "resp_person_name" => @$recomendation_position_name[$index] ?: '',
+                    "resp_person_payroll" => @$recomendation_position_payroll_name[$index] ?: '',
+                    "resp_person_positionid" => @$recomendation_position_id[$index] ?: '',
+                    "priority" => @$recomendation_priority[$index] ?: '',
                     "attachments" => $attachments
                ];
           });

@@ -19,12 +19,52 @@ class ApiUtitilySafetyCardController extends ApiController
     ) {
     }
 
+     /**
+     * [17] SC : List Safety Card
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": "success",
+     *       "data": [
+     *           {
+     *               "id": 11367,
+     *               "report_type": "Perilaku Aman",
+     *               "block_or_function": "Bangkanai",
+     *               "location": "Bangkanai",
+     *               "date": "20 May 2024",
+     *               "brief_desc": "-"
+     *           }
+     *       ]
+     *   }
+     */
     public function index(Request $request){
-
+        $result = $this->safetyCardService->list($this->auth()->email);
+        return $this->sendSuccess($result);
     }
-
+    /**
+     * [16] SC : Statistic
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *       "today": 0,
+     *       "this_week": 9,
+     *       "this_month": 9,
+     *       "this_year": 26,
+     *       "overall": 0
+     *   }
+     *   }
+     */
     public function statistic(Request $request){
-        
+        $result = $this->safetyCardService->statistic($this->auth()->email);
+        return $this->sendSuccess($result);
     }
     /**
      * [1] SC : Risk Rank
@@ -472,6 +512,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam risk_rank string required 
      * @bodyParam brief_desc string required 
      * @bodyParam recomendation_category[0] string required 
+     * @bodyParam recomendation_target_date[0] string required 
      * @bodyParam recomendation_finding[0] string required 
      * @bodyParam recomendation_position_name[0] string required 
      * @bodyParam recomendation_position_payroll_name[0] string required 
