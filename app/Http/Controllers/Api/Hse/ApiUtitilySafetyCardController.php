@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Hse\SafetyCardService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 /**
  * @group HSE - Safety Card
@@ -52,6 +53,88 @@ class ApiUtitilySafetyCardController extends ApiController
      * @defaultParam
      * 
      * @pathParam id string required id list safety card
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *       "header": {
+     *           "safetycard_id": 11375,
+     *           "process_id": 15,
+     *           "creation_date": "2024-05-21T15:10:34.647",
+     *           "payroll_id": "20070019",
+     *           "payroll_name": "HENDRA SAPUTRA",
+     *           "position_id": "0000000139",
+     *           "position_name": "BPM ADMIN",
+     *           "onbehalf_payroll_id": null,
+     *           "onbehalf_payroll_name": null,
+     *           "onbehalf_position_id": null,
+     *           "onbehalf_position_name": null,
+     *           "category": "Occupational Safety",
+     *           "date": "2024-05-21T00:00:00",
+     *           "block_or_function": "Bangkanai",
+     *           "location": "Bangkanai",
+     *           "obs_location": "Bangkanai",
+     *           "obs_name": "",
+     *           "company": null,
+     *           "division": null,
+     *           "department": "ACCOUNTING SERVICES - BUSINESS EXPENSES SETTLEMENT",
+     *           "pts_no": "",
+     *           "report_type": "Perilaku Aman",
+     *           "main_attachment": null
+     *       },
+     *       "possibility_of_event": {
+     *           "_2_4": false,
+     *           "_2_5": true,
+     *           "_2_7_text": "OTHER"
+     *       },
+     *       "unsafe_behaviour": {
+     *           "_3_1_1": false,
+     *           "_3_1_2": true,
+     *           "_3_1_12_text": "OTH"
+     *       },
+     *       "unsafe_condition": {
+     *           "_3_2_2": false,
+     *           "_3_2_3": true,
+     *           "_3_2_11_text": "USF OTH"
+     *       },
+     *       "unsafe_reason": {
+     *           "_4_1": true,
+     *           "_4_2": false,
+     *           "_4_14_text": "5.1 Fit for Duty"
+     *       },
+     *       "life_saving_rules": {
+     *           "_5_1": false,
+     *           "_5_2": true
+     *       },
+     *       "footer": {
+     *           "risk_rank": "Rendah",
+     *           "brief_desc": null,
+     *           "appreciation": ""
+     *       },
+     *       "recommendations": [
+     *           {
+     *               "finding": "FINDING VALUE",
+     *               "recommendation": "WAHHH",
+     *               "target_completed_date": "2024-05-27T00:00:00",
+     *               "recommendation_category": "Safety",
+     *               "block": "Bangkanai",
+     *               "location": "Bangkanai",
+     *               "resp_person_name": "HENDRA SAPUTRA",
+     *               "resp_person_payroll": "20070019",
+     *               "resp_person_positionid": "0000000139",
+     *               "resp_person_division": null,
+     *               "resp_person_dept": null,
+     *               "priority": "Low",
+     *               "attachments": {
+     *                   "att1": "2f094498-5d07-4a18-9e2e-3c05c2a9cf10_MwmSvocJsxKQzLUGqipiGF8gqBYG5pFLG19jaK4S.png",
+     *                   "att2": null,
+     *                   "att3": null
+     *               }
+     *           }
+     *       ]
+     *   }
+     *}
      */
     public function detail(Request $request,$id){
         $result = $this->safetyCardService->detil($id);
@@ -524,11 +607,11 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam other_unsafe_reason string optional if input other 
      * @bodyParam life_saving_rule string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam risk_rank string required 
-     * @bodyParam brief_desc string required 
+     * @bodyParam brief_description string required 
      * @bodyParam recomendation_category[0] string required 
      * @bodyParam recomendation_target_date[0] string required 
      * @bodyParam recomendation_finding[0] string required 
-     * @bodyParam recomendation_position_name[0] string required 
+     * @bodyParam recomendation_position_payroll_id[0] string required 
      * @bodyParam recomendation_position_payroll_name[0] string required 
      * @bodyParam recomendation_position_id[0] string required 
      * @bodyParam recomendation_priority[0] string required 
@@ -536,10 +619,19 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam recomendation_attachments[0][0] file required 
      * @bodyParam recomendation_attachments[0][1] file required 
      * @bodyParam recomendation_attachments[0][2] file required 
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "success"
+     *   }
      */
     public function store(Request $request,SubmitHseSafetyCardAction $submitHseSafetyCardAction){
-        $submitHseSafetyCardAction->handle($request,$this->auth());
-        dd($request->all());
+        try{
+            $submitHseSafetyCardAction->handle($request,$this->auth());
+            return $this->sendMessage('success');
+        }catch(BadRequestException $e){
+            return $this->badRequest($e->getMessage());
+        }
     }
     
 }

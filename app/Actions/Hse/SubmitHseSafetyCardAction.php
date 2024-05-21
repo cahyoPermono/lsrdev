@@ -4,6 +4,7 @@ namespace App\Actions\Hse;
 use App\Helpers\MedcoRestful;
 use App\Services\Hse\SafetyCardService;
 use Illuminate\Http\Request;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class SubmitHseSafetyCardAction
 {
@@ -27,22 +28,21 @@ class SubmitHseSafetyCardAction
                'life_saving_rule' => 'required',
                'risk_rank' => 'required',
                'brief_description' => 'required',
-               'recomendation_category' => 'required',
-               'recomendation_finding' => 'required',
-               'recomendation' => 'required',
-               'recomendation_target_date' => 'required',
-               'recomendation_position_id' => 'required',
-               'recomendation_position_name' => 'required',
-               'recomendation_position_payroll_name' => 'required',
-               'recomendation_position_payroll_id' => 'required',
-               'recomendation_priority' => 'required',
+               'recomendation_category.*' => 'required',
+               'recomendation_finding.*' => 'required',
+               'recomendation.*' => 'required',
+               'recomendation_target_date.*' => 'required',
+               'recomendation_position_id.*' => 'required',
+               'recomendation_position_payroll_id.*' => 'required',
+               'recomendation_position_payroll_name.*' => 'required',
+               'recomendation_priority.*' => 'required',
           ]);
 
           $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
                $recomendation_finding = $request->recomendation_finding;
                $recomendation_target_date = $request->recomendation_target_date;
-               $recomendation_position_name = $request->recomendation_position_name;
                $recomendation_position_payroll_name = $request->recomendation_position_payroll_name;
+               $recomendation_position_payroll_id = $request->recomendation_position_payroll_id;
                $recomendation_position_id = $request->recomendation_position_id;
                $recomendation_priority = $request->recomendation_priority;
                $recomendation = $request->recomendation;
@@ -63,8 +63,8 @@ class SubmitHseSafetyCardAction
                     "recommendation_category" => $category,
                     "block" => $request->block_function,
                     "location" => $request->location,
-                    "resp_person_name" => @$recomendation_position_name[$index] ?: '',
-                    "resp_person_payroll" => @$recomendation_position_payroll_name[$index] ?: '',
+                    "resp_person_name" => @$recomendation_position_payroll_name[$index] ?: '',
+                    "resp_person_payroll" => @$recomendation_position_payroll_id[$index] ?: '',
                     "resp_person_positionid" => @$recomendation_position_id[$index] ?: '',
                     "priority" => @$recomendation_priority[$index] ?: '',
                     "attachments" => $attachments
@@ -115,7 +115,10 @@ class SubmitHseSafetyCardAction
                "Recommendations" => $recomendations->toArray()
           ];
 
-          (new SafetyCardService)->postSafetyCard($bodyParam);
           logger(json_encode($bodyParam));
+          $result = (new SafetyCardService)->postSafetyCard($bodyParam);
+          if(!@$result['status_code']==201){
+               throw new BadRequestException(@$result['message']);
+          }
      }
 }
