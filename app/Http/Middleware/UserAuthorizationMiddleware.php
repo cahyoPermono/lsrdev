@@ -28,7 +28,7 @@ class UserAuthorizationMiddleware
 
         $userAccess = AuthorizationUser::query()
             ->join('app_modules', 'authorization_users.modules_id', 'app_modules.id')
-            ->where('authorization_users.email', $userEmail)
+            ->where('authorization_users.email', 'ilike', $userEmail)
             ->where('app_modules.key', $moduleKey)
             ->first();
         if(!$userAccess){
