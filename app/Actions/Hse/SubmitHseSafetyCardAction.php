@@ -94,8 +94,9 @@ class SubmitHseSafetyCardAction
                "Recommendations" => $recomendations->toArray()
           ];
 
-          logger(json_encode($bodyParam));
+          app('log')->channel('safety-card')->debug($bodyParam);
           $result = (new SafetyCardService)->postSafetyCard($bodyParam);
+          app('log')->channel('safety-card')->debug($result);
           if(!@$result['status_code']==201){
                throw new BadRequestException(@$result['message']);
           }
