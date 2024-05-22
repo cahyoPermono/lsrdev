@@ -597,6 +597,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam division string required 
      * @bodyParam department string required 
      * @bodyParam report_type string required 
+     * @bodyParam attachment file required 
      * @bodyParam posibility_event string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam other_posibility_event string optional if input other 
      * @bodyParam unsafe_behaivour string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI

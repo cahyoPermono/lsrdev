@@ -36,6 +36,7 @@ class SubmitHseSafetyCardAction
                'recomendation_position_payroll_id.*' => 'required',
                'recomendation_position_payroll_name.*' => 'required',
                'recomendation_priority.*' => 'required',
+               
           ]);
 
           $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
@@ -71,6 +72,7 @@ class SubmitHseSafetyCardAction
                ];
           });
 
+          $attachment = $request->file('attachment');
           $bodyParam = [
                "Header" => [
                     "email" => $user->email,
@@ -86,6 +88,10 @@ class SubmitHseSafetyCardAction
                     "department" => $request->department,
                     "pts_no" => $user?->person_id ?: '',
                     "report_type" => $request->report_type,
+                    'main_attachment' => [
+                         'file_name' => $attachment->getClientOriginalName(),
+                         'file_string' => base64_encode(file_get_contents($attachment))
+                    ]
                ],
                "PossibilityEvent" => [
                     "poe" => $request->posibility_event,
