@@ -67,28 +67,28 @@ class SubmitHseSafetyCardAction
                     ]
                ],
                "PossibilityEvent" => [
-                    "poe" => $request->posibility_event,
+                    "poe" => $request->posibility_event ?: '',
                     // array pisahkan dengan tanda koma
                     "others_poe_text" => $request->other_posibility_event ?: ''
                ],
                "UnsafeBehaviour" => [
-                    "ub" => $request->unsafe_behaivour,
+                    "ub" => $request->unsafe_behaivour ?: '',
                     // array pisahkan dengan tanda koma
                     "others_ub_text" => $request->other_unsafe_behaivour ?: '',
                ],
                "UnsafeCondition" => [
-                    "uc" => $request->unsafe_condition,
+                    "uc" => $request->unsafe_condition ?: '',
                     // array pisahkan dengan tanda koma
                     "others_uc_text" => $request->other_unsafe_condition ?: '',
                ],
                "UnsafeReason" => [
-                    "ur" => $request->unsafe_reason,
+                    "ur" => $request->unsafe_reason ?: '',
                     "others_ur_text" => $request->other_unsafe_reason ?: '',
                ],
-               "LifeSavingRule" => $request->life_saving_rule, // array pisahkan dengan tanda koma
+               "LifeSavingRule" => $request->life_saving_rule ?: '', // array pisahkan dengan tanda koma
                "Footer" => [
-                    "risk_rank" => $request->risk_rank,
-                    "brief_desc" => $request->brief_description,
+                    "risk_rank" => $request->risk_rank ?: '',
+                    "brief_desc" => $request->brief_description ?: '',
                     "appreciation" => "",
                ],
                "Recommendations" => $recomendations->toArray()
