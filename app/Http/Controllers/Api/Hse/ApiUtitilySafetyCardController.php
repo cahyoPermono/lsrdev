@@ -628,6 +628,33 @@ class ApiUtitilySafetyCardController extends ApiController
      */
     public function store(Request $request,SubmitHseSafetyCardAction $submitHseSafetyCardAction){
         try{
+            $this->validates([
+                'position_id' => 'required',
+                'category' => 'required',
+                'date' => 'required',
+                'block_function' => 'required',
+                'location' => 'required',
+                'observation_location' => 'required',
+                'company' => 'required',
+                'division' => 'required',
+                'department' => 'required',
+                'report_type' => 'required',
+                'posibility_event' => 'required',
+                'unsafe_behaivour' => 'required',
+                'unsafe_condition' => 'required',
+                'unsafe_reason' => 'required',
+                'life_saving_rule' => 'required',
+                'risk_rank' => 'required',
+                'brief_description' => 'required',
+                'recomendation_category.*' => 'required',
+                'recomendation_finding.*' => 'required',
+                'recomendation.*' => 'required',
+                'recomendation_target_date.*' => 'required',
+                'recomendation_position_id.*' => 'required',
+                'recomendation_position_payroll_id.*' => 'required',
+                'recomendation_position_payroll_name.*' => 'required',
+                'recomendation_priority.*' => 'required',
+           ]);
             $submitHseSafetyCardAction->handle($request,$this->auth());
             return $this->sendMessage('success');
         }catch(BadRequestException $e){
