@@ -59,7 +59,7 @@ class SubmitHseSafetyCardAction
                     "company" => $request->company,
                     "division" => $request->division,
                     "department" => $request->department,
-                    "pts_no" => $user?->person_id ?: '',
+                    "pts_no" => (string) $user?->person_id ?: '',
                     "report_type" => $request->report_type,
                     'main_attachment' => [
                          'file_name' => $attachment->getClientOriginalName(),
