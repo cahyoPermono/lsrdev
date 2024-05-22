@@ -2,6 +2,7 @@
 
 use App\Helpers\MedcoRestful;
 use App\Helpers\Url;
+use App\Services\MedcoApi\MedcoUserService;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminUsersController;
 use App\Http\Controllers\Admin\AdminAppModulesController;
@@ -17,9 +18,8 @@ use App\Http\Controllers\Admin\AdminAuthorizationUserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::get('/', function () {
-    return view('welcome');
+    return to_route('admin.dashboard');
 });
 Route::group(['prefix' => portalconfig('admin_path'), 'as' => "admin.", 'middleware' => ['portal-admin']], function () {
     Route::post('/modules/sorting-menu', [AdminAppModulesController::class, 'sortingMenu'])->name('modules.sorting-menu');

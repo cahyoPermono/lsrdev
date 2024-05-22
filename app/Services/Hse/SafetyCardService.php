@@ -176,10 +176,7 @@ class SafetyCardService
                ]
           );
           $data = @$result['list_answer'];
-          return [
-               'en' => $data ?: [],
-               'id' => $data ?: [],
-          ];
+          return $data;
      }
 
 
