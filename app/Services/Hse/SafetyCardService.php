@@ -176,7 +176,11 @@ class SafetyCardService
                ]
           );
           $data = @$result['list_answer'];
-          return $data;
+          return [
+               'payroll_id' => @$data['payroll_id'] ?: '',
+               'payroll_name' => @$data['payroll_name'] ?: '',
+               'positions' => @$data['positions'] ?: [],
+          ];
      }
 
 
