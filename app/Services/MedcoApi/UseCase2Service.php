@@ -19,7 +19,7 @@ class UseCase2Service
           );
 
           return [
-               $this->putObject($medcoPrice, "MEDCO"),
+               $this->putObject($medcoPrice, "MEDC"),
                $this->putObject($brentPrice, "Brent"),
                $this->putObject($cpiPrice, "CPI")
           ];
