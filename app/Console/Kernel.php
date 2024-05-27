@@ -25,19 +25,20 @@ class Kernel extends ConsoleKernel
     }
 
     private function runJob(Schedule $schedule){
-        $schedule->command('use-case-2:insert-company-dashboard-data')->hourly(); 
-        $schedule->command('use-case-2:insert-asset-dashboard-data')->hourly(); 
-        $schedule->command('use-case-2:insert-block-dashboard-data')->hourly(); 
-        $schedule->command('use-case-2:insert-field-dashboard-data')->hourly(); 
+        
+        $schedule->command('use-case-2:insert-company-dashboard-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-asset-dashboard-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-block-dashboard-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-field-dashboard-data')->everyThirtyMinutes(); 
 
-        $schedule->command('use-case-2:insert-company-summary-data')->hourly(); 
-        $schedule->command('use-case-2:insert-asset-summary-data')->hourly(); 
-        $schedule->command('use-case-2:insert-block-summary-data')->hourly(); 
-        $schedule->command('use-case-2:insert-field-summary-data')->hourly(); 
+        $schedule->command('use-case-2:insert-company-summary-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-asset-summary-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-block-summary-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-field-summary-data')->everyThirtyMinutes(); 
 
 
-        $schedule->command('use-case-2:insert-company-chart-data')->hourly(); 
-        $schedule->command('use-case-2:insert-asset-chart-data')->hourly(); 
-        $schedule->command('use-case-2:insert-block-chart-data')->hourly(); 
+        $schedule->command('use-case-2:insert-company-chart-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-asset-chart-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-block-chart-data')->everyThirtyMinutes(); 
     }
 }
