@@ -203,6 +203,10 @@ class SafetyCardService
      private function makeResult($result)
      {
           return [
+               'label' => [
+                    'en' => @$result['question_eng'],
+                    'id' => @$result['question_ind'],
+               ],
                'en' => @$result['list_answer_eng'] ?: [],
                'id' => @$result['list_answer_ind'] ?: []
           ];
