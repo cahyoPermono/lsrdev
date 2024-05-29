@@ -32,7 +32,7 @@ class ApiLoginAction
                throw new BadRequestException(__('alert.email_not_found'));
           }
           if($ptsUser->person_status==='I'){
-               throw new BadRequestException(__('alert.account_in_active'));
+               throw new BadRequestException('Your PTS status is inactive. Please contact admin');
           }
           if ($user = $this->userService->findUserByEmail($ptsUser->email)) {
                // Validate date last login
