@@ -59,7 +59,7 @@ class InsertAssetDashboardData extends Command
                             'type' => $type,
                             'date' => @$row['date'],
                             'name' => @$row['block_name'],
-                            'code' => @$row['block_name'],
+                            'code' => @$row['block_code'],
                             'company_code' => @$row['asset_kind'],
                             'productivity_index' => @$row['productivity_index'] ?: 1,
                             'country_code' => @$row['country_code'],
