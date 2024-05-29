@@ -191,8 +191,8 @@ class SafetyCardService
                     url: Url::SafetyCardPostSafetyCard,
                     body: $params
                );
-               logger("POST SAFETY CARD");
-               logger(json_encode($result));
+               // logger("POST SAFETY CARD");
+               // logger(json_encode($result));
                return $result;
           } catch (\Exception $e) {
                logger($e);
