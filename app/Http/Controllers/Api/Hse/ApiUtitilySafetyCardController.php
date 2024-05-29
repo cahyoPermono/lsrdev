@@ -172,6 +172,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *   "status": 200,
      *   "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *       "en": [
      *       "Low",
      *       "Medium",
@@ -200,6 +204,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *   "status": 200,
      *   "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *       "en": [
      *       "Occupational Safety",
      *       "Process Safety"
@@ -226,6 +234,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *   "status": 200,
      *   "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *       "en": [
      *       "Bangkanai",
      *       "Block A"
@@ -252,6 +264,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               {
      *                   "block_or_function": "Bangkanai",
@@ -283,6 +299,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "E&P FINANCIAL SERVICES",
      *               "SURFACE ENGINEERING OFFSHORE"
@@ -309,6 +329,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               {
      *                   "division": "E&P FINANCIAL SERVICES",
@@ -340,6 +364,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *   "status": 200,
      *   "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *       "en": [
      *       "1.1 Safe Behaviour",
      *       "1.2 Unsafe Behaviour"
@@ -366,6 +394,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "2.1 Struck against/by",
      *               "2.2 Fall/Trapped"
@@ -392,6 +424,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "3.1.1 Operating Equipment without Authority",
      *               "3.1.2 Failure to Secure / Warn"
@@ -418,6 +454,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "3.2.1 Inadequate barrier/warning sign",
      *               "3.2.2 Defective/degraded/Corrosion of Equipment/Tools/Material"
@@ -445,6 +485,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "4.1 Lack of Awareness",
      *               "4.2 Lack of training/experience"
@@ -472,6 +516,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "5.1 Fit for Duty",
      *               "5.2 Work Authorization"
@@ -499,6 +547,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "Safety",
      *               "Health"
@@ -526,6 +578,10 @@ class ApiUtitilySafetyCardController extends ApiController
      * @response {
      *       "status": 200,
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               "Low",
      *               "Medium"
@@ -555,6 +611,10 @@ class ApiUtitilySafetyCardController extends ApiController
      *       "status": 200,
      *       "message": "success",
      *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
      *           "en": [
      *               {
      *                   "payroll_id": "20070019",
