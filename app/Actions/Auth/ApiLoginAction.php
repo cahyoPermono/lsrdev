@@ -10,7 +10,10 @@ use App\Models\AppModules;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
 use App\Services\Account\UserActivityService;
+use Illuminate\Validation\UnauthorizedException;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
+use Laililmahfud\Adminportal\Api\JwtToken;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class ApiLoginAction
 {
@@ -25,6 +28,25 @@ class ApiLoginAction
      {
           $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
+
+          $tokenMedco = $request->header('tokenmedco');
+          if (empty($tokenMedco)){
+               throw new BadRequestException('Your token was invalid !');
+          }
+          $parts = explode('.', $tokenMedco);
+          if (count($parts) < 3){
+               throw new BadRequestException('Your token was invalid !');
+          }
+          $payload = base64_decode($parts[1]);
+          $decoded_payload = json_decode($payload, true);
+          
+          if(!isset($decoded_payload['email'])) {
+               throw new BadRequestException('Your token was invalid !');
+          }
+          if(strtolower($decoded_payload['email']) != strtolower($request->email)){ 
+               throw new BadRequestException('Your token was invalid !');
+          }
+
 
           
           $this->validateModuleAccess($request,$request->email);
@@ -72,7 +94,7 @@ class ApiLoginAction
           if ($appsCategory === 'use-case-2') {
                $module = AppModules::where('key', 'use-case-2')->first();
                if (!$module) {
-                    throw new BadRequestException('Dashboard module not found');
+                    throw new InternalErrorException('Dashboard module does not exist');
                }
                $findModuleAccess = AuthorizationUser::query()
                     ->where('email', 'ILIKE', $email)

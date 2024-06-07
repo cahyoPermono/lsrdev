@@ -26,6 +26,8 @@ class ApiLoginController extends ApiController
      * @authenticated
      * @defaultParam
      * 
+     * @header tokenmedco string required
+     * 
      * @requestBody multipart/form-data
      * @bodyParam email string required ex : abdul.hakim@contractor.medcoenergi.com
      * 
