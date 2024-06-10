@@ -49,7 +49,7 @@ class SafetyCardService
                "this_week" => @$result['this_week'] ?: 0,
                "this_month" => @$result['this_month'] ?: 0,
                "this_year" => @$result['this_year'] ?: 0,
-               "overall" => 0,
+               "overall" => @$result['overall'] ?: 0,
           ];
      }
 
