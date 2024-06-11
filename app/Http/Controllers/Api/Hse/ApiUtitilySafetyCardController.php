@@ -647,6 +647,8 @@ class ApiUtitilySafetyCardController extends ApiController
      * @authenticated
      * @defaultParam
      * 
+     * @queryParam string name optional
+     * @queryParam string position optional
      * @response {
      *       "status": 200,
      *       "message": "success",
