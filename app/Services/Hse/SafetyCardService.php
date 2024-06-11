@@ -183,6 +183,23 @@ class SafetyCardService
           ];
      }
 
+     public function recomendationResponsibile($name,$position)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetResponsiblePerson,
+               query: [
+                    'name' => $name ?: '',
+                    'position' => $position ?: ''
+               ]
+          );
+          $data = @$result['list_answer'];
+          return [
+               'payroll_id' => @$data['payroll_id'] ?: '',
+               'payroll_name' => @$data['payroll_name'] ?: '',
+               'positions' => @$data['positions'] ?: [],
+          ];
+     }
+
 
      public function postSafetyCard($params)
      {

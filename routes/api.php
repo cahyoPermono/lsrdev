@@ -214,6 +214,7 @@ Route::middleware(['private-api'])
                         Route::get('/recomendation/category', 'recomendationCategory')->name('recomendation.category');
                         Route::get('/recomendation/priority', 'recomendationPriority')->name('recomendation.priority');
                         Route::get('/recomendation/position', 'recomendationPosition')->name('recomendation.position');
+                        Route::get('/recomendation/responsibile', 'recomendationResponsibile')->name('recomendation.responsibile');
                         Route::post('/store', 'store')->name('store');
                     });
             });

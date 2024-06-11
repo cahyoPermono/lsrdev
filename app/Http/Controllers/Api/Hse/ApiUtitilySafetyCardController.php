@@ -640,6 +640,45 @@ class ApiUtitilySafetyCardController extends ApiController
         return $this->sendSuccess($result);
     }
     
+
+    /**
+     * [15] SC : Responsible
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": "success",
+     *       "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
+     *           "en": [
+     *               {
+     *                   "payroll_id": "20070019",
+     *                   "payroll_name": "HENDRA SAPUTRA",
+     *                   "position_id": "0000000139",
+     *                   "position_name": "BPM ADMIN"
+     *               }
+     *           ],
+     *           "id": [
+     *               {
+     *                   "payroll_id": "20070019",
+     *                   "payroll_name": "HENDRA SAPUTRA",
+     *                   "position_id": "0000000139",
+     *                   "position_name": "BPM ADMIN"
+     *               }
+     *           ]
+     *       }
+     *   }
+     */
+    public function recomendationResponsibile(Request $request){
+        $result = $this->safetyCardService->recomendationResponsibile($request->get('name',''),$request->get('position',''));
+        return $this->sendSuccess($result);
+    }
+    
     /**
      * [15] SC : Submit Safety Card
      * 
