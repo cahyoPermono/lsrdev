@@ -4,12 +4,14 @@ namespace App\Services\UseCase2;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\UseCase2\UseCase2FieldData;
 use App\Models\UseCase2\UseCase2FieldSummary;
+use App\Models\UseCase2\UseCase2FieldChartData;
 
 class UseCase2FieldDataService
 {
      public function __construct(
           public $model = UseCase2FieldData::class,
-          public $summaryModel = UseCase2FieldSummary::class
+          public $summaryModel = UseCase2FieldSummary::class,
+          public $chartModel = UseCase2FieldChartData::class,
      ) {
      }
 
@@ -43,5 +45,31 @@ class UseCase2FieldDataService
           }
 
           return $data;
+     }
+
+     public function findAllChartByDateRangeAndType($start, $end, $blockCode, $type, $try = false)
+     {
+          $query = $this->chartModel::query()
+               ->where('type', $type)
+               ->where('block_code', $blockCode);
+
+          if (!$query->clone()->count() && !$try) {
+               Artisan::call('use-case-2:insert-field-chart-data');
+               return $this->findAllChartByDateRangeAndType($start, $end,$blockCode,$type, true);
+          }
+          $dataItems = $query->clone()
+               ->select([
+                    'date as date_label',
+                    "actual_net",
+                    "actual_gross",
+                    "budget_net",
+                    "budget_gross",
+                    "outlook_net",
+                    "outlook_gross",
+               ])
+               ->orderBy('date','asc')
+               ->get();
+
+          return $dataItems;
      }
 }
