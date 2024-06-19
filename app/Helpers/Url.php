@@ -45,4 +45,6 @@ class Url
 
      const GetProductionFieldDashboardData = "MMAPDashboard/v1/Field/Production"; // [✅]
      const GetSummaryFieldDashboardData = "MMAPDashboard/v1/Field/Summary"; // [✅]
+     const GetChartFieldGasData = "MMAPDashboard/v1/Field/GasChart"; // [✅]
+     const GetChartFieldOilData = "MMAPDashboard/v1/Field/OilChart"; // [✅]
 }

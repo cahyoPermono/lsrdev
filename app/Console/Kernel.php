@@ -40,6 +40,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('use-case-2:insert-company-chart-data')->everyThirtyMinutes(); 
         $schedule->command('use-case-2:insert-asset-chart-data')->everyThirtyMinutes(); 
         $schedule->command('use-case-2:insert-block-chart-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-field-chart-data')->everyThirtyMinutes();
 
         $schedule->command('app:deactivate-inactive-users')->everyThirtyMinutes(); 
     }
