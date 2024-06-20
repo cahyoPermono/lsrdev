@@ -37,4 +37,16 @@ class MedcoRestful
                ->json();
      }
 
+     public static function postAction($url, $query = null, $body = [])
+     {
+          if ($query) {
+               $query = "?" . http_build_query($query);
+          }
+          $url = config('services.api.medco_rest_url') . $url . $query;
+          return Http::withoutVerifying()
+               ->asJson()
+               ->post($url, $body)
+               ->json();
+     }
+
 }

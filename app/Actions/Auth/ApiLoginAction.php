@@ -19,6 +19,7 @@ class ApiLoginAction
 {
      public function __construct(
           private $userActivityService = new UserActivityService,
+          private $authorizationUserService = new AuthorizationUserService,
           private $userService = new UserService,
           private $medcoUserService = new MedcoUserService
      ) {
@@ -56,7 +57,17 @@ class ApiLoginAction
           if($ptsUser->person_status==='I'){
                throw new BadRequestException('Your PTS status is inactive. Please contact admin');
           }
-          if ($user = $this->userService->findUserByEmail($ptsUser->email)) {
+
+          $email = $request->email;
+
+          $authorization = $this->authorizationUserService->findFirstByEmail($email);
+          if (!$authorization) {
+               throw new BadRequestException('Anda tidak diperbolehkan masuk !');
+          }
+          $this->validateModuleAccess($request, $request->email);
+
+
+          if ($user = $this->userService->findOrCreateByEmail($email)) {
                // Validate date last login
                $lastLoginDays = $user->last_login->diffInDays(now());
                if ($lastLoginDays >= $maxLastLoginDays) {
@@ -67,25 +78,37 @@ class ApiLoginAction
                }
           }
 
-
-          $user = $this->userService->createOrUpdateUser($ptsUser->email, [
-               'email' => $ptsUser->email,
-               'workforce' => $ptsUser->department_name ?: '',
-               'identify_provider' => $ptsUser->company_name ?: '',
-               'pts_id' => $ptsUser->person_id,
+          $userProperties = [
                'platform' => $request->header('platform'),
                'regid' => $request->header('regid'),
                'status' => Status::Active,
                'last_login' => now(),
-          ]);
+          ];
 
-          $userName = [$ptsUser->first_name,$ptsUser->middle_name,$ptsUser->last_name];
-          $ptsUser->user_id = $user->id;
-          $ptsUser->name = implode(" ",$userName);
+          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
+               if($ptsUser->person_status==='I'){
+                    throw new BadRequestException('Anda tidak diperbolehkan masuk !');
+               }
+               $userProperties = [
+                    ...$userProperties,
+                    ...[
+                         'workforce' => $ptsUser->department_name ?: '',
+                         'identify_provider' => $ptsUser->company_name ?: '',
+                         'pts_id' => $ptsUser->person_id,
+                    ]
+               ];
+          }
+
+          $user = $this->userService->createOrUpdateUser($email, $userProperties);
+
+          $user->person_id = $ptsUser?->person_id;
+          $user->user_id = $user->id;
+          $user->name = $ptsUser ? implode(" ", [$ptsUser?->first_name, $ptsUser?->middle_name, $ptsUser?->last_name]) : $email;
           $this->userActivityService->createActivity($user->id, 'login');
 
-          return $ptsUser;
+          return $user;
      }
+
 
 
      private function validateModuleAccess(Request $request, $email)
@@ -97,11 +120,11 @@ class ApiLoginAction
                     throw new InternalErrorException('Dashboard module does not exist');
                }
                $findModuleAccess = AuthorizationUser::query()
-                    ->where('email', 'ILIKE', $email)
-                    ->where('modules_id',$module->id)
+                    ->where('email', $email)
+                    ->where('modules_id', $module->id)
                     ->first();
-               if(!$findModuleAccess){
-                    throw new BadRequestException('You are not authorized to use the Production Dashboard');
+               if (!$findModuleAccess) {
+                    throw new BadRequestException('You are not authorized to use the Production Dashboard!');
                }
           }
      }

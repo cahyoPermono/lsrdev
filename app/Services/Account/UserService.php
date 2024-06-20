@@ -34,6 +34,22 @@ class UserService extends AdminService
           return $this->model::where('email', $email)->first();
      }
 
+     public function findOrCreateByEmail($email)
+     {
+          $user =  $this->model::where('email','ilike', $email)->first();
+          if(!$user){
+               $user = $this->model::create([
+                    'email' => $email,
+                    'workforce' => '',
+                    'identify_provider' => '',
+                    'pts_id' => '',
+                    'status' => 'active',
+                    'last_login' => now(),
+               ]);
+          }
+          return $user;
+     }
+
      public function updateUser($id, $properties)
      {
           return $this->model::where('id', $id)->update($properties);

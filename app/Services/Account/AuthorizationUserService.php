@@ -39,6 +39,14 @@ class AuthorizationUserService extends AdminService
     }
 
 
+    public function findFirstByEmail($email)
+    {
+        return $this->model::query()
+            ->where('email',"ilike", $email)
+            ->first();
+    }
+
+
     public function findUserModule($email)
     {
         $excludeModuleKey = ['use-case-2'];
@@ -73,7 +81,7 @@ class AuthorizationUserService extends AdminService
             throw new BadRequestException('Mohon menambahkan permission terlebih dahulu !');
         }
         $email = $request->email;
-        $this->model::where('email', $email)->delete();
+        $this->model::where('email',"ilike", $email)->delete();
 
         $this->model::insert(
             collect($request->permissions)->map(fn($id) => [
@@ -92,6 +100,6 @@ class AuthorizationUserService extends AdminService
 
     public function bulkDeleteByUuid($emails)
     {
-        return $this->model::whereIn('email', $emails)->delete();
+        return $this->model::whereIn('email', "ilike", $emails)->delete();
     }
 }
