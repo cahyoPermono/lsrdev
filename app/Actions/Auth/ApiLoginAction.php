@@ -5,7 +5,7 @@ use App\Enum\Status;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use App\Models\AuthorizationUser;
-use App\Helpers\Faker\UserDataFake;
+use App\Services\Account\AuthorizationUserService;
 use App\Models\AppModules;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
