@@ -1,0 +1,233 @@
+<?php
+namespace App\Services\Hse;
+
+use App\Helpers\MedcoRestful;
+use App\Helpers\Url;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
+
+class SafetyCardService
+{
+     public function list($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetSafetyCardList,
+               query: [
+                    "email" => $email
+               ]
+          );
+          return collect($result)->map(fn($row) => [
+               'id' => $row['safetycard_id'],
+               'report_type' => @$row['report_type'] ?: '-',
+               'block_or_function' => @$row['block_or_function'] ?: '-',
+               'location' => @$row['location'] ?: '-',
+               'date' => dateTimeFromString(@$row['date'], 'd M Y'),
+               'brief_desc' => @$row['brief_desc'] ?: '-',
+          ]);
+     }
+
+     public function detil($id)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetSafetyCardDetail,
+               query : [
+                    "safetyCardId" => $id
+               ]
+          );
+          return $result;
+     }
+
+     public function statistic($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetStatistic,
+               query: [
+                    "email" => $email
+               ]
+          );
+          return [
+               "today" => @$result['today'] ?: 0,
+               "this_week" => @$result['this_week'] ?: 0,
+               "this_month" => @$result['this_month'] ?: 0,
+               "this_year" => @$result['this_year'] ?: 0,
+               "overall" => @$result['overall'] ?: 0,
+          ];
+     }
+
+     public function riskRank()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetRiskRank
+          );
+          return $this->makeResult($result);
+     }
+
+
+     public function category()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetCategory
+          );
+          return $this->makeResult($result);
+     }
+
+     public function blockFunction()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetBlockFunction
+          );
+          return $this->makeResult($result);
+     }
+
+     public function location()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetLocation
+          );
+          return $this->makeResult($result);
+     }
+
+     public function division()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetDivision
+          );
+          return $this->makeResult($result);
+     }
+
+     public function department()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetDepartment
+          );
+          return $this->makeResult($result);
+     }
+
+     public function reportType()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetReportType
+          );
+          return $this->makeResult($result);
+     }
+
+     public function positibilyOfEvent()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetPossibilityOfEvent
+          );
+          return $this->makeResult($result);
+     }
+
+     public function unsafeBehaviour()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetUnsafeBehaviour
+          );
+          return $this->makeResult($result);
+     }
+
+     public function unsafeCondition()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetUnsafeCondition
+          );
+          return $this->makeResult($result);
+     }
+
+     public function unsafeReason()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetUnsafeReason
+          );
+          return $this->makeResult($result);
+     }
+
+     public function lifeSavingRules()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetLifeSavingRules
+          );
+          return $this->makeResult($result);
+     }
+
+     public function recomendationCategory()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetRecommendationCategory
+          );
+          return $this->makeResult($result);
+     }
+
+     public function recomendationPriority()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetRecommendationPriority
+          );
+          return $this->makeResult($result);
+     }
+
+
+     public function recomendationPosition($email)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetPosition,
+               query: [
+                    'email' => $email
+               ]
+          );
+          $data = @$result['list_answer'];
+          return [
+               'payroll_id' => @$data['payroll_id'] ?: '',
+               'payroll_name' => @$data['payroll_name'] ?: '',
+               'positions' => @$data['positions'] ?: [],
+          ];
+     }
+
+     public function recomendationResponsibile($name,$position)
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetResponsiblePerson,
+               query: [
+                    'name' => $name ?: '',
+                    'position' => $position ?: ''
+               ]
+          );
+          return [
+               'label' => [
+                    'en' => @$result['question_eng'],
+                    'id' => @$result['question_ind'],
+               ],
+               'en' => @$result['list_answer'] ?: [],
+               'id' => @$result['list_answer'] ?: []
+          ];
+     }
+
+
+     public function postSafetyCard($params)
+     {
+          try {
+               $result = MedcoRestful::postAction(
+                    url: Url::SafetyCardPostSafetyCard,
+                    body: $params
+               );
+               // logger("POST SAFETY CARD");
+               // logger(json_encode($result));
+               return $result;
+          } catch (\Exception $e) {
+               logger($e);
+               throw new BadRequestException('Error hit api put ic detail');
+          }
+     }
+
+     private function makeResult($result)
+     {
+          return [
+               'label' => [
+                    'en' => @$result['question_eng'],
+                    'id' => @$result['question_ind'],
+               ],
+               'en' => @$result['list_answer_eng'] ?: [],
+               'id' => @$result['list_answer_ind'] ?: []
+          ];
+     }
+}

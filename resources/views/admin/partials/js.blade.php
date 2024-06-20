@@ -1,1 +1,1 @@
-<script src="{{asset('adminportal/js/bootstrap.bundle.min.js')}}"></script>
+{{-- <script src="{{asset('adminportal/js/bootstrap.bundle.min.js')}}"></script> --}}

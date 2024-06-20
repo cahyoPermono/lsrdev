@@ -14,6 +14,8 @@ class AdminAuthorizationUserController extends AdminController
     protected $resourcePath = "admin.authorization-user";
     protected $moduleService = AuthorizationUserService::class;
 
+    protected $import = true;
+    protected $importExcel = AuthorizationUserImport::class;
 
     protected $tableColumns = [
         ["label" => "Email", "name" => "email"],

@@ -9,3 +9,13 @@ if (!function_exists('diffDays')) {
           return $currentDate->diffInDays($lastLoginDate);
      }
 }
+
+if (!function_exists('dateTimeFromString')) {
+     function dateTimeFromString($string,$format = null): mixed
+     {
+          if($string){
+               return Carbon::parse($string)->format($format ?: 'Y-m-d H:i:s');
+          }
+          return null;
+     }
+}

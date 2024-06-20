@@ -17,16 +17,16 @@ class LoginResponseResource extends JsonResource
     public function toArray(Request $request): array
     {
         $token = JwtToken::setData([
-            'session_id' => $this->user_id,
-            'email' => $this->email,
-            'name' => $this->name,
-            'person_id' => $this->person_id,
+            'session_id' => @$this?->user_id,
+            'email' => @$this?->email,
+            'name' => @$this?->name,
+            'person_id' => @$this?->person_id,
             'regid' => request()->header('regid'),
             'authorization' => []
         ])->setExpired("+1 days")->build();
 
         return [
-            'email' => $this->email,
+            'email' => @$this?->email,
             'token' => $token
         ];
     }

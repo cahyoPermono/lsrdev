@@ -28,7 +28,7 @@ class ApiPrivateMiddleware
             });
             $isBlacklistToken = Optimize::cacheForever("is-blacklist-token:{$token}", JwtToken::isBlacklist());
 
-            if ($isBlacklistToken || !@$dataToken->person_id) {
+            if ($isBlacklistToken) {
                 return $this->unauthorized('Your token was not found !', Error::FORBIDDEN);
             }
             if (@$dataToken->regid != $request->header('regid')) {
