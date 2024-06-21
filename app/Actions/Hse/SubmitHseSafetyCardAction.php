@@ -10,9 +10,6 @@ class SubmitHseSafetyCardAction
 {
      public function handle(Request $request, $user)
      {
-         
-
-          logger(json_encode($request->all()));
           $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
                $recomendation_finding = $request->recomendation_finding;
                $recomendation_target_date = $request->recomendation_target_date;
