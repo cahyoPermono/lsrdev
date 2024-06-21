@@ -46,6 +46,7 @@ class SubmitHseSafetyCardAction
           });
 
           $attachment = $request->file('attachment');
+          $hasAttachment = $request->hasFile('attachment');
           $bodyParam = [
                "Header" => [
                     "email" => $user->email,
@@ -62,8 +63,8 @@ class SubmitHseSafetyCardAction
                     "pts_no" => (string) $user?->person_id ?: '',
                     "report_type" => $request->report_type,
                     'main_attachment' => [
-                         'file_name' => $attachment ? $attachment->getClientOriginalName() : "",
-                         'file_string' => $attachment ? base64_encode(file_get_contents($attachment)) : ""
+                         'file_name' => $hasAttachment ? $attachment->getClientOriginalName() : "",
+                         'file_string' => $hasAttachment ? base64_encode(file_get_contents($attachment)) : ""
                     ]
                ],
                "PossibilityEvent" => [
