@@ -690,7 +690,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @requestBody multipart/form-data
      * @bodyParam date string required Y-m-d Format
      * @bodyParam category string required 
-     * @bodyParam position_id string required 
+     * @bodyParam position_id string optional 
      * @bodyParam block_function string required 
      * @bodyParam location string required 
      * @bodyParam observation_location string required 
@@ -710,7 +710,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam life_saving_rule string required multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam risk_rank string required 
      * @bodyParam brief_description string required 
-     * @bodyParam appreciation string required 
+     * @bodyParam appreciation string optional 
      * @bodyParam recomendation_category[0] string required 
      * @bodyParam recomendation_target_date[0] string required 
      * @bodyParam recomendation_finding[0] string required 
@@ -731,7 +731,6 @@ class ApiUtitilySafetyCardController extends ApiController
     public function store(Request $request,SubmitHseSafetyCardAction $submitHseSafetyCardAction){
         try{
             $this->validates([
-                'position_id' => 'required',
                 'category' => 'required',
                 'date' => 'required',
                 'block_function' => 'required',
