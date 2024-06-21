@@ -61,8 +61,8 @@ class SubmitHseSafetyCardAction
                     "pts_no" => (string) $user?->person_id ?: '',
                     "report_type" => $request->report_type,
                     'main_attachment' => [
-                         'file_name' => $hasAttachment ? $attachment->getClientOriginalName() : "",
-                         'file_string' => $hasAttachment ? base64_encode(file_get_contents($attachment)) : ""
+                         'file_name' => $hasAttachment ? $attachment->getClientOriginalName() : null,
+                         'file_string' => $hasAttachment ? base64_encode(file_get_contents($attachment)) : null
                     ]
                ],
                "PossibilityEvent" => [
