@@ -12,6 +12,7 @@ class SubmitHseSafetyCardAction
      {
          
 
+          logger(json_encode($request->all()));
           $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
                $recomendation_finding = $request->recomendation_finding;
                $recomendation_target_date = $request->recomendation_target_date;
@@ -47,7 +48,6 @@ class SubmitHseSafetyCardAction
 
           $attachment = $request->file('attachment');
           $hasAttachment = $request->hasFile('attachment');
-          logger($hasAttachment,$attachment);
           $bodyParam = [
                "Header" => [
                     "email" => $user->email,
