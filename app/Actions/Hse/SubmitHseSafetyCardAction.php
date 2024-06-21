@@ -89,7 +89,7 @@ class SubmitHseSafetyCardAction
                "Footer" => [
                     "risk_rank" => $request->risk_rank ?: '',
                     "brief_desc" => $request->brief_description ?: '',
-                    "appreciation" => "",
+                    "appreciation" => $request->appreciation,
                ],
                "Recommendations" => $recomendations->toArray()
           ];
