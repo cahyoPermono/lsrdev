@@ -47,6 +47,7 @@ class SubmitHseSafetyCardAction
 
           $attachment = $request->file('attachment');
           $hasAttachment = $request->hasFile('attachment');
+          logger($hasAttachment,$attachment);
           $bodyParam = [
                "Header" => [
                     "email" => $user->email,
