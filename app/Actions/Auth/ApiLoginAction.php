@@ -29,41 +29,16 @@ class ApiLoginAction
      {
           $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
-
-          $tokenMedco = $request->header('tokenmedco');
-          if (empty($tokenMedco)){
-               throw new BadRequestException('Your token was invalid !');
-          }
-          $parts = explode('.', $tokenMedco);
-          if (count($parts) < 3){
-               throw new BadRequestException('Your token was invalid !');
-          }
-          $payload = base64_decode($parts[1]);
-          $decoded_payload = json_decode($payload, true);
-          
-          if(!isset($decoded_payload['email'])) {
-               throw new BadRequestException('Your token was invalid !');
-          }
-          if(strtolower($decoded_payload['email']) != strtolower($request->email)){ 
-               throw new BadRequestException('Your token was invalid !');
-          }
-
-
-          
-          $this->validateModuleAccess($request,$request->email);
-          if (!$ptsUser = $this->medcoUserService->findUserByEmail($request->email)) {
-               throw new BadRequestException(__('alert.email_not_found'));
-          }
-          if($ptsUser->person_status==='I'){
-               throw new BadRequestException('Your PTS status is inactive. Please contact admin');
-          }
-
           $email = $request->email;
+          $tokenMedco = $request->header('tokenmedco');
+
+          $this->validateEmailWithTokenMedco($email, $tokenMedco);
 
           $authorization = $this->authorizationUserService->findFirstByEmail($email);
           if (!$authorization) {
-               throw new BadRequestException('Anda tidak diperbolehkan masuk !');
+               throw new BadRequestException('You are not authorized to use this app');
           }
+
           $this->validateModuleAccess($request, $request->email);
 
 
@@ -87,7 +62,7 @@ class ApiLoginAction
 
           if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
                if($ptsUser->person_status==='I'){
-                    throw new BadRequestException('Anda tidak diperbolehkan masuk !');
+                    throw new BadRequestException('Your PTS status is inactive. Please contact admin');
                }
                $userProperties = [
                     ...$userProperties,
@@ -97,19 +72,40 @@ class ApiLoginAction
                          'pts_id' => $ptsUser->person_id,
                     ]
                ];
-          }
-
-          $user = $this->userService->createOrUpdateUser($email, $userProperties);
-
+          } 
+          
+          $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
+          
           $user->person_id = $ptsUser?->person_id;
           $user->user_id = $user->id;
-          $user->name = $ptsUser ? implode(" ", [$ptsUser?->first_name, $ptsUser?->middle_name, $ptsUser?->last_name]) : $email;
+          $user->name = $ptsUser ? implode(" ", [
+               $ptsUser?->first_name, 
+               $ptsUser?->middle_name, 
+               $ptsUser?->last_name
+               ]) : $email;
           $this->userActivityService->createActivity($user->id, 'login');
 
           return $user;
      }
 
-
+     private function validateEmailWithTokenMedco(String $email, String $tokenMedco){
+          if (empty($tokenMedco)){
+               throw new BadRequestException('Your token was invalid !');
+          }
+          $parts = explode('.', $tokenMedco);
+          if (count($parts) < 3){
+               throw new BadRequestException('Your token was invalid !');
+          }
+          $payload = base64_decode($parts[1]);
+          $decoded_payload = json_decode($payload, true);
+          
+          if(!isset($decoded_payload['email'])) {
+               throw new BadRequestException('Your token was invalid !');
+          }
+          if(strtolower($decoded_payload['email']) != strtolower($email)){ 
+               throw new BadRequestException('Your token was invalid !');
+          }
+     }
 
      private function validateModuleAccess(Request $request, $email)
      {
@@ -117,15 +113,16 @@ class ApiLoginAction
           if ($appsCategory === 'use-case-2') {
                $module = AppModules::where('key', 'use-case-2')->first();
                if (!$module) {
-                    throw new InternalErrorException('Dashboard module does not exist');
+                    throw new BadRequestException('Module use case 2 not found');
                }
                $findModuleAccess = AuthorizationUser::query()
                     ->where('email', $email)
                     ->where('modules_id', $module->id)
                     ->first();
                if (!$findModuleAccess) {
-                    throw new BadRequestException('You are not authorized to use the Production Dashboard!');
+                    throw new BadRequestException('You are not authorized to use the Production Dashboard app');
                }
           }
      }
+
 }
