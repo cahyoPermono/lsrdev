@@ -34,10 +34,10 @@ class ApiLoginAction
 
           $this->validateEmailWithTokenMedco($email, $tokenMedco);
 
-          $authorization = $this->authorizationUserService->findFirstByEmail($email);
-          if (!$authorization) {
-               throw new BadRequestException('You are not authorized to use this app');
-          }
+          // $authorization = $this->authorizationUserService->findFirstByEmail($email);
+          // if (!$authorization) {
+          //      throw new BadRequestException('You are not authorized to use this app');
+          // }
 
           $this->validateModuleAccess($request, $request->email);
 
@@ -75,6 +75,12 @@ class ApiLoginAction
           } 
           
           $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
+
+          // Add HSE authorization
+          if (str_contains($email, "@medcoenergi.com") || str_contains($email, "@tc.medcoenergi.com")){
+               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); //10 = HSE Module ID
+          }
+
           
           $user->person_id = $ptsUser?->person_id;
           $user->user_id = $user->id;
