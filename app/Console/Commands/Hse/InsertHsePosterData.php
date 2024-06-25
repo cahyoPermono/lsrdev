@@ -43,8 +43,8 @@ class InsertHsePosterData extends Command
                             'author' => @$row['Author'] ?: '',
                             'file' => @$row['FileBase64'] ?: '',
                             'url' => @$row['_dlc_DocIdUrl'] ?: '',
-                            'start_at' => dateTimeFromString(@$row['Start_x0020_Date']) ?: '',
-                            'end_at' => dateTimeFromString(@$row['End_x0020_Date']) ?: '',
+                            'start_at' => dateTimeFromString(@$row['Start_x0020_Date']) ?: null,
+                            'end_at' => dateTimeFromString(@$row['End_x0020_Date']) ?: null,
                         ];
                     })->toArray();
                     HseSafetyPoster::insert($itemData);
