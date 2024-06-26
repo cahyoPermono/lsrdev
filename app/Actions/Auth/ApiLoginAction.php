@@ -67,6 +67,8 @@ class ApiLoginAction
                          'pts_id' => $ptsUser->person_id,
                     ]
                ];
+               // Add Self Screening Authorization
+               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 3); // 3 = Self Screening Module ID
           } 
           
           $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
