@@ -29,8 +29,70 @@ class ApiLoginAction
      {
           $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
-
+          $email = $request->email;
           $tokenMedco = $request->header('tokenmedco');
+
+          $this->validateEmailWithTokenMedco($email, $tokenMedco);
+          
+          $this->validateModuleAccess($request, $request->email);
+
+
+          if ($user = $this->userService->findOrCreateByEmail($email)) {
+               // Validate date last login
+               $lastLoginDays = $user->last_login->diffInDays(now());
+               if ($lastLoginDays >= $maxLastLoginDays) {
+                    $this->userService->updateUser($user->id, [
+                         'status' => Status::InActive
+                    ]);
+                    throw new BadRequestException(__('alert.account_in_active'));
+               }
+          }
+
+          $userProperties = [
+               'platform' => $request->header('platform'),
+               'regid' => $request->header('regid'),
+               'status' => Status::Active,
+               'last_login' => now(),
+          ];
+
+          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
+               if($ptsUser->person_status==='I'){
+                    throw new BadRequestException('Your PTS status is inactive. Please contact admin');
+               }
+               $userProperties = [
+                    ...$userProperties,
+                    ...[
+                         'workforce' => $ptsUser->department_name ?: '',
+                         'identify_provider' => $ptsUser->company_name ?: '',
+                         'pts_id' => $ptsUser->person_id,
+                    ]
+               ];
+               // Add Self Screening Authorization
+               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 3); // 3 = Self Screening Module ID
+          } 
+          
+          $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
+
+          // Add HSE authorization
+          $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
+
+          if (preg_match($email_regex, $email)) {
+              $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
+          }
+          
+          $user->person_id = $ptsUser?->person_id;
+          $user->user_id = $user->id;
+          $user->name = $ptsUser ? implode(" ", [
+               $ptsUser?->first_name, 
+               $ptsUser?->middle_name, 
+               $ptsUser?->last_name  
+               ]) : $email;
+          $this->userActivityService->createActivity($user->id, 'login');
+
+          return $user;
+     }
+
+     private function validateEmailWithTokenMedco(String $email, String $tokenMedco){
           if (empty($tokenMedco)){
                throw new BadRequestException('Your token was invalid !');
           }
@@ -44,7 +106,7 @@ class ApiLoginAction
           if(!isset($decoded_payload['email'])) {
                throw new BadRequestException('Your token was invalid !');
           }
-          if(strtolower($decoded_payload['email']) != strtolower($request->email)){ 
+          if(strtolower($decoded_payload['email']) != strtolower($email)){ 
                throw new BadRequestException('Your token was invalid !');
           }
 
@@ -117,15 +179,16 @@ class ApiLoginAction
           if ($appsCategory === 'use-case-2') {
                $module = AppModules::where('key', 'use-case-2')->first();
                if (!$module) {
-                    throw new InternalErrorException('Dashboard module does not exist');
+                    throw new BadRequestException('Module use case 2 not found');
                }
                $findModuleAccess = AuthorizationUser::query()
                     ->where('email', $email)
                     ->where('modules_id', $module->id)
                     ->first();
                if (!$findModuleAccess) {
-                    throw new BadRequestException('You are not authorized to use the Production Dashboard!');
+                    throw new BadRequestException('You are not authorized to use the Production Dashboard app');
                }
           }
      }
+
 }

@@ -75,6 +75,20 @@ class AuthorizationUserService extends AdminService
                 ];
             })->values();
     }
+    public function findOrCreateByEmailAndModuleID($email, $moduleID)
+    {
+         $authorization =  $this->model::where('email','ilike', $email)->where('modules_id', $moduleID)->first();
+         if(!$authorization){
+              $authorization = $this->model::create([
+                'uuid' => Str::uuid(),
+                'created_at' => now(),
+                'email' => $email,
+                'modules_id' => $moduleID
+            ]);
+         }
+         return $authorization;
+    }
+
     public function store(Request $request)
     {
         if(!$request->permissions){
