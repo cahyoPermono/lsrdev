@@ -690,7 +690,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @requestBody multipart/form-data
      * @bodyParam date string required Y-m-d Format
      * @bodyParam category string required 
-     * @bodyParam position_id string required 
+     * @bodyParam position_id string optional 
      * @bodyParam block_function string required 
      * @bodyParam location string required 
      * @bodyParam observation_location string required 
@@ -710,17 +710,18 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam life_saving_rule string required multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam risk_rank string required 
      * @bodyParam brief_description string required 
-     * @bodyParam recomendation_category[0] string required 
-     * @bodyParam recomendation_target_date[0] string required 
-     * @bodyParam recomendation_finding[0] string required 
-     * @bodyParam recomendation_position_payroll_id[0] string required 
-     * @bodyParam recomendation_position_payroll_name[0] string required 
-     * @bodyParam recomendation_position_id[0] string required 
-     * @bodyParam recomendation_priority[0] string required 
-     * @bodyParam recomendation[0] string required 
-     * @bodyParam recomendation_attachments[0][0] file required 
-     * @bodyParam recomendation_attachments[0][1] file required 
-     * @bodyParam recomendation_attachments[0][2] file required 
+     * @bodyParam appreciation string optional 
+     * @bodyParam recomendation_category[0] string optional 
+     * @bodyParam recomendation_target_date[0] string optional 
+     * @bodyParam recomendation_finding[0] string optional 
+     * @bodyParam recomendation_position_payroll_id[0] string optional 
+     * @bodyParam recomendation_position_payroll_name[0] string optional 
+     * @bodyParam recomendation_position_id[0] string optional 
+     * @bodyParam recomendation_priority[0] string optional 
+     * @bodyParam recomendation[0] string optional 
+     * @bodyParam recomendation_attachments[0][0] file optional 
+     * @bodyParam recomendation_attachments[0][1] file optional 
+     * @bodyParam recomendation_attachments[0][2] file optional 
      * 
      * @response {
      *   "status": 200,
@@ -730,7 +731,6 @@ class ApiUtitilySafetyCardController extends ApiController
     public function store(Request $request,SubmitHseSafetyCardAction $submitHseSafetyCardAction){
         try{
             $this->validates([
-                'position_id' => 'required',
                 'category' => 'required',
                 'date' => 'required',
                 'block_function' => 'required',
@@ -747,14 +747,14 @@ class ApiUtitilySafetyCardController extends ApiController
                 // 'life_saving_rule' => 'required',
                 'risk_rank' => 'required',
                 'brief_description' => 'required',
-                'recomendation_category.*' => 'required',
-                'recomendation_finding.*' => 'required',
-                'recomendation.*' => 'required',
-                'recomendation_target_date.*' => 'required',
-                'recomendation_position_id.*' => 'required',
-                'recomendation_position_payroll_id.*' => 'required',
-                'recomendation_position_payroll_name.*' => 'required',
-                'recomendation_priority.*' => 'required',
+                // 'recomendation_category.*' => 'required',
+                // 'recomendation_finding.*' => 'required',
+                // 'recomendation.*' => 'required',
+                // 'recomendation_target_date.*' => 'required',
+                // 'recomendation_position_id.*' => 'required',
+                // 'recomendation_position_payroll_id.*' => 'required',
+                // 'recomendation_position_payroll_name.*' => 'required',
+                // 'recomendation_priority.*' => 'required',
            ]);
             $submitHseSafetyCardAction->handle($request,$this->auth());
             return $this->sendMessage('success');
