@@ -22,7 +22,7 @@ class SubmitHseSafetyCardAction
                     $recomendation = $request->recomendation;
 
                     $attachments = [];
-                    collect($request->recomendation_attachments[$index])
+                    collect(@$request->recomendation_attachments[$index])
                          ->filter(fn($row) => !is_null($row))
                          ->each(function ($file, $index) use (&$attachments) {
                               $number = $index + 1;
