@@ -10,38 +10,42 @@ class SubmitHseSafetyCardAction
 {
      public function handle(Request $request, $user)
      {
-          $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
-               $recomendation_finding = $request->recomendation_finding;
-               $recomendation_target_date = $request->recomendation_target_date;
-               $recomendation_position_payroll_name = $request->recomendation_position_payroll_name;
-               $recomendation_position_payroll_id = $request->recomendation_position_payroll_id;
-               $recomendation_position_id = $request->recomendation_position_id;
-               $recomendation_priority = $request->recomendation_priority;
-               $recomendation = $request->recomendation;
+          $recomendations = collect($request->recomendation_category)
+               ->filter(fn($row) => !is_null($row))
+               ->map(function ($category, $index) use ($request) {
+                    $recomendation_finding = $request->recomendation_finding;
+                    $recomendation_target_date = $request->recomendation_target_date;
+                    $recomendation_position_payroll_name = $request->recomendation_position_payroll_name;
+                    $recomendation_position_payroll_id = $request->recomendation_position_payroll_id;
+                    $recomendation_position_id = $request->recomendation_position_id;
+                    $recomendation_priority = $request->recomendation_priority;
+                    $recomendation = $request->recomendation;
 
-               $attachments = [];
-               collect($request->recomendation_attachments[$index])->each(function ($file, $index) use(&$attachments) {
-                    $number = $index + 1;
-                    $attachments["att{$number}"]= [
-                         "file_name" => $file->getClientOriginalName(),
-                         "file_string" => base64_encode(file_get_contents($file))
+                    $attachments = [];
+                    collect($request->recomendation_attachments[$index])
+                         ->filter(fn($row) => !is_null($row))
+                         ->each(function ($file, $index) use (&$attachments) {
+                              $number = $index + 1;
+                              $attachments["att{$number}"] = [
+                                   "file_name" => $file->getClientOriginalName(),
+                                   "file_string" => base64_encode(file_get_contents($file))
+                              ];
+                         });
+
+                    return [
+                         "finding" => @$recomendation_finding[$index] ?: '',
+                         "recommendation" => @$recomendation[$index] ?: '',
+                         "target_completed_date" => @$recomendation_target_date[$index] ?: '',
+                         "recommendation_category" => $category,
+                         "block" => $request->block_function,
+                         "location" => $request->location,
+                         "resp_person_name" => @$recomendation_position_payroll_name[$index] ?: '',
+                         "resp_person_payroll" => @$recomendation_position_payroll_id[$index] ?: '',
+                         "resp_person_positionid" => @$recomendation_position_id[$index] ?: '',
+                         "priority" => @$recomendation_priority[$index] ?: '',
+                         "attachments" => $attachments
                     ];
                });
-     
-               return [
-                    "finding" => @$recomendation_finding[$index] ?: '',
-                    "recommendation" => @$recomendation[$index] ?: '',
-                    "target_completed_date" => @$recomendation_target_date[$index] ?: '',
-                    "recommendation_category" => $category,
-                    "block" => $request->block_function,
-                    "location" => $request->location,
-                    "resp_person_name" => @$recomendation_position_payroll_name[$index] ?: '',
-                    "resp_person_payroll" => @$recomendation_position_payroll_id[$index] ?: '',
-                    "resp_person_positionid" => @$recomendation_position_id[$index] ?: '',
-                    "priority" => @$recomendation_priority[$index] ?: '',
-                    "attachments" => $attachments
-               ];
-          });
 
           $attachment = $request->file('attachment');
           $hasAttachment = $request->hasFile('attachment');
@@ -84,7 +88,8 @@ class SubmitHseSafetyCardAction
                     "ur" => $request->unsafe_reason ?: '',
                     "others_ur_text" => $request->other_unsafe_reason ?: '',
                ],
-               "LifeSavingRule" => $request->life_saving_rule ?: '', // array pisahkan dengan tanda koma
+               "LifeSavingRule" => $request->life_saving_rule ?: '',
+               // array pisahkan dengan tanda koma
                "Footer" => [
                     "risk_rank" => $request->risk_rank ?: '',
                     "brief_desc" => $request->brief_description ?: '',
@@ -96,7 +101,7 @@ class SubmitHseSafetyCardAction
           $result = (new SafetyCardService)->postSafetyCard($bodyParam);
           app('log')->channel('safety-card')->debug(json_encode($result));
           app('log')->channel('safety-card')->debug(json_encode($bodyParam));
-          if(@$result['status_code']!=201){
+          if (@$result['status_code'] != 201) {
                throw new BadRequestException(@$result['message']);
           }
      }
