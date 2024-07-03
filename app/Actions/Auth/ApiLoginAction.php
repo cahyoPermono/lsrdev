@@ -10,10 +10,7 @@ use App\Models\AppModules;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
 use App\Services\Account\UserActivityService;
-use Illuminate\Validation\UnauthorizedException;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
-use Laililmahfud\Adminportal\Api\JwtToken;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class ApiLoginAction
 {
@@ -108,67 +105,7 @@ class ApiLoginAction
           }
           if(strtolower($decoded_payload['email']) != strtolower($email)){ 
                throw new BadRequestException('Your token was invalid !');
-          }
-
-
-          
-          $this->validateModuleAccess($request,$request->email);
-          if (!$ptsUser = $this->medcoUserService->findUserByEmail($request->email)) {
-               throw new BadRequestException(__('alert.email_not_found'));
-          }
-          if($ptsUser->person_status==='I'){
-               throw new BadRequestException('Your PTS status is inactive. Please contact admin');
-          }
-
-          $email = $request->email;
-
-          $authorization = $this->authorizationUserService->findFirstByEmail($email);
-          if (!$authorization) {
-               throw new BadRequestException('Anda tidak diperbolehkan masuk !');
-          }
-          $this->validateModuleAccess($request, $request->email);
-
-
-          if ($user = $this->userService->findOrCreateByEmail($email)) {
-               // Validate date last login
-               $lastLoginDays = $user->last_login->diffInDays(now());
-               if ($lastLoginDays >= $maxLastLoginDays) {
-                    $this->userService->updateUser($user->id, [
-                         'status' => Status::InActive
-                    ]);
-                    throw new BadRequestException(__('alert.account_in_active'));
-               }
-          }
-
-          $userProperties = [
-               'platform' => $request->header('platform'),
-               'regid' => $request->header('regid'),
-               'status' => Status::Active,
-               'last_login' => now(),
-          ];
-
-          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
-               if($ptsUser->person_status==='I'){
-                    throw new BadRequestException('Anda tidak diperbolehkan masuk !');
-               }
-               $userProperties = [
-                    ...$userProperties,
-                    ...[
-                         'workforce' => $ptsUser->department_name ?: '',
-                         'identify_provider' => $ptsUser->company_name ?: '',
-                         'pts_id' => $ptsUser->person_id,
-                    ]
-               ];
-          }
-
-          $user = $this->userService->createOrUpdateUser($email, $userProperties);
-
-          $user->person_id = $ptsUser?->person_id;
-          $user->user_id = $user->id;
-          $user->name = $ptsUser ? implode(" ", [$ptsUser?->first_name, $ptsUser?->middle_name, $ptsUser?->last_name]) : $email;
-          $this->userActivityService->createActivity($user->id, 'login');
-
-          return $user;
+          };
      }
 
 
