@@ -10,8 +10,6 @@ class SubmitHseSafetyCardAction
 {
      public function handle(Request $request, $user)
      {
-         
-
           $recomendations = collect($request->recomendation_category)->map(function ($category, $index) use ($request) {
                $recomendation_finding = $request->recomendation_finding;
                $recomendation_target_date = $request->recomendation_target_date;
@@ -46,6 +44,7 @@ class SubmitHseSafetyCardAction
           });
 
           $attachment = $request->file('attachment');
+          $hasAttachment = $request->hasFile('attachment');
           $bodyParam = [
                "Header" => [
                     "email" => $user->email,
@@ -61,10 +60,10 @@ class SubmitHseSafetyCardAction
                     "department" => $request->department,
                     "pts_no" => (string) $user?->person_id ?: '',
                     "report_type" => $request->report_type,
-                    'main_attachment' => [
-                         'file_name' => $attachment->getClientOriginalName(),
-                         'file_string' => base64_encode(file_get_contents($attachment))
-                    ]
+                    'main_attachment' => $hasAttachment ? [
+                         'file_name' => $hasAttachment ? $attachment->getClientOriginalName() : null,
+                         'file_string' => $hasAttachment ? base64_encode(file_get_contents($attachment)) : null
+                    ] : null
                ],
                "PossibilityEvent" => [
                     "poe" => $request->posibility_event ?: '',
