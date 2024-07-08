@@ -73,12 +73,13 @@ class ApiLoginAction
           
           $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
 
-          // Add HSE authorization
-          $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
+          // TODO: Reimplement later during rollout
+          // // Add HSE authorization
+          // $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
 
-          if (preg_match($email_regex, $email)) {
-              $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
-          }
+          // if (preg_match($email_regex, $email)) {
+          //     $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
+          // }
           
           $user->person_id = $ptsUser?->person_id;
           $user->user_id = $user->id;
