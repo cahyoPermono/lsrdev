@@ -708,7 +708,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam unsafe_reason string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam other_unsafe_reason string optional if input other 
      * @bodyParam life_saving_rule string required multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
-     * @bodyParam risk_rank string required 
+     * @bodyParam risk_rank string optional 
      * @bodyParam brief_description string required 
      * @bodyParam appreciation string optional 
      * @bodyParam recomendation_category[0] string optional 
@@ -745,7 +745,7 @@ class ApiUtitilySafetyCardController extends ApiController
                 // 'unsafe_condition' => 'required',
                 // 'unsafe_reason' => 'required',
                 // 'life_saving_rule' => 'required',
-                'risk_rank' => 'required',
+                // 'risk_rank' => 'required',
                 'brief_description' => 'required',
                 // 'recomendation_category.*' => 'required',
                 // 'recomendation_finding.*' => 'required',
