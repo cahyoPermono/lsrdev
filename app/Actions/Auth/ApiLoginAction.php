@@ -52,9 +52,9 @@ class ApiLoginAction
                'last_login' => now(),
           ];
 
-          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
+          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {   
                if($ptsUser->person_status==='I'){
-                    throw new BadRequestException('Your PTS status is inactive. Please contact admin');
+                    throw new BadRequestException('Your PTS status is inactive. Please contact your PTS local admin');
                }
                $userProperties = [
                     ...$userProperties,
