@@ -74,6 +74,7 @@ class ApiLoginAction
           $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
 
           // TODO: Reimplement later during rollout
+          // TODO: Only add hse auth if email not registered in pts
           // // Add HSE authorization
           // $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
 
