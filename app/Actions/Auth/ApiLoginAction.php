@@ -10,10 +10,7 @@ use App\Models\AppModules;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
 use App\Services\Account\UserActivityService;
-use Illuminate\Validation\UnauthorizedException;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
-use Laililmahfud\Adminportal\Api\JwtToken;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class ApiLoginAction
 {
@@ -31,6 +28,7 @@ class ApiLoginAction
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
           $email = $request->email;
           $tokenMedco = $request->header('tokenmedco');
+          $ptsUser = $this->medcoUserService->findUserByEmail($email);
 
           $this->validateEmailWithTokenMedco($email, $tokenMedco);
           
@@ -55,9 +53,9 @@ class ApiLoginAction
                'last_login' => now(),
           ];
 
-          if ($ptsUser = $this->medcoUserService->findUserByEmail($email)) {
+          if ($ptsUser) {   
                if($ptsUser->person_status==='I'){
-                    throw new BadRequestException('Your PTS status is inactive. Please contact admin');
+                    throw new BadRequestException('Your PTS status is inactive. Please contact your PTS local admin');
                }
                $userProperties = [
                     ...$userProperties,
@@ -68,20 +66,13 @@ class ApiLoginAction
                     ]
                ];
                // Add Self Screening Authorization
-               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 3); // 3 = Self Screening Module ID
-          } 
+               $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 3); // 3 = Self Screening Module ID
+          } else {
+               $this->grantHSEAuthorization($email);
+          }
           
           $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
 
-          // TODO: Reimplement later during rollout
-          // TODO: Only add hse auth if email not registered in pts
-          // // Add HSE authorization
-          // $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
-
-          // if (preg_match($email_regex, $email)) {
-          //     $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
-          // }
-          
           $user->person_id = $ptsUser?->person_id;
           $user->user_id = $user->id;
           $user->name = $ptsUser ? implode(" ", [
@@ -110,7 +101,7 @@ class ApiLoginAction
           }
           if(strtolower($decoded_payload['email']) != strtolower($email)){ 
                throw new BadRequestException('Your token was invalid !');
-          }
+          };
      }
 
      private function validateModuleAccess(Request $request, $email)
@@ -122,12 +113,20 @@ class ApiLoginAction
                     throw new BadRequestException('Module use case 2 not found');
                }
                $findModuleAccess = AuthorizationUser::query()
-                    ->where('email', $email)
+                    ->where('email', 'ilike', $email)
                     ->where('modules_id', $module->id)
                     ->first();
                if (!$findModuleAccess) {
                     throw new BadRequestException('You are not authorized to use the Production Dashboard app');
                }
+          }
+     }
+
+     private function grantHSEAuthorization(String $email){
+          $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
+
+          if (preg_match($email_regex, $email)) {
+              $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 10); // 10 = HSE Module ID
           }
      }
 
