@@ -31,7 +31,7 @@ class UserService extends AdminService
 
      public function findUserByEmail($email)
      {
-          return $this->model::where('email', $email)->first();
+          return $this->model::where('email', 'ilike', $email)->first();
      }
 
      public function findOrCreateByEmail($email)

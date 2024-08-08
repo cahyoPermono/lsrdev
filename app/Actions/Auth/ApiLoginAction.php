@@ -35,7 +35,7 @@ class ApiLoginAction
           $this->validateModuleAccess($request, $request->email);
 
 
-          if ($user = $this->userService->findOrCreateByEmail($email)) {
+          if ($user = $this->userService->findOrCreateByEmail(strtolower($email))) {
                // Validate date last login
                $lastLoginDays = $user->last_login->diffInDays(now());
                if ($lastLoginDays >= $maxLastLoginDays) {
@@ -51,12 +51,12 @@ class ApiLoginAction
                'regid' => $request->header('regid'),
                'status' => Status::Active,
                'last_login' => now(),
-          ];
+          ];   
 
           if ($ptsUser) {   
-               if($ptsUser->person_status==='I'){
-                    throw new BadRequestException('Your PTS status is inactive. Please contact your PTS local admin');
-               }
+               $this->userService->updateUser($user->id, [
+                    'has_pts' => true
+               ]);
                $userProperties = [
                     ...$userProperties,
                     ...[
@@ -65,10 +65,14 @@ class ApiLoginAction
                          'pts_id' => $ptsUser->person_id,
                     ]
                ];
-               // Add Self Screening Authorization
-               $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 3); // 3 = Self Screening Module ID
+               if ($ptsUser->person_status==='A'){
+                    $this->handlePTSActive($email, $user->id);
+               } else {
+                    $this->handlePTSInactive($email, $user->id);
+               }
+
           } else {
-               $this->grantHSEAuthorization($email);
+               $this->handleNoPTS($email, $user->id);
           }
           
           $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
@@ -119,6 +123,11 @@ class ApiLoginAction
                if (!$findModuleAccess) {
                     throw new BadRequestException('You are not authorized to use the Production Dashboard app');
                }
+          } else {
+               $modules = $this->authorizationUserService->findUserModule($email)->toArray();
+               if(count($modules) === 0){
+                    throw new BadRequestException('You are not authorized to use SmartX');
+               }
           }
      }
 
@@ -128,6 +137,28 @@ class ApiLoginAction
           if (preg_match($email_regex, $email)) {
               $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 10); // 10 = HSE Module ID
           }
+     }
+
+     private function handlePTSActive(String $email, String $userId){
+          $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 3); // 3 = Self Screening Module ID
+          $this->userService->updateUser($userId, [
+               'is_pts_active' => true
+          ]);
+     }
+
+     private function handlePTSInactive(String $email, String $userId){
+          $this->userService->updateUser($userId, [
+               'is_pts_active' => false
+          ]);
+          $this->grantHSEAuthorization($email);
+     }
+
+     private function handleNoPTS(String $email, String $userId){
+          $this->userService->updateUser($userId, [
+               'has_pts' => false,
+               'is_pts_active' => false
+          ]);
+          $this->grantHSEAuthorization($email);
      }
 
 }

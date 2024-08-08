@@ -3,14 +3,20 @@ namespace App\Services\Account;
 
 use Illuminate\Http\Request;
 use App\Models\AuthorizationUser;
+use App\Services\AppModulesService;
 use Illuminate\Support\Str;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 use Laililmahfud\Adminportal\Services\AdminService;
+use App\Services\MedcoApi\MedcoUserService;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class AuthorizationUserService extends AdminService
 {
     public function __construct(
         public $model = AuthorizationUser::class,
+        private $medcoUserService = new MedcoUserService,
+        private $userService = new UserService,
+        private $appModulesService = new AppModulesService
     ) {
     }
 
@@ -50,15 +56,24 @@ class AuthorizationUserService extends AdminService
     public function findUserModule($email)
     {
         $excludeModuleKey = ['use-case-2'];
-        $modules = $this->model::query()
-            ->join('app_modules as module', 'module.id', 'authorization_users.modules_id')
-            ->where('authorization_users.email', "ilike", $email)
-            ->whereNotIn('module.key',$excludeModuleKey)
-            ->select(['module.*'])
-			->distinct()
-            ->orderBy('module.sorting', 'asc')
-            ->get();
 
+        $ptsModuleKeys = $this->appModulesService->getPTSModulesKeys()->toArray();
+
+        $user = $this->userService->findUserByEmail($email);
+
+        // if user is not an active PTS user, exclude PTS modules
+        if (!$user->is_pts_active) {   
+            $excludeModuleKey = array_merge($excludeModuleKey, $ptsModuleKeys);
+        } 
+
+        $modules = $this->model::query()
+        ->join('app_modules as module', 'module.id', 'authorization_users.modules_id')
+        ->where('authorization_users.email', "ilike", $email)
+        ->whereNotIn('module.key',$excludeModuleKey)
+        ->select(['module.*'])
+        ->distinct()
+        ->orderBy('module.sorting', 'asc')
+        ->get();
 
         return $modules->whereNull('parent_id')
             ->map(function ($module) use ($modules) {

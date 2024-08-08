@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Models\AuthorizationUser;
+use App\Services\Account\UserService;
+use App\Services\AppModulesService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserAuthorizationMiddleware
 {
+    public function __construct(
+        public $model = AuthorizationUser::class,
+        private $userService = new UserService,
+        private $appModulesService = new AppModulesService
+    ) {
+    }
+
     use JsonResponse;
     /**
      * Handle an incoming request.
@@ -26,9 +35,20 @@ class UserAuthorizationMiddleware
             return $this->unauthorized('Your token was invalid !', Error::INVALID_TOKEN);
         }
 
+        $excludeModuleKey = [];
+        $ptsModuleKeys = $this->appModulesService->getPTSModulesKeys()->toArray();
+
+        $user = $this->userService->findUserByEmail($userEmail);
+
+        // if user is not an active PTS user, exclude PTS modules
+        if (!$user->is_pts_active) {   
+            $excludeModuleKey = array_merge($excludeModuleKey, $ptsModuleKeys);
+        } 
+
         $userAccess = AuthorizationUser::query()
             ->join('app_modules', 'authorization_users.modules_id', 'app_modules.id')
             ->where('authorization_users.email', 'ilike', $userEmail)
+            ->whereNotIn('app_modules.key',$excludeModuleKey)
             ->where('app_modules.key', $moduleKey)
             ->first();
         if(!$userAccess){
