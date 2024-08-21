@@ -31,8 +31,6 @@ class ApiLoginAction
           $ptsUser = $this->medcoUserService->findUserByEmail($email);
 
           $this->validateEmailWithTokenMedco($email, $tokenMedco);
-          
-          $this->validateModuleAccess($request, $request->email);
 
 
           if ($user = $this->userService->findOrCreateByEmail(strtolower($email))) {
@@ -85,6 +83,8 @@ class ApiLoginAction
                $ptsUser?->last_name  
                ]) : $email;
           $this->userActivityService->createActivity($user->id, 'login');
+
+          $this->validateModuleAccess($request, $request->email);
 
           return $user;
      }
