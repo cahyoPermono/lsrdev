@@ -32,9 +32,9 @@ class InsertHsePosterData extends Command
         $itemData = MedcoRestful::fetchData(
             url : Url::GetHsePoster
         );
+        HseSafetyPoster::query()->delete();
         if ($itemData) {
             DB::transaction(function () use ($itemData) {
-                HseSafetyPoster::query()->delete();
                 $items = collect($itemData)->chunk(200);
                 foreach ($items as $data) {
                     $itemData = $data->map(function ($row){
