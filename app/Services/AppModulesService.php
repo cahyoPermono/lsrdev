@@ -42,4 +42,10 @@ class AppModulesService extends AdminService
 
         return $this->model::whereUuid($uuid)->update($data);
     }
+
+    public function getPTSModulesKeys()
+    {
+        return $this->model::where('is_pts_module',true)
+            ->pluck('key');
+    }
 }

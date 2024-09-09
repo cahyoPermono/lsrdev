@@ -25,7 +25,7 @@ return [
 
     'servers' => [
         [
-            'url' => 'https://tenmma1901t.medcoenergi.com/medco-sa/public',
+            'url' => 'https://tenmma1901t.medcoenergi.com/medco-dev/public',
             'description' => 'DEV',
         ],
         [
@@ -37,8 +37,8 @@ return [
             'description' => 'LOCAL',
         ],
         [
-            'url' => 'https://114.5.237.90/medco-sa/public',
-            'description' => 'MEDCO',
+            'url' => 'https://tenmma1901t.medcoenergi.com/medco-sa/public',
+            'description' => 'MEDCO-TEST',
         ],
     ],
 

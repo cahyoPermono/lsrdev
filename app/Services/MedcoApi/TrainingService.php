@@ -34,7 +34,7 @@ class TrainingService
                "contract_number" => @$row['contract_number'],
                "status" => @$row['status'],
                "contact_owner" => @$row['contract_owner'],
-               "contract_period" => @$row['contract_period'],
+               "contract_period" => @$row['contract_period'] ?: "N/A",
                "npwp" => @$restResponse['npwp'],
                "trainer" => @$restResponse['name'],
                "nik" => @$restResponse['nik'],
