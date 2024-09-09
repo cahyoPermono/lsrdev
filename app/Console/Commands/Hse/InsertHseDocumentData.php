@@ -32,9 +32,9 @@ class InsertHseDocumentData extends Command
         $itemData = MedcoRestful::fetchData(
             url : Url::GetHseDocument
         );
+        HseDocument::query()->delete();
         if ($itemData) {
             DB::transaction(function () use ($itemData) {
-                HseDocument::query()->delete();
                 $items = collect($itemData)->chunk(200);
                 foreach ($items as $data) {
                     $itemData = $data->map(function ($row){

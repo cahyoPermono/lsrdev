@@ -32,9 +32,9 @@ class InsertHsePosterData extends Command
         $itemData = MedcoRestful::fetchData(
             url : Url::GetHsePoster
         );
+        HseSafetyPoster::query()->delete();
         if ($itemData) {
             DB::transaction(function () use ($itemData) {
-                HseSafetyPoster::query()->delete();
                 $items = collect($itemData)->chunk(200);
                 foreach ($items as $data) {
                     $itemData = $data->map(function ($row){
@@ -43,8 +43,8 @@ class InsertHsePosterData extends Command
                             'author' => @$row['Author'] ?: '',
                             'file' => @$row['FileBase64'] ?: '',
                             'url' => @$row['_dlc_DocIdUrl'] ?: '',
-                            'start_at' => dateTimeFromString(@$row['Start_x0020_Date']) ?: null,
-                            'end_at' => dateTimeFromString(@$row['End_x0020_Date']) ?: null,
+                            'start_at' => dateTimeFromString(@$row['StarDate'])  ?: '',
+                            'end_at' => dateTimeFromString(@$row['End_x0020_Date']) ?: '',
                         ];
                     })->toArray();
                     HseSafetyPoster::insert($itemData);

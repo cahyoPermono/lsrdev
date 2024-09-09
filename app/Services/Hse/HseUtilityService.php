@@ -24,13 +24,16 @@ class HseUtilityService
      ) {
      }
 
-     public function findAllSlider()
+     public function findAllSlider($limit = 4)
      {
           return $this->slider::query()
                ->select(['id', 'title', 'url', 'file as image'])
                ->latest('start_at')
-               ->get();
-     }
+               ->paginate($limit)->transform(function ($row) {
+
+                    return $row;
+               });  
+          }
 
      public function findFirstPopupCampaign()
      {

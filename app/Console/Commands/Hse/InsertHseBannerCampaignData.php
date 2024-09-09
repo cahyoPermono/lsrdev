@@ -32,9 +32,9 @@ class InsertHseBannerCampaignData extends Command
         $itemData = MedcoRestful::fetchData(
             url : Url::GetHseBannerCampaign
         );
+        BannerCampaign::query()->delete();
         if ($itemData) {
             DB::transaction(function () use ($itemData) {
-                BannerCampaign::query()->delete();
                 $items = collect($itemData)->chunk(200);
                 foreach ($items as $data) {
                     $itemData = $data->map(function ($row){

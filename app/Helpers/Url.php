@@ -43,8 +43,10 @@ class Url
      const GetChartBlockOilData = "MMAPDashboard/v1/Block/OilChart";
 
 
-     const GetProductionFieldDashboardData = "MMAPDashboard/v1/Field/Production";
-     const GetSummaryFieldDashboardData = "MMAPDashboard/v1/Field/Summary";
+     const GetProductionFieldDashboardData = "MMAPDashboard/v1/Field/Production"; // [✅]
+     const GetSummaryFieldDashboardData = "MMAPDashboard/v1/Field/Summary"; // [✅]
+     const GetChartFieldGasData = "MMAPDashboard/v1/Field/GasChart"; // [✅]
+     const GetChartFieldOilData = "MMAPDashboard/v1/Field/OilChart"; // [✅]
 
 
      // HSE

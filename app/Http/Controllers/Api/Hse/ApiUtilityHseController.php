@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api\Hse;
 
 use App\Http\Controllers\Controller;
@@ -24,6 +23,10 @@ class ApiUtilityHseController extends ApiController
      * @authenticated
      * @defaultParam
      * 
+     * @queryParam limit optional default 4
+     * @queryParam page optional default 1
+     * 
+     * 
      * @response {
      *       "status": 200,
      *       "message": "success",
@@ -39,7 +42,8 @@ class ApiUtilityHseController extends ApiController
      */
     public function slider(Request $request)
     {
-        $result = $this->hseUtilityService->findAllSlider();
+        $limit = $request->get('limit', 4);
+        $result = $this->hseUtilityService->findAllSlider($limit);
         return $this->sendSuccess($result);
     }
 

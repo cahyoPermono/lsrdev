@@ -32,9 +32,9 @@ class InsertHseLeasonLearnedData extends Command
         $itemData = MedcoRestful::fetchData(
             url : Url::GetHseLeassonLearned
         );
+        HseLeasonLearned::query()->delete();
         if ($itemData) {
             DB::transaction(function () use ($itemData) {
-                HseLeasonLearned::query()->delete();
                 $items = collect($itemData)->chunk(200);
                 foreach ($items as $data) {
                     $itemData = $data->map(function ($row){

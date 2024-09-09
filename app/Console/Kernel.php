@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->everyFifteenMinutes();
+        // $schedule->command('inspire')->hourly();
         $this->runJob($schedule); 
     }
 
@@ -25,19 +25,26 @@ class Kernel extends ConsoleKernel
     }
 
     private function runJob(Schedule $schedule){
-        $schedule->command('use-case-2:insert-company-dashboard-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-asset-dashboard-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-block-dashboard-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-field-dashboard-data')->everyFifteenMinutes(); 
+        $dailyJobTime = "06:30";
 
-        $schedule->command('use-case-2:insert-company-summary-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-asset-summary-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-block-summary-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-field-summary-data')->everyFifteenMinutes(); 
+        $schedule->command('use-case-2:insert-company-dashboard-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-asset-dashboard-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-block-dashboard-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-field-dashboard-data')->everyThirtyMinutes(); 
+
+        $schedule->command('use-case-2:insert-company-summary-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-asset-summary-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-block-summary-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-field-summary-data')->everyThirtyMinutes(); 
 
 
-        $schedule->command('use-case-2:insert-company-chart-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-asset-chart-data')->everyFifteenMinutes(); 
-        $schedule->command('use-case-2:insert-block-chart-data')->everyFifteenMinutes(); 
+        $schedule->command('use-case-2:insert-company-chart-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-asset-chart-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-block-chart-data')->everyThirtyMinutes(); 
+        $schedule->command('use-case-2:insert-field-chart-data')->everyThirtyMinutes();
+
+        $schedule->command('hse:run-all-hse-command')->dailyAt($dailyJobTime);
+
+        $schedule->command('app:deactivate-inactive-users')->everyThirtyMinutes(); 
     }
 }

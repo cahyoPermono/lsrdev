@@ -43,7 +43,7 @@ class InsertBlockSummaryData extends Command
                         return [
                             'created_at' => now(),
                             'date' => @$row['date'],
-                            'asset_code' => @$row['block_code'],
+                            'asset_code' => @$row['block_name'],
                             'code' => '',
                             'gross' => json_encode([
                                 'total' => @$gross['total_today'],
