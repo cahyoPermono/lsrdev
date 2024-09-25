@@ -707,7 +707,7 @@ class ApiUtitilySafetyCardController extends ApiController
      * @bodyParam other_unsafe_condition string optional if input other 
      * @bodyParam unsafe_reason string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam other_unsafe_reason string optional if input other 
-     * @bodyParam life_saving_rule string required multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
+     * @bodyParam life_saving_rule string optional multiple from checkbox, separate with (,) : ex ABC,DEF,GHI
      * @bodyParam risk_rank string optional 
      * @bodyParam brief_description string required 
      * @bodyParam appreciation string optional 
