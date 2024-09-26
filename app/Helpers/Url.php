@@ -80,4 +80,5 @@ class Url
      const SafetyCardPostSafetyCard = "MMAPSafetyCard/api/SafetyCard/PostSafetyCard";
      const SafetyCardGetSafetyCardList = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardList";
      const SafetyCardGetSafetyCardDetail = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardDetail";
+     const SafetyCardGetObservationLocation = "MMAPSafetyCard/api/SafetyCard/GetObservationLocation";
 }

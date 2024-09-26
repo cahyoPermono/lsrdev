@@ -680,7 +680,7 @@ class ApiUtitilySafetyCardController extends ApiController
         $result = $this->safetyCardService->recomendationResponsibile($request->get('name',''),$request->get('position',''));
         return $this->sendSuccess($result);
     }
-    
+
     /**
      * [15] SC : Submit Safety Card
      * 
@@ -761,6 +761,36 @@ class ApiUtitilySafetyCardController extends ApiController
         }catch(BadRequestException $e){
             return $this->badRequest($e->getMessage());
         }
+    }
+    
+    /**
+     * [16] SC : Observation Location
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *   "status": 200,
+     *   "data": {
+     *        "label" : {
+     *             "en" : "LABEL ATAU NULL",
+     *             "id" : "LABEL ATAU NULL"
+     *        },
+     *       "en": [
+     *            "Office",
+     *            "Camp & Kitchen",
+     *       ],
+     *       "id": [
+     *            "Office",
+     *            "Camp & Kitchen",
+     *       ]
+     *   }
+     *   }
+     */
+    public function observationLocation(Request $request)
+    {
+        $result = $this->safetyCardService->observationLocation();
+        return $this->sendSuccess($result);
     }
     
 }

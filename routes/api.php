@@ -216,6 +216,7 @@ Route::middleware(['private-api'])
                         Route::get('/recomendation/position', 'recomendationPosition')->name('recomendation.position');
                         Route::get('/recomendation/responsibile', 'recomendationResponsibile')->name('recomendation.responsibile');
                         Route::post('/store', 'store')->name('store');
+                        Route::get('/observation-location', 'observationLocation')->name('observation-location');
                     });
             });
 
