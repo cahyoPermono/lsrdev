@@ -46,5 +46,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('hse:run-all-hse-command')->dailyAt($dailyJobTime);
 
         $schedule->command('app:deactivate-inactive-users')->everyThirtyMinutes(); 
+        $schedule->command('utility:calculate-task-todo-user')->everyFiveMinutes(); 
     }
 }

@@ -83,4 +83,6 @@ class Url
      const SafetyCardGetObservationLocation = "MMAPSafetyCard/api/SafetyCard/GetObservationLocation";
      
      const GetListTrainingByEmail = "MMAPSVC2/api/OTC/GetReportOTC";
+     const GetRequestApproverList = "MMAPiTrac/v1/Reservation/get_request_approver";
+     const GetReservationByApprovePayrol = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_payroll";
 }
