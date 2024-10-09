@@ -214,6 +214,11 @@
 
                     <x-portal::input type="text" name="key" id="key" label="Key" placeholder="Key"
                         style="width: 440px;" horizontal>{{ old('key') }}</x-portal::input>
+                        
+                    <x-portal::input.select name="is_module" label="Is Module" placeholder="Is Module" horizontal="true">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </x-portal::input.select>
                 </form>
             </section>
         </div>
