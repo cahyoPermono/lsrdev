@@ -19,7 +19,7 @@ class MedcoRestful
 
           $statusCode = @$result['status_code'] ?: @$result['status'];
           if ($statusCode === Response::HTTP_OK) {
-               return @$result['data'] ?: $result;
+               return isset($result['data']) ? $result['data'] : $result;
           }
           return null;
      }

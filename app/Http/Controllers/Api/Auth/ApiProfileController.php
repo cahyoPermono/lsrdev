@@ -49,8 +49,9 @@ class ApiProfileController extends ApiController
      */
     public function index(Request $request)
     {
-        $user_id = $this->auth()->session_id;
-        $person_id = $this->auth()->person_id;
+        $user = $this->auth();
+        $user_id = $user->session_id;
+        $person_id = $user->person_id;
         $medcoUser = $this->medcoUserService->findUserByPersonId($person_id);
         $user = User::where('id', $user_id)->first();
 

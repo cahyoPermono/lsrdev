@@ -29,14 +29,20 @@ class MedcoUserService
            * Fetch API Request
            */
           $restResponse = MedcoRestful::fetchData(
-               url: Url::FindUserByPersonId,
+               url: Url::FindUserByPersonIdv2,
                query: [
                     "personid" => $personId
                ]
           );
+          if(is_array($restResponse)){
+               $restResponse = @$restResponse[0];
+          }
           $user = $restResponse ? (object) $restResponse : null;
           if ($user && @$user->supervisor) {
                $user->supervisor = $spv ? $this->findUserByPersonId($user->supervisor, false) : null;
+          }
+          if($user){
+               $user->person_id = $personId;
           }
 
           return $user;

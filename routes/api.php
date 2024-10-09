@@ -1,23 +1,25 @@
 <?php
 
+use App\Http\Controllers\Api\Itrac\ApiItracReservationController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\ApiLoginController;
 use App\Http\Controllers\Api\Auth\ApiProfileController;
-use App\Http\Controllers\Api\Auth\ApiUserAuthorizationController;
+use App\Http\Controllers\Api\Util\ApiUtilityController;
 use App\Http\Controllers\Api\Hse\ApiUtilityHseController;
-use App\Http\Controllers\Api\Hse\ApiUtitilySafetyCardController;
-use App\Http\Controllers\Api\Isolation\ApiIsolationController;
-use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
-use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
-use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
-use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
-use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
-use App\Http\Controllers\Api\UseCase2\ApiUseCase2AssetsController;
-use App\Http\Controllers\Api\UseCase2\ApiUseCase2BlockController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCase2Controller;
+use App\Http\Controllers\Api\Isolation\ApiIsolationController;
+use App\Http\Controllers\Api\PwtIssuer\ApiPwtIssuerController;
+use App\Http\Controllers\Api\Hse\ApiUtitilySafetyCardController;
+use App\Http\Controllers\Api\Auth\ApiUserAuthorizationController;
+use App\Http\Controllers\Api\UseCase2\ApiUseCase2BlockController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCase2FieldController;
+use App\Http\Controllers\Api\UseCase2\ApiUseCase2AssetsController;
 use App\Http\Controllers\Api\UseCase2\ApiUseCaseCompanyController;
-use App\Http\Controllers\Api\User\ApiUserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningController;
+use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
+use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
+use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +42,7 @@ Route::middleware(['private-api'])
     ->group(function () {
 
 
-        Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile')->middleware(['authorization:other-screening']);
+        Route::get('/user/{person_id}/profile', ApiUserController::class)->name('user.profile');//->middleware(['authorization:other-screening']);
 
         Route::controller(ApiUserAuthorizationController::class)
             ->prefix('auth/')
@@ -220,6 +222,27 @@ Route::middleware(['private-api'])
                     });
             });
 
+        Route::controller(ApiUtilityController::class)
+            ->prefix('utility/')
+            ->as('utility.')
+            ->group(function () {
+                Route::get('/todo', 'todo')->name('todo');
+                Route::get('/app-version', 'appVersion')->name('app-version');
+            });
+
+        Route::prefix('itrac/')
+            ->as('itrac.')
+            ->middleware(['authorization:itrac'])
+            ->group(function () {
+                Route::controller(ApiItracReservationController::class)
+                    ->prefix('reservation/')
+                    ->as('reservation.')
+                    ->group(function () {
+                        Route::get('/', 'index')->name('index');
+                        Route::get('/{reservation_id}', 'show')->name('show');
+                        Route::get('/oim-approver', 'oimApprover')->name('oim-approver');
+                    });
+            });
     });
 
 Route::get('/key', function () {

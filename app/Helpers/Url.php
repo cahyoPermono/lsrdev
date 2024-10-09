@@ -85,4 +85,8 @@ class Url
      const GetListTrainingByEmail = "MMAPSVC2/api/OTC/GetReportOTC";
      const GetRequestApproverList = "MMAPiTrac/v1/Reservation/get_request_approver";
      const GetReservationByApprovePayrol = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_payroll";
+     const GetFuturePersonReservation = "MMAPiTrac/v1/Reservation/get_future_person_reservation";
+     const GetFuturePoolCarRequest = "MMAPiTrac/v1/Reservation/get_future_pool_car_request";
+     const FindUserByPersonIdv2 = "MMAPiTrac/v1/Person/get_person_info";
+     const GetReservationInfo = "MMAPiTrac/v1/Reservation/get_reservation_info";
 }
