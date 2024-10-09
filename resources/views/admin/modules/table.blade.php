@@ -76,6 +76,7 @@
         const titleForm = document.getElementById('title-form')
         const formMenu = document.getElementById('form-menu');
         const menuName = document.getElementById('name')
+        const menuIsModule = document.getElementById('is_module')
         const menuIcon = document.getElementById('icon')
         const menuKey = document.getElementById('key')
         const viewIcon = document.getElementById('view-icon')
@@ -87,10 +88,12 @@
                 const name = item.getAttribute('data-name');
                 const key = item.getAttribute('data-key');
                 const icon = item.getAttribute('data-icon');
+                const isModule = item.getAttribute('data-is_module') ? 1 : 0;
                 menuIcon.removeAttribute('required');
                 menuName.value = name;
                 menuIcon.value = '';
                 menuKey.value = key;
+                menuIsModule.value = isModule
                 btnCancel.classList.remove('d-none')
                 titleForm.innerHTML = 'Update Module';
                 viewIcon.classList.remove('d-none')
@@ -136,7 +139,7 @@
                                 </div>
                                 <div class="d-flex">
                                     <a href="javascript:;" class="btn-edit" data-id="{{ $row->id }}"
-                                        data-name="{{ $row->name }}" data-key="{{ $row->key }}"
+                                        data-name="{{ $row->name }}" data-key="{{ $row->key }}" data-is_module="{{ $row->is_module }}"
                                         data-icon="{{ asset($row->icon) }}">Edit</a>
                                     <a href="javascript:;" data-toggle="confirmation"
                                         data-message="{{ __('adminportal.delete_confirmation') }}"
@@ -159,7 +162,7 @@
                                                 <div class="d-flex">
                                                     <a href="javascript:;" class="btn-edit"
                                                         data-id="{{ $sub->id }}" data-name="{{ $sub->name }}"
-                                                        data-key="{{ $sub->key }}"
+                                                        data-key="{{ $sub->key }}"  data-is_module="{{ $sub->is_module }}"
                                                         data-icon="{{ asset($sub->icon) }}">Edit</a>
                                                     <a href="javascript:;" data-toggle="confirmation"
                                                         data-message="{{ __('adminportal.delete_confirmation') }}"

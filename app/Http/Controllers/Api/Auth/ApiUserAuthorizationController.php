@@ -51,10 +51,14 @@ class ApiUserAuthorizationController extends ApiController
      *       "key": "self-screening",
      *       "icon": "http://crocodic.test/medco-sa/public/fake/self-screening.png",
      *       "sorting": 1,
+     *       "is_module": true,
      *       "subs": [
      *           {
      *           "label": "Other Screening",
-     *           "key": "other-screening"
+     *           "key": "other-screening",
+     *           "icon": "http://crocodic.test/medco-sa/public/uploads/image/mfxHcS6Q4ygZFPw2XlpeK3Vq65WQYdU9Se6LUgDT.png",
+     *           "sorting": 5,
+     *           "is_module": true
      *           }
      *       ]
      *       },
@@ -63,6 +67,7 @@ class ApiUserAuthorizationController extends ApiController
      *       "key": "ptw-issuer",
      *       "icon": "http://crocodic.test/medco-sa/public/fake/pwt-issuer.png",
      *       "sorting": 2,
+     *       "is_module": true,
      *       "subs": []
      *       },
      *       {
@@ -70,6 +75,7 @@ class ApiUserAuthorizationController extends ApiController
      *       "key": "isolation",
      *       "icon": "http://crocodic.test/medco-sa/public/fake/isolation.png",
      *       "sorting": 2,
+     *       "is_module": true,
      *       "subs": []
      *       }
      *   ]
