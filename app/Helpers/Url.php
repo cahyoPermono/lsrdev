@@ -81,4 +81,6 @@ class Url
      const SafetyCardGetSafetyCardList = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardList";
      const SafetyCardGetSafetyCardDetail = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardDetail";
      const SafetyCardGetObservationLocation = "MMAPSafetyCard/api/SafetyCard/GetObservationLocation";
+     
+     const GetListTrainingByEmail = "MMAPSVC2/api/OTC/GetReportOTC";
 }
