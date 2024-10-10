@@ -45,11 +45,19 @@ class ApiUserController extends ApiController
      *       "qr_code": "https://chart.googleapis.com/chart?chl=19821141&chs=500x500&cht=qr&chld=H%7C0"
      *   }
      *  }
+     * 
+     * @response 400 {
+     *   "status": 400,
+     *   "error": "bad_request",
+     *   "message": "person not found"
+     *   }
      */
     public function __invoke(Request $request, $person_id)
     {
         $user = $this->medcoUserService->findUserByPersonId($person_id);
-        abort_if(!$user, 404);
+        if(!$user){
+            return $this->badRequest('person not found');
+        }
 
         return $this->sendSuccess(new ProfileResource($user));
     }

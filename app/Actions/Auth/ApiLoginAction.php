@@ -1,6 +1,7 @@
 <?php
 namespace App\Actions\Auth;
 
+use App\Constanta\Constanta;
 use App\Enum\Status;
 use App\Models\Settings;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ class ApiLoginAction
 
      public function handle(Request $request)
      {
-          $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
-          $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
+          $minActiveDay = Settings::where('key', Constanta::SETTING::MIN_ACTIVE_DAY)->first();
+          $maxLastLoginDays = intval($minActiveDay?->value) ?: 90;
           $email = $request->email;
           $tokenMedco = $request->header('tokenmedco');
           $ptsUser = $this->medcoUserService->findUserByEmail($email);

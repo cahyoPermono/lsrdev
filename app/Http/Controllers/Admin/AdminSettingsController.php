@@ -2,9 +2,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Settings;
+use App\Constanta\Constanta;
 use Illuminate\Http\Request;
-use Laililmahfud\Adminportal\Controllers\AdminController;
 use App\Services\SettingsService;
+use Laililmahfud\Adminportal\Controllers\AdminController;
 
 class AdminSettingsController extends AdminController
 {
@@ -15,9 +16,9 @@ class AdminSettingsController extends AdminController
 
 
     public function index(Request $request){
-        $min_active_day = Settings::where('key', 'min_active_day')->first();
+        $minActiveDay = Settings::where('key', Constanta::SETTING::MIN_ACTIVE_DAY)->first();
         return view('admin.settings.index' , [
-            'min_active_day'=> $min_active_day?->value
+            'min_active_day'=> $minActiveDay?->value
         ]);
     }
     

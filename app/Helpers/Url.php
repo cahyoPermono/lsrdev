@@ -89,4 +89,6 @@ class Url
      const GetFuturePoolCarRequest = "MMAPiTrac/v1/Reservation/get_future_pool_car_request";
      const FindUserByPersonIdv2 = "MMAPiTrac/v1/Person/get_person_info";
      const GetReservationInfo = "MMAPiTrac/v1/Reservation/get_reservation_info";
+     const GetPosition = "MMAPiTrac/v1/Position/get_position";
+     const GetCostCenter = "MMAPiTrac/v1/Cost/get_cost_center";
 }

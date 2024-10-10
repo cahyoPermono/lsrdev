@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Itrac\ApiItracReservationController;
+use App\Http\Controllers\Api\Itrac\ApiItracUtilityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\ApiLoginController;
@@ -241,6 +242,17 @@ Route::middleware(['private-api'])
                         Route::get('/', 'index')->name('index');
                         Route::get('/{reservation_id}', 'show')->name('show');
                         Route::get('/oim-approver', 'oimApprover')->name('oim-approver');
+                    });
+                Route::controller(ApiItracUtilityController::class)
+                    ->prefix('utility/')
+                    ->as('utility.')
+                    ->group(function () {
+                        Route::get('/status', 'status')->name('status');
+                        Route::get('/schedule', 'schedule')->name('schedule');
+                        Route::get('/transit-point', 'transitPoint')->name('transit-point');
+                        Route::get('/position', 'position')->name('position');
+                        Route::get('/cost-center', 'costCenter')->name('cost-center');
+                        Route::get('/requirement/{person_id}', 'personRequirement')->name('person-requirement');
                     });
             });
     });
