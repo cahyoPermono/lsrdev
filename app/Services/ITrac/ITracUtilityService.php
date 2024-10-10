@@ -7,6 +7,35 @@ use App\Helpers\MedcoRestful;
 
 class ITracUtilityService
 {
+     public function findAllLocation()
+     {
+          $restResponse = MedcoRestful::fetchData(
+               url: Url::GetLocation,
+          );
+          $result = collect($restResponse);
+
+          return $result->map(fn($row) => [
+               'id' => @$row['location_id'],
+               'code' => @$row['code'],
+               'name' => @$row['name'],
+          ])
+               ->values();
+     }
+     
+     public function findAllPurposeOfVisit()
+     {
+          $restResponse = MedcoRestful::fetchData(
+               url: Url::GetPurpostOfVisit,
+          );
+          $result = collect($restResponse);
+
+          return $result->map(fn($row) => [
+               'id' => @$row['code_id'],
+               'code' => @$row['code'],
+               'name' => @$row['short_name'],
+          ])
+               ->values();
+     }
      public function findAllPosition()
      {
           $restResponse = MedcoRestful::fetchData(

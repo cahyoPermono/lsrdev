@@ -148,4 +148,52 @@ class ApiItracUtilityController extends ApiController
           $result = $iTracUtilityService->findUtilitySetting(Constanta::SETTING::ITRAC_TRANSIT_POINT);
           return $this->sendSuccess($result);
       }
+
+      /**
+      * Location
+      *
+      * @authenticated
+      * @defaultParam
+      * 
+      * 
+      * @response {
+      *    "status": 200,
+      *    "message": "success",
+      *    "data": [
+      *         {
+      *              "id": 1,
+      *              "code": "HLP",
+      *              "name": "Halim Perdana K."
+      *         }
+      *    ]
+      *    }
+      */
+      public function location(Request $request,ITracUtilityService $iTracUtilityService){
+          $result = $iTracUtilityService->findAllLocation();
+          return $this->sendSuccess($result);
+      }
+
+     /**
+      * Purpose Of Visit
+      *
+      * @authenticated
+      * @defaultParam
+      * 
+      * 
+      * @response {
+      *    "status": 200,
+      *    "message": "success",
+      *    "data": [
+      *         {
+      *              "id": 10,
+      *              "code": "PA",
+      *              "name": "Planned Activity"
+      *         }
+      *    ]
+      *    }
+      */
+      public function purposeVisit(Request $request,ITracUtilityService $iTracUtilityService){
+          $result = $iTracUtilityService->findAllPurposeOfVisit();
+          return $this->sendSuccess($result);
+      }
 }

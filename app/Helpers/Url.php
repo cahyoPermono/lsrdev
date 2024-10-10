@@ -91,4 +91,8 @@ class Url
      const GetReservationInfo = "MMAPiTrac/v1/Reservation/get_reservation_info";
      const GetPosition = "MMAPiTrac/v1/Position/get_position";
      const GetCostCenter = "MMAPiTrac/v1/Cost/get_cost_center";
+     const GetLocation = "MMAPiTrac/v1/Location/get_location";
+     const GetPurpostOfVisit = "MMAPiTrac/v1/Purpose/get_purpose_of_visit";
+     const PostUpdateOimApprover = "MMAPiTrac/v1/Reservation/update_oim_approver";
+     const PostCancelReservationRequest = "MMAPiTrac/v1/Reservation/cancel_person_reservation";
 }

@@ -240,13 +240,17 @@ Route::middleware(['private-api'])
                     ->as('reservation.')
                     ->group(function () {
                         Route::get('/', 'index')->name('index');
-                        Route::get('/{reservation_id}', 'show')->name('show');
                         Route::get('/oim-approver', 'oimApprover')->name('oim-approver');
+                        Route::get('/{reservation_id}', 'show')->name('show');
+                        Route::post('/oim-approver', 'updateOimApprover')->name('oim-approver.update');
+                        Route::post('/cancel/{reservation_id}', 'cancelReservation')->name('cancel-reservation');
                     });
                 Route::controller(ApiItracUtilityController::class)
                     ->prefix('utility/')
                     ->as('utility.')
                     ->group(function () {
+                        Route::get('/purpose-visit', 'purposeVisit')->name('purpose-visit');
+                        Route::get('/location', 'location')->name('location');
                         Route::get('/status', 'status')->name('status');
                         Route::get('/schedule', 'schedule')->name('schedule');
                         Route::get('/transit-point', 'transitPoint')->name('transit-point');

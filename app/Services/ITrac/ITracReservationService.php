@@ -2,8 +2,11 @@
 namespace App\Services\ITrac;
 
 use App\Helpers\Url;
+use Illuminate\Http\Request;
 use App\Helpers\MedcoRestful;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ITracReservationService
 {
@@ -14,16 +17,50 @@ class ITracReservationService
           );
           $result = collect($restResponse);
 
-          return $result->filter(function($row) use($workLocation){
+          $result = $result->filter(function($row) use($workLocation){
                return str_contains(strtolower($row['work_location']),strtolower($workLocation));
-          })
-          ->map(fn($row) => [
+          });
+          return $result->map(fn($row) => [
+               'id' => @$row['user_id'],
                'reservation_approver_id' => @$row['reservation_approver_id'],
                'person_id' => @$row['person_id'],
                'name' => @$row['name'],
                'email' => @$row['email'],
           ])
           ->values();
+     }
+
+     public function updateOimApproverReservation(Request $request)
+     {
+          $restResponse = MedcoRestful::postAction(
+               url: Url::PostUpdateOimApprover,
+               body : [
+                    "reservation_id" => $request->reservation_id,
+                    "approver" => $request->oim_approver_id,
+               ]
+          );
+          $result = collect($restResponse);
+          if(@$result['status_code']==Response::HTTP_CREATED){
+               return @$result['message'] ?: "Update oim approver success";
+          }
+
+          throw new BadRequestException(@$result['message']  ?: 'Gagal update oim approver');
+     }
+
+     public function cancelReservationRequest($reservationId)
+     {
+          $restResponse = MedcoRestful::postAction(
+               url: Url::PostCancelReservationRequest,
+               body : [
+                    "reservation_id" => $reservationId,
+               ]
+          );
+          $result = collect($restResponse);
+          if(@$result['status_code']==Response::HTTP_CREATED){
+               return @$result['message'] ?: "Cancel oim approver success";
+          }
+
+          throw new BadRequestException(@$result['message']  ?: 'Gagal Cancel oim approver');
      }
 
      public function findReservationInfo($reservationId){
@@ -61,6 +98,7 @@ class ITracReservationService
                'priority' => @$row['priority'] ?: '-', 
                'accomodation_location' => @$row['accomodation_location'] ?: '-', 
                'justification' => @$comments[2] ?: '-', 
+               'approved_by' => @$row['approved_by']
           ];
      }
 

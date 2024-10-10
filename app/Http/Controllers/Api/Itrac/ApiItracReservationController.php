@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ITrac\ITracReservationService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 /**
  * @group ITrac/Reservation
@@ -52,7 +53,8 @@ class ApiItracReservationController extends ApiController
      *       ]
      *   }
      **/
-    public function index(Request $request,ITracReservationService $iTracReservationService){
+    public function index(Request $request, ITracReservationService $iTracReservationService)
+    {
         $personId = $this->auth()->person_id;
         $result = $iTracReservationService->findAllReservation($personId);
         return $this->sendSuccess($result);
@@ -71,6 +73,7 @@ class ApiItracReservationController extends ApiController
      *       "message": "success",
      *       "data": [
      *           {
+     *               "id": "93300073",
      *               "reservation_approver_id": 2,
      *               "person_id": 19821141,
      *               "name": "Ayu Annisa",
@@ -79,7 +82,8 @@ class ApiItracReservationController extends ApiController
      *       ]
      *   }
      */
-    public function oimApprover(Request $request,ITracReservationService $iTracReservationService){
+    public function oimApprover(Request $request, ITracReservationService $iTracReservationService)
+    {
         $result = $iTracReservationService->findAllOimApprover($request->work_location);
         return $this->sendSuccess($result);
     }
@@ -114,13 +118,65 @@ class ApiItracReservationController extends ApiController
      *       "purpose_of_visit": "R",
      *       "priority": "Priority A",
      *       "accomodation_location": "DAYUNG",
-     *       "justification": "Testing"
+     *       "justification": "Testing",
+     *       "approved_by": "93300073"
      *   }
      *   }
      */
-    public function show(Request $request,ITracReservationService $iTracReservationService,$reservationId){
+    public function show(Request $request, ITracReservationService $iTracReservationService, $reservationId)
+    {
         $result = $iTracReservationService->findReservationInfo($reservationId);
         return $this->sendSuccess($result);
+    }
+
+
+    /**
+     * 
+     * Upate OIM Approver
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * 
+     * @requestBody multipart/form-data
+     * @bodyParam reservation_id integer required
+     * @bodyParam oim_approver_id integer required
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "Update oim approver success"
+     * }
+     */
+    public function updateOimApprover(Request $request, ITracReservationService $iTracReservationService)
+    {
+        try {
+            $message = $iTracReservationService->updateOimApproverReservation($request);
+            return $this->sendMessage($message);
+        } catch (BadRequestException $e) {
+            return $this->badRequest($e->getMessage());
+        }
+    }
+
+    /**
+     * Cancel Reservation Request
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @pathParam reservation_id integer required
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": "Cancel reservation success"
+     *   }
+     */
+    public function cancelReservation(Request $request,ITracReservationService $iTracReservationService,$reservationId){
+        try {
+            $message = $iTracReservationService->cancelReservationRequest($reservationId);
+            return $this->sendMessage($message);
+        } catch (BadRequestException $e) {
+            return $this->badRequest($e->getMessage());
+        }
     }
 
 }
