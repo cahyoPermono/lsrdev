@@ -7,6 +7,20 @@ use App\Helpers\MedcoRestful;
 
 class ITracUtilityService
 {
+     public function findAllTransportaionType()
+     {
+          $restResponse = MedcoRestful::fetchData(
+               url: Url::GetTransportationType,
+          );
+          $result = collect($restResponse);
+
+          return $result->map(fn($row) => [
+               'id' => @$row['transportation_type_id'],
+               'name' => @$row['description'] ." | " .@$row['seat_capacity'] . " seats" ,
+          ])
+               ->values();
+     }
+
      public function findAllLocation()
      {
           $restResponse = MedcoRestful::fetchData(

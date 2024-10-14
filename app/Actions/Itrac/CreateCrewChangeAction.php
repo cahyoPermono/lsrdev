@@ -1,5 +1,5 @@
 <?php
-namespace App\Actions\Itrac\CrewChange;
+namespace App\Actions\Itrac;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

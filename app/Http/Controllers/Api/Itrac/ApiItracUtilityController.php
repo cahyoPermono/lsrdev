@@ -197,4 +197,14 @@ class ApiItracUtilityController extends ApiController
           $result = $iTracUtilityService->findAllPurposeOfVisit();
           return $this->sendSuccess($result);
       }
+
+      /**
+       * Transportaion Type
+       * 
+       * @authenticated
+       * @defaultParam
+       */
+      public function transportationType(Request $request){
+
+      }
 }

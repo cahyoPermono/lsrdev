@@ -24,6 +24,20 @@ class ITracReservationService
           throw new BadRequestException(@$result['message']  ?: @$result['title']);
      }
 
+     public function createPoolCar($postData)
+     {
+          $restResponse = MedcoRestful::postAction(
+               url: Url::PostCreatePoolCar,
+               body : $postData
+          );
+          $result = collect($restResponse);
+          if(@$result['status_code']==Response::HTTP_CREATED){
+               return @$result['message'] ?: "Request submitted successfully";
+          }
+          
+          throw new BadRequestException(@$result['message']  ?: @$result['title']);
+     }
+
      public function findAllOimApprover($workLocation)
      {
           $restResponse = MedcoRestful::fetchData(

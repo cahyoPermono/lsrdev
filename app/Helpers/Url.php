@@ -92,8 +92,10 @@ class Url
      const GetPosition = "MMAPiTrac/v1/Position/get_position";
      const GetCostCenter = "MMAPiTrac/v1/Cost/get_cost_center";
      const GetLocation = "MMAPiTrac/v1/Location/get_location";
+     const GetTransportationType = "MMAPiTrac/v1/Transportation/get_transportation_type";
      const GetPurpostOfVisit = "MMAPiTrac/v1/Purpose/get_purpose_of_visit";
      const PostUpdateOimApprover = "MMAPiTrac/v1/Reservation/update_oim_approver";
      const PostCancelReservationRequest = "MMAPiTrac/v1/Reservation/cancel_person_reservation";
      const PostCreateReservation = "MMAPiTrac/v1/Reservation/post_person_reservation";     
+     const PostCreatePoolCar = "MMAPiTrac/v1/Reservation/post_pool_car_request";     
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\Itrac\ApiItracCrewChangeController;
+use App\Http\Controllers\Api\Itrac\ApiItracController;
 use App\Http\Controllers\Api\Itrac\ApiItracReservationController;
 use App\Http\Controllers\Api\Itrac\ApiItracUtilityController;
 use Illuminate\Support\Facades\Route;
@@ -253,18 +253,20 @@ Route::middleware(['private-api'])
                         Route::get('/purpose-visit', 'purposeVisit')->name('purpose-visit');
                         Route::get('/location', 'location')->name('location');
                         Route::get('/status', 'status')->name('status');
+                        Route::get('/transportation-type', 'transportationType')->name('transportation-type');
                         Route::get('/schedule', 'schedule')->name('schedule');
                         Route::get('/transit-point', 'transitPoint')->name('transit-point');
                         Route::get('/position', 'position')->name('position');
                         Route::get('/cost-center', 'costCenter')->name('cost-center');
                         Route::get('/requirement/{person_id}', 'personRequirement')->name('person-requirement');
                     });
-                Route::controller(ApiItracCrewChangeController::class)
-                    ->prefix('crew-change/')
-                    ->as('crew-change.')
-                    ->middleware(['authorization:crew_change'])
+                Route::controller(ApiItracController::class)
+                    ->prefix('store/')
+                    ->as('store.')
                     ->group(function () {
-                        Route::post('/', 'store')->name('store');
+                        Route::post('/crew-change', 'storeCreawChange')->name('store.crew-change')->middleware(['authorization:crew_change']);
+                        Route::post('/special-trip', 'storeSpecialTrip')->name('store.special-trip')->middleware(['authorization:special_trip']);
+                        Route::post('/pool-car', 'storePoolCar')->name('store.pool-car')->middleware(['authorization:pool_car']);
                     });
             });
     });

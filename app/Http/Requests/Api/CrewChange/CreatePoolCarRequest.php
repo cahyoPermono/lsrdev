@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\CrewChange;
 use App\Traits\FailedValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCrewChangeRequest extends FormRequest
+class CreatePoolCarRequest extends FormRequest
 {
     use FailedValidation;
     /**
@@ -25,18 +25,11 @@ class CreateCrewChangeRequest extends FormRequest
     {
         return [
             'pts_id' => 'required',
-            'pts_company_id' => 'required',
-            'departure_date' => 'required',
-            // 'return_date' => 'required',
-            'purpose_of_visit_id' => 'required',
-            'status' => 'required',
-            'schedule' => 'required',
+            'date_time' => 'required',
             'from_location_id' => 'required',
             'to_location_id' => 'required',
-            'to_location_field_site_id' => 'required',
-            'transit_point' => 'required',
-            'coast_center_id' => 'required',
-            'position_id' => 'required',
+            'transportation_type_id' => 'required',
+            'justification' => 'required',
         ];
     }
 }
