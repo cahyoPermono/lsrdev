@@ -179,4 +179,30 @@ class ApiItracReservationController extends ApiController
         }
     }
 
+    
+    /**
+     * 
+     * Reservation OIM Approval
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * @response {
+     *       "status": 200,
+     *       "message": "success",
+     *       "data": [
+     *           {
+     *               "id": 921434,
+     *               "title": "Abdul  HAKIM",
+     *               "description": "29 Oct 2024 | GELAM - DAYUNG",
+     *               "type": "Special Trip"
+     *           }
+     *       ]
+     *   }
+     */
+    public function reservationOim(Request $request,ITracReservationService $iTracReservationService){
+        $personId = $this->auth()->person_id;
+        $result = $iTracReservationService->findAllReservationOimApproval($personId);
+        return $this->sendSuccess($result);
+    }
 }

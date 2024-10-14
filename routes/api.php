@@ -241,6 +241,7 @@ Route::middleware(['private-api'])
                     ->as('reservation.')
                     ->group(function () {
                         Route::get('/', 'index')->name('index');
+                        Route::get('/oim', 'reservationOim')->name('reservation-oim')->middleware(['authorization:oim_approval']);
                         Route::get('/oim-approver', 'oimApprover')->name('oim-approver');
                         Route::get('/{reservation_id}', 'show')->name('show');
                         Route::post('/oim-approver', 'updateOimApprover')->name('oim-approver.update');
@@ -261,12 +262,10 @@ Route::middleware(['private-api'])
                         Route::get('/requirement/{person_id}', 'personRequirement')->name('person-requirement');
                     });
                 Route::controller(ApiItracController::class)
-                    ->prefix('store/')
-                    ->as('store.')
                     ->group(function () {
-                        Route::post('/crew-change', 'storeCreawChange')->name('store.crew-change')->middleware(['authorization:crew_change']);
-                        Route::post('/special-trip', 'storeSpecialTrip')->name('store.special-trip')->middleware(['authorization:special_trip']);
-                        Route::post('/pool-car', 'storePoolCar')->name('store.pool-car')->middleware(['authorization:pool_car']);
+                        Route::post('/store/crew-change', 'storeCreawChange')->name('store.crew-change')->middleware(['authorization:crew_change']);
+                        Route::post('/store/special-trip', 'storeSpecialTrip')->name('store.special-trip')->middleware(['authorization:special_trip']);
+                        Route::post('/store/pool-car', 'storePoolCar')->name('store.pool-car')->middleware(['authorization:pool_car']);
                     });
             });
     });

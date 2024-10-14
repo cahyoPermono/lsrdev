@@ -14,28 +14,28 @@ class ITracReservationService
      {
           $restResponse = MedcoRestful::postAction(
                url: Url::PostCreateReservation,
-               body : $postData
+               body: $postData
           );
           $result = collect($restResponse);
-          if(@$result['status_code']==Response::HTTP_CREATED){
+          if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Request submitted successfully";
           }
-          
-          throw new BadRequestException(@$result['message']  ?: @$result['title']);
+
+          throw new BadRequestException(@$result['message'] ?: @$result['title']);
      }
 
      public function createPoolCar($postData)
      {
           $restResponse = MedcoRestful::postAction(
                url: Url::PostCreatePoolCar,
-               body : $postData
+               body: $postData
           );
           $result = collect($restResponse);
-          if(@$result['status_code']==Response::HTTP_CREATED){
+          if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Request submitted successfully";
           }
-          
-          throw new BadRequestException(@$result['message']  ?: @$result['title']);
+
+          throw new BadRequestException(@$result['message'] ?: @$result['title']);
      }
 
      public function findAllOimApprover($workLocation)
@@ -45,8 +45,8 @@ class ITracReservationService
           );
           $result = collect($restResponse);
 
-          $result = $result->filter(function($row) use($workLocation){
-               return str_contains(strtolower($row['work_location']),strtolower($workLocation));
+          $result = $result->filter(function ($row) use ($workLocation) {
+               return str_contains(strtolower($row['work_location']), strtolower($workLocation));
           });
           return $result->map(fn($row) => [
                'id' => @$row['user_id'],
@@ -55,43 +55,44 @@ class ITracReservationService
                'name' => @$row['name'],
                'email' => @$row['email'],
           ])
-          ->values();
+               ->values();
      }
 
      public function updateOimApproverReservation(Request $request)
      {
           $restResponse = MedcoRestful::postAction(
                url: Url::PostUpdateOimApprover,
-               body : [
+               body: [
                     "reservation_id" => $request->reservation_id,
                     "approver" => $request->oim_approver_id,
                ]
           );
           $result = collect($restResponse);
-          if(@$result['status_code']==Response::HTTP_CREATED){
+          if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Update oim approver success";
           }
 
-          throw new BadRequestException(@$result['message']  ?: 'Gagal update oim approver');
+          throw new BadRequestException(@$result['message'] ?: 'Gagal update oim approver');
      }
 
      public function cancelReservationRequest($reservationId)
      {
           $restResponse = MedcoRestful::postAction(
                url: Url::PostCancelReservationRequest,
-               body : [
+               body: [
                     "reservation_id" => $reservationId,
                ]
           );
           $result = collect($restResponse);
-          if(@$result['status_code']==Response::HTTP_CREATED){
+          if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Cancel oim approver success";
           }
 
-          throw new BadRequestException(@$result['message']  ?: 'Gagal Cancel oim approver');
+          throw new BadRequestException(@$result['message'] ?: 'Gagal Cancel oim approver');
      }
 
-     public function findReservationInfo($reservationId){
+     public function findReservationInfo($reservationId)
+     {
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetReservationInfo,
                query: [
@@ -99,12 +100,12 @@ class ITracReservationService
                ]
           );
 
-          if(is_array($restResponse)){
+          if (is_array($restResponse)) {
                $restResponse = @$restResponse[0];
           }
           $row = $restResponse;
           $additional_info = explode('*|*', @$row['additional_info'] ?: ''); // PTS ID*|*Request Subject='Crew Change’ 
-          $comments = explode('*|*',@$row['comments'] ?: ''); //  Schedule*|*Transit Point*|*Justification
+          $comments = explode('*|*', @$row['comments'] ?: ''); //  Schedule*|*Transit Point*|*Justification
 
           return [
                'title' => @$row['start_location'] . ' - ' . @$row['end_location'],
@@ -118,14 +119,14 @@ class ITracReservationService
                'transit_point' => @$comments[1] ?: 'Direct to Location',
                'transportation_number' => @$row['transportation_number'] ?: '-',
                'transportation_type' => @$row['transportation_type'] ?: '-',
-               'transportation_unit' => @$row['transportation_unit'] ?: '-', 
-               'transportation_mode' => @$row['transportation_mode'] ?: '-', 
-               'seat_no' => @$row['seat_no'] ?: '-', 
+               'transportation_unit' => @$row['transportation_unit'] ?: '-',
+               'transportation_mode' => @$row['transportation_mode'] ?: '-',
+               'seat_no' => @$row['seat_no'] ?: '-',
                'status' => @$row['job_activity'],
-               'purpose_of_visit' => @$row['purpose_of_visit'] ?: '-', 
-               'priority' => @$row['priority'] ?: '-', 
-               'accomodation_location' => @$row['accomodation_location'] ?: '-', 
-               'justification' => @$comments[2] ?: '-', 
+               'purpose_of_visit' => @$row['purpose_of_visit'] ?: '-',
+               'priority' => @$row['priority'] ?: '-',
+               'accomodation_location' => @$row['accomodation_location'] ?: '-',
+               'justification' => @$comments[2] ?: '-',
                'approved_by' => @$row['approved_by']
           ];
      }
@@ -197,5 +198,33 @@ class ITracReservationService
                ->unique()
                ->sortByDesc('date')
                ->values();
+     }
+
+
+     public function findAllReservationOimApproval($personId)
+     {
+          $restResponse = MedcoRestful::fetchData(
+               url: Url::GetReservationByPersonId,
+               query: [
+                    "approvedbypersonid" => $personId,
+               ]
+          );
+
+
+          return collect($restResponse)
+               ->whereNull('approved_status')
+               ->where('reservation_status', '!=', 'Cancelled')
+               ->map(function ($row) {
+                    $title = implode(" ", [@$row['first_name'], @$row['middle_name'], @$row['last_name']]);
+                    $departure_date = @$row['departure_date'];
+                    $description = date('d M Y', strtotime($departure_date)) . " | " . @$row['start_location'] . ' - ' . @$row['end_location'];
+                    return [
+                         'id' => @$row['reservation_id'],
+                         'title' => $title,
+                         'description' => $description,
+                         "type" => @$row['job_activity'],
+                    ];
+               });
+          ;
      }
 }
