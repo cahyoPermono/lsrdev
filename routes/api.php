@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Itrac\ApiItracCrewChangeController;
 use App\Http\Controllers\Api\Itrac\ApiItracReservationController;
 use App\Http\Controllers\Api\Itrac\ApiItracUtilityController;
 use Illuminate\Support\Facades\Route;
@@ -257,6 +258,13 @@ Route::middleware(['private-api'])
                         Route::get('/position', 'position')->name('position');
                         Route::get('/cost-center', 'costCenter')->name('cost-center');
                         Route::get('/requirement/{person_id}', 'personRequirement')->name('person-requirement');
+                    });
+                Route::controller(ApiItracCrewChangeController::class)
+                    ->prefix('crew-change/')
+                    ->as('crew-change.')
+                    ->middleware(['authorization:crew_change'])
+                    ->group(function () {
+                        Route::post('/', 'store')->name('store');
                     });
             });
     });

@@ -4,12 +4,26 @@ namespace App\Services\ITrac;
 use App\Helpers\Url;
 use Illuminate\Http\Request;
 use App\Helpers\MedcoRestful;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\Response;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ITracReservationService
 {
+     public function createReservation($postData)
+     {
+          $restResponse = MedcoRestful::postAction(
+               url: Url::PostCreateReservation,
+               body : $postData
+          );
+          $result = collect($restResponse);
+          if(@$result['status_code']==Response::HTTP_CREATED){
+               return @$result['message'] ?: "Request submitted successfully";
+          }
+          
+          throw new BadRequestException(@$result['message']  ?: @$result['title']);
+     }
+
      public function findAllOimApprover($workLocation)
      {
           $restResponse = MedcoRestful::fetchData(

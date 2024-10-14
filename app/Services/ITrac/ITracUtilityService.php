@@ -18,6 +18,7 @@ class ITracUtilityService
                'id' => @$row['location_id'],
                'code' => @$row['code'],
                'name' => @$row['name'],
+               'field_site_id' => @$row['field_site_id']
           ])
                ->values();
      }

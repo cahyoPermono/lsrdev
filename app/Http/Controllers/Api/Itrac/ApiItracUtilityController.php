@@ -163,7 +163,8 @@ class ApiItracUtilityController extends ApiController
       *         {
       *              "id": 1,
       *              "code": "HLP",
-      *              "name": "Halim Perdana K."
+      *              "name": "Halim Perdana K.",
+      *              "field_site_id" : null
       *         }
       *    ]
       *    }
