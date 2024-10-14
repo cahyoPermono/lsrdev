@@ -219,6 +219,14 @@ class SafetyCardService
           }
      }
 
+     public function observationLocation()
+     {
+          $result = MedcoRestful::fetchData(
+               url: Url::SafetyCardGetObservationLocation
+          );
+          return $this->makeResult($result);
+     }
+
      private function makeResult($result)
      {
           return [
