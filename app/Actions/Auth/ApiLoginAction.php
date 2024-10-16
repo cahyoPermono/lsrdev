@@ -31,7 +31,7 @@ class ApiLoginAction
           $tokenMedco = $request->header('tokenmedco');
           $ptsUser = $this->medcoUserService->findUserByEmail($email);
 
-          // $this->validateEmailWithTokenMedco($email, $tokenMedco);
+          $this->validateEmailWithTokenMedco($email, $tokenMedco);
 
 
           if ($user = $this->userService->findOrCreateByEmail(strtolower($email))) {
