@@ -69,7 +69,7 @@ class TrainingService
 
           return $trainings->map(fn($row) => [
                "training_name" => @$row['course_name'],
-               "validity" => @$row['validity'],
+               'validity' => @$row['valid_status'] ? 'Valid' : 'Invalid', 
                "valid_until" => @$row['valid_until'] ? date('Y-m-d', strtotime(@$row['valid_until'])) : null,
                "contract_number" => @$row['course_id'],
                "status" => @$row['valid_status'] ? 'Active' : 'Inactive',
@@ -100,7 +100,7 @@ class TrainingService
                     'course_type' => @$row['course_type'], 
                     'last_training_date' => @$row['last_training_date'] ? date('Y-m-d',strtotime($row['last_training_date'])) : null,
                     'valid_until' =>  @$row['valid_until'] ? date('Y-m-d',strtotime($row['valid_until'])) : null,
-                    'validity' => @$row['valid_status'], 
+                    'validity' => @$row['valid_status'] ? 'Valid' : 'Invalid', 
                     'record_id' => @$row['record_id'], 
                ]
           ]);
