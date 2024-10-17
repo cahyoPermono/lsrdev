@@ -84,7 +84,7 @@ class TrainingService
                "requirement_type" => @$row['course_type'],
                "training_type" => @$row['course_type'],
                "last_taken" => @$row['last_training_date'] ? date('Y-m-d', strtotime(@$row['last_training_date'])) : null,
-               "mandatory" => false,
+               "mandatory" => 'No',
                "personel_type" => null,
                "detail_category" => 'one',
                "detail" => [
