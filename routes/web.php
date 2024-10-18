@@ -1,10 +1,11 @@
 <?php
 
-use App\Helpers\MedcoRestful;
 use App\Helpers\Url;
-use App\Services\MedcoApi\MedcoUserService;
+use App\Helpers\MedcoRestful;
 use Illuminate\Support\Facades\Route;
+use App\Services\MedcoApi\MedcoUserService;
 use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminAppModulesController;
 use App\Http\Controllers\Admin\AdminAuthorizationUserController;
 
@@ -26,6 +27,7 @@ Route::group(['prefix' => portalconfig('admin_path'), 'as' => "admin.", 'middlew
     Route::post('/user/sync-status', [AdminUsersController::class, 'syncStatus'])->name('users.sync-status');
 
     Route::post('/authorization-user/import',[AdminAuthorizationUserController::class,'import'])->name('authorization-user.import');
+    Route::post('/admin.settings/app-version',[AdminSettingsController::class,'storeAppVersion'])->name('settings.app-version');
 });
 
 Route::get('test-api-connection',function(){
