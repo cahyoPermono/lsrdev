@@ -101,6 +101,7 @@ class ApiItracReservationController extends ApiController
      *   "message": "success",
      *   "data": {
      *       "title": "GELAM - DAYUNG",
+     *       "person_id" : 123456,
      *       "reservation_id": 921444,
      *       "reservation_status": "Created",
      *       "approved_status": null,

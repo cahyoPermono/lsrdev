@@ -109,6 +109,7 @@ class ITracReservationService
 
           return [
                'title' => @$row['start_location'] . ' - ' . @$row['end_location'],
+               'person_id' => @$row['person_id'],
                'reservation_id' => @$row['reservation_id'],
                'reservation_status' => @$row['reservation_status'],
                'approved_status' => @$row['approved_status'],
