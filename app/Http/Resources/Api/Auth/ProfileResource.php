@@ -26,6 +26,8 @@ class ProfileResource extends JsonResource
             'middle_name' => $this->middle_name,
             'last_name' => $this->last_name,
             'sex' => @$this->sex ?: '-',
+            'cost_center_id' => @$this->cost_center_id ?: '-',
+            'cost_center_name' => @$this->cost_center_name ?: '-',
             'nationality' => @$this->nationality ?: '-',
             'department' => $this->department_name,
             'company_id' => $this->company_id,
