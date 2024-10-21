@@ -27,12 +27,17 @@ class AdminSettingsController extends AdminController
     
     public function storeAppVersion(Request $request){
         $exist = AppVersion::latest()->first();
-        AppVersion::updateOrCreate(['id'=>$exist?->id],[
+        $props = [
             'android_version' => $request->android_version,
             'ios_version' => $request->ios_version,
             'download_url' => $request->download_url,
             'text_template' => $request->text_template,
-        ]);
+        ];
+        if($exist){
+            $exist->update($props);
+        }else{
+            AppVersion::create($props);
+        }
         return back()->with(['success' => 'Application setting berhasil diperbarui']);
     }
 }
