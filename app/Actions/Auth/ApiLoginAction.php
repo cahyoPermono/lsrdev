@@ -24,16 +24,17 @@ class ApiLoginAction
 
      public function handle(Request $request)
      {
+          
           $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
           $maxLastLoginDays = $maxInActiveDay?->value ?: 90;
-          $email = $request->email;
+          $email = strtolower($request->email);
           $tokenMedco = $request->header('tokenmedco');
           $ptsUser = $this->medcoUserService->findUserByEmail($email);
 
           $this->validateEmailWithTokenMedco($email, $tokenMedco);
 
 
-          if ($user = $this->userService->findOrCreateByEmail(strtolower($email))) {
+          if ($user = $this->userService->findOrCreateByEmail($email)) {
                // Validate date last login
                $lastLoginDays = $user->last_login->diffInDays(now());
                if ($lastLoginDays >= $maxLastLoginDays) {
@@ -50,11 +51,10 @@ class ApiLoginAction
                'status' => Status::Active,
                'last_login' => now(),
           ];   
+          // Grant HSE Authorization to all medco users
+          $this->grantHSEAuthorizationForMedcoAccount($email);
 
           if ($ptsUser) {   
-               $this->userService->updateUser($user->id, [
-                    'has_pts' => true
-               ]);
                $userProperties = [
                     ...$userProperties,
                     ...[
@@ -64,16 +64,35 @@ class ApiLoginAction
                     ]
                ];
                if ($ptsUser->person_status==='A'){
-                    $this->handlePTSActive($email, $user->id);
+                    $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 3); // 3 = Self Screening Module ID
+                    $userProperties = [
+                         ...$userProperties,
+                         ...[
+                              'has_pts' => true,
+                              'is_pts_active' => true
+                         ]
+                    ];
                } else {
-                    $this->handlePTSInactive($email, $user->id);
+                    $userProperties = [
+                         ...$userProperties,
+                         ...[
+                              'has_pts' => true,
+                              'is_pts_active' => false
+                         ]
+                    ];
                }
 
           } else {
-               $this->handleNoPTS($email, $user->id);
+               $userProperties = [
+                    ...$userProperties,
+                    ...[
+                         'has_pts' => false,
+                         'is_pts_active' => false
+                    ]
+               ];
           }
           
-          $user = $this->userService->createOrUpdateUser(strtolower($email), $userProperties);
+          $user = $this->userService->createOrUpdateUser($email, $userProperties);
 
           $user->person_id = $ptsUser?->person_id;
           $user->user_id = $user->id;
@@ -103,16 +122,18 @@ class ApiLoginAction
           if(!isset($decoded_payload['email'])) {
                throw new BadRequestException('Your token was invalid !');
           }
-          if(strtolower($decoded_payload['email']) != strtolower($email)){ 
+          if(strtolower($decoded_payload['email']) != $email){ 
                throw new BadRequestException('Your token was invalid !');
           };
      }
 
      private function validateModuleAccess(Request $request, $email)
      {
+          $regid = $request->header('regid');
+          $appVersion = explode('_', $regid)[1] ?? '0.0.0';
           $appsCategory = $request->header('apps-category');
           if ($appsCategory === 'use-case-2') {
-               $module = AppModules::where('key', 'use-case-2')->first();
+               $module = AppModules::where('key',  'use-case-2')->first();
                if (!$module) {
                     throw new BadRequestException('Module use case 2 not found');
                }
@@ -121,44 +142,21 @@ class ApiLoginAction
                     ->where('modules_id', $module->id)
                     ->first();
                if (!$findModuleAccess) {
-                    throw new BadRequestException('You are not authorized to use the Production Dashboard app');
+                    throw new BadRequestException('You are not authorized to access Production Dashboard');
                }
           } else {
-               $modules = $this->authorizationUserService->findUserModule($email)->toArray();
+               $modules = $this->authorizationUserService->findUserModule($email, $appVersion)->toArray();
                if(count($modules) === 0){
-                    throw new BadRequestException('You are not authorized to use SmartX');
+                    throw new BadRequestException('You are not authorized to access SmartX');
                }
           }
      }
 
-     private function grantHSEAuthorization(String $email){
+     private function grantHSEAuthorizationForMedcoAccount(String $email){
           $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
 
           if (preg_match($email_regex, $email)) {
-              $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 10); // 10 = HSE Module ID
+              $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
           }
      }
-
-     private function handlePTSActive(String $email, String $userId){
-          $this->authorizationUserService->findOrCreateByEmailAndModuleID(strtolower($email), 3); // 3 = Self Screening Module ID
-          $this->userService->updateUser($userId, [
-               'is_pts_active' => true
-          ]);
-     }
-
-     private function handlePTSInactive(String $email, String $userId){
-          $this->userService->updateUser($userId, [
-               'is_pts_active' => false
-          ]);
-          $this->grantHSEAuthorization($email);
-     }
-
-     private function handleNoPTS(String $email, String $userId){
-          $this->userService->updateUser($userId, [
-               'has_pts' => false,
-               'is_pts_active' => false
-          ]);
-          $this->grantHSEAuthorization($email);
-     }
-
 }
