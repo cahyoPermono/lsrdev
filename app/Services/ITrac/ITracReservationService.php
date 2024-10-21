@@ -38,16 +38,18 @@ class ITracReservationService
           throw new BadRequestException(@$result['message'] ?: @$result['title']);
      }
 
-     public function findAllOimApprover($workLocation)
+     public function findAllOimApprover($workLocation = null)
      {
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetRequestApproverList,
           );
           $result = collect($restResponse);
 
-          $result = $result->filter(function ($row) use ($workLocation) {
-               return str_contains(strtolower($row['work_location']), strtolower($workLocation));
-          });
+          if($workLocation){
+               $result = $result->filter(function ($row) use ($workLocation) {
+                    return str_contains(strtolower($row['work_location']), strtolower($workLocation));
+               });
+          }
           return $result->map(fn($row) => [
                'id' => @$row['user_id'],
                'reservation_approver_id' => @$row['reservation_approver_id'],
@@ -109,6 +111,7 @@ class ITracReservationService
 
           return [
                'title' => @$row['start_location'] . ' - ' . @$row['end_location'],
+               'start_location' => @$row['start_location'],
                'person_id' => @$row['person_id'],
                'reservation_id' => @$row['reservation_id'],
                'reservation_status' => @$row['reservation_status'],

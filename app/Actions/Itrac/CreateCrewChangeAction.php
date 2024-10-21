@@ -32,7 +32,7 @@ class CreateCrewChangeAction
                'pov' => intval($request->purpose_of_visit_id),
                'approver' => 'INDAPPS',
                'accomm' => $request->accomodation ? true : false,
-               'transportation' => 'ON_QUOTA_DRILL',
+               'transportation' => 'MEPG_CREW_CHANGE',
                'comments' => implode("*|*",[$request->schedule,$request->transit_point,""]), //Schedule*|*Transit Point*|*Justification=''(concatenated string with *|* as delimiter),
                'additional_info' => implode("*|*",[$user->person_id,"Crew Change"]),// PTS ID*|*Request Subject='Crew Change’ (hardcode)
           ];

@@ -33,7 +33,7 @@ class CreateSpecialTripAction
                'pov' => intval($request->purpose_of_visit_id),
                'approver' => $request->oim_approver_id,
                'accomm' => $request->accomodation ? true : false,
-               'transportation' => 'ON_LV_TEST',
+               'transportation' => 'MEPG_SPC_TRIP',
                'comments' => implode("*|*", [$subject_request == 'special_trip' ? '' : $request->schedule, $request->transit_point, $request->justification]), //Schedule*|*Transit Point*|*Justification=''(concatenated string with *|* as delimiter),
                'additional_info' => implode("*|*", [$user->person_id, $subject_request == 'special_trip' ? 'Special Trip' : 'Late Crew Change Registration']),// PTS ID*|*Request Subject='Crew Change’ (hardcode)
           ];
