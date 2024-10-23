@@ -203,8 +203,20 @@ class ApiItracUtilityController extends ApiController
        * 
        * @authenticated
        * @defaultParam
+       * 
+      * @response {
+      *    "status": 200,
+      *    "message": "success",
+      *    "data": [
+      *         {
+      *              "id": 10,
+      *              "name": "Planned Activity"
+      *         }
+      *    ]
+      *    }
        */
-      public function transportationType(Request $request){
-
+      public function transportationType(Request $request,ITracUtilityService $iTracUtilityService){
+        $result = $iTracUtilityService->findAllTransportaionType();
+        return $this->sendSuccess($result);
       }
 }
