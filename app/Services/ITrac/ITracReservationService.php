@@ -17,6 +17,8 @@ class ITracReservationService
                body: $postData
           );
           $result = collect($restResponse);
+          logger(Url::PostCreateReservation);
+          logger(json_encode($result));
           if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Request submitted successfully";
           }
@@ -31,6 +33,8 @@ class ITracReservationService
                body: $postData
           );
           $result = collect($restResponse);
+          logger(Url::PostCreateReservation);
+          logger(json_encode($result));
           if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Request submitted successfully";
           }
