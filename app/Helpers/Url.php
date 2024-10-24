@@ -99,4 +99,5 @@ class Url
      const PostCreateReservation = "MMAPiTrac/v1/Reservation/post_person_reservation";     
      const PostCreatePoolCar = "MMAPiTrac/v1/Reservation/post_pool_car_request";    
      const GetReservationByPersonId = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_person_id"; 
+     const PostApprovalReservation = "MMAPiTrac/v1/Reservation/post_oim_approval"; 
 }

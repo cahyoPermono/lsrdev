@@ -99,6 +99,26 @@ class ITracReservationService
           throw new BadRequestException(@$result['message'] ?: 'Gagal Cancel oim approver');
      }
 
+     
+     public function approvalReservation(Request $request)
+     {
+          $action =  $request->type == 'approve' ? 'Approve' : 'Reject';
+          $restResponse = MedcoRestful::postAction(
+               url: Url::PostApprovalReservation,
+               body: [
+                    "reservation_id" => $request->reservation_id,
+                    "approval" => $request->type=='approve' ? true : false,
+                    "comments" => $request->comments ?: ''
+               ]
+          );
+          $result = collect($restResponse);
+          if (@$result['status_code'] == Response::HTTP_CREATED) {
+               return @$result['message'] ?: $action." reservation success";
+          }
+
+          throw new BadRequestException(@$result['message'] ?: "Gagal {$action} reservation");
+     }
+
      public function findReservationInfo($reservationId)
      {
           $restResponse = MedcoRestful::fetchData(

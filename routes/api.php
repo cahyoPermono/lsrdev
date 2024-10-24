@@ -245,6 +245,7 @@ Route::middleware(['private-api'])
                         Route::get('/oim-approver', 'oimApprover')->name('oim-approver');
                         Route::get('/{reservation_id}', 'show')->name('show');
                         Route::post('/oim-approver', 'updateOimApprover')->name('oim-approver.update');
+                        Route::post('/approve-reject', 'approveReject')->name('approve-reject');
                         Route::post('/cancel/{reservation_id}', 'cancelReservation')->name('cancel-reservation');
                     });
                 Route::controller(ApiItracUtilityController::class)

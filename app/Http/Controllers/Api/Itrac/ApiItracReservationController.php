@@ -206,4 +206,32 @@ class ApiItracReservationController extends ApiController
         $result = $iTracReservationService->findAllReservationOimApproval($personId);
         return $this->sendSuccess($result);
     }
+
+    
+    /**
+     * 
+     * Reject / Approve Reservation
+     * 
+     * @authenticated
+     * @defaultParam
+     * 
+     * 
+     * @requestBody multipart/form-data
+     * @bodyParam reservation_id integer required
+     * @bodyParam type string required in approve or reject
+     * @bodyParam comments string optional
+     * 
+     * @response {
+     *   "status": 200,
+     *   "message": "Reject reservation success"
+     * }
+     */
+    public function approveReject(Request $request,ITracReservationService $iTracReservationService){
+        try {
+            $message = $iTracReservationService->approvalReservation($request);
+            return $this->sendMessage($message);
+        } catch (BadRequestException $e) {
+            return $this->badRequest($e->getMessage());
+        }
+    }
 }
