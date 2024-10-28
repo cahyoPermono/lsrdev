@@ -32,25 +32,28 @@ class CalculateTaskTodoUser extends Command
             url: Url::GetRequestApproverList,
         );
         if (!$restResponse) {
-                return [];
+            return [];
         }
 
         $approvers = collect($restResponse)->whereNotNull('email')->values();
-        foreach($approvers as $approver){
+        foreach ($approvers as $approver) {
             $totalTask = 0;
             $taskReservation = MedcoRestful::fetchData(
                 url: Url::GetReservationByApprovePayrol,
-                query : [
+                query: [
                     'payroll' => @$approver['user_id']
                 ]
             );
             if ($taskReservation) {
-                $totalTask = count($taskReservation);
+                $totalTask = collect($restResponse)
+                    ->whereNull('approved_status')
+                    ->where('reservation_status', '!=', 'Cancelled')
+                    ->count();
             }
-            
+
             TaskTodo::updateOrCreate([
                 'email' => @$approver['email'],
-            ],[
+            ], [
                 'email' => @$approver['email'],
                 'module_key' => 'oim_approval',
                 'total_task' => $totalTask,
