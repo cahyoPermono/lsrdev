@@ -195,7 +195,7 @@ class ITracReservationService
                     'date' => @$row['departure_date'] ? date('Y-m-d', strtotime($row['departure_date'])) : null,
                     'title' => $title,
                     'description' => $description . ' | ' . $approved_status,
-                    'person_id' => trim(@$row['person_id']),
+                    'person_id' => intval(trim(@$row['person_id'])),
                     "type" => "special_late_crew",
                     "detail" => null,
                ];
