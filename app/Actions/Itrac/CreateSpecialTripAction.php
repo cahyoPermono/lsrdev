@@ -20,11 +20,11 @@ class CreateSpecialTripAction
           $subject_request = $request->subject_request;
           $postData = [
                'person_id' => intval($request->pts_id),
-               'daytime' => Carbon::parse($request->departure_date),
-               'return_date' => Carbon::parse($request->return_date),
+               'daytime' => Carbon::parse($request->departure_date)->format('Y-m-d'),
+               'return_date' => Carbon::parse($request->return_date)->format('Y-m-d'),
                'start_loc' => intval($request->from_location_id),
                'end_loc' => intval($request->to_location_id),
-               'field_site' => $request->to_location_field_site_id,
+               // 'field_site' => $request->to_location_field_site_id,
                'job_activity' => $subject_request == 'special_trip' ? 'Special Trip' : $request->status,
                'crew' => true,
                'cost_center' => intval($request->coast_center_id),

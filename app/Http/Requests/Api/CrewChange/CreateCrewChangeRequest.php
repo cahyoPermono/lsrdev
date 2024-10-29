@@ -33,7 +33,7 @@ class CreateCrewChangeRequest extends FormRequest
             'schedule' => 'required',
             'from_location_id' => 'required',
             'to_location_id' => 'required',
-            'to_location_field_site_id' => 'required',
+            // 'to_location_field_site_id' => 'required',
             'transit_point' => 'required',
             'coast_center_id' => 'required',
             'position_id' => 'required',

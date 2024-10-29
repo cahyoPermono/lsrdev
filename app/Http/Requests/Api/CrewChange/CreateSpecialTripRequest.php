@@ -34,7 +34,7 @@ class CreateSpecialTripRequest extends FormRequest
             'schedule' => 'required_if:subject_request,late_crew_change',
             'from_location_id' => 'required',
             'to_location_id' => 'required',
-            'to_location_field_site_id' => 'required',
+            // 'to_location_field_site_id' => 'required',
             'transit_point' => 'required',
             'coast_center_id' => 'required',
             'position_id' => 'required',

@@ -36,7 +36,6 @@ class ApiItracController extends ApiController
      * @bodyParam schedule string required
      * @bodyParam from_location_id number required
      * @bodyParam to_location_id number required
-     * @bodyParam to_location_field_site_id number required
      * @bodyParam transit_point string required
      * @bodyParam accomodation boolean optional
      * 
@@ -81,7 +80,6 @@ class ApiItracController extends ApiController
      * @bodyParam schedule string optional required if subject_request = late_crew_change
      * @bodyParam from_location_id number required
      * @bodyParam to_location_id number required
-     * @bodyParam to_location_field_site_id number required
      * @bodyParam transit_point string required
      * @bodyParam accomodation boolean optional
      * @bodyParam oim_approver_id string required

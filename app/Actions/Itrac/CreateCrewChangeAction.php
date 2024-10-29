@@ -19,11 +19,11 @@ class CreateCrewChangeAction
           // See : https://prnt.sc/L6zHh3nqkiy0
           $postData = [
                'person_id' => intval($request->pts_id),
-               'daytime' => Carbon::parse($request->departure_date),
-               'return_date' => Carbon::parse($request->return_date),
+               'daytime' => Carbon::parse($request->departure_date)->format('Y-m-d'),
+               'return_date' => Carbon::parse($request->return_date)->format('Y-m-d'),
                'start_loc' => intval($request->from_location_id),
                'end_loc' => intval($request->to_location_id),
-               'field_site' => $request->to_location_field_site_id,
+               // 'field_site' => $request->to_location_field_site_id,
                'job_activity' => $request->status,
                'crew' => true,
                'cost_center' => intval($request->coast_center_id),
