@@ -27,11 +27,6 @@ class UseCase2FieldDataService
                ->orderBy('date','asc')
                ->get();
 
-          if (!count($dataItems) && !$try) {
-               Artisan::call('use-case-2:insert-field-dashboard-data');
-               return $this->findAllByDateAndType($date, $blockCode, $type, true);
-          }
-
           return $dataItems;
      }
 
