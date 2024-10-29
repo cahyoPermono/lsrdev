@@ -35,7 +35,7 @@ class CalculateTaskTodoUser extends Command
             return [];
         }
 
-        $approvers = collect($restResponse)->whereNotNull('email')->values();
+        $approvers = collect($restResponse)->where('email','abdul.hakim@contractor.medcoenergi.com')->values();
         foreach ($approvers as $approver) {
             $totalTask = 0;
             $taskReservation = MedcoRestful::fetchData(
@@ -45,7 +45,7 @@ class CalculateTaskTodoUser extends Command
                 ]
             );
             if ($taskReservation) {
-                $totalTask = collect($restResponse)
+                $totalTask = collect($taskReservation)
                     ->whereNull('approved_status')
                     ->where('reservation_status', '!=', 'Cancelled')
                     ->count();
