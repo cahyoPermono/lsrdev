@@ -248,7 +248,8 @@ class ITracReservationService
                ->map(function ($row) {
                     $title = implode(" ", [@$row['first_name'], @$row['middle_name'], @$row['last_name']]);
                     $departure_date = @$row['departure_date'];
-                    $description = date('d M Y', strtotime($departure_date)) . " | " . @$row['start_location'] . ' - ' . @$row['end_location'];
+                    $departure_date = $departure_date ? date('d M Y', strtotime($departure_date)) : '-';
+                    $description = $departure_date . " | " . @$row['start_location'] . ' - ' . @$row['end_location'];
                     return [
                          'id' => @$row['reservation_id'],
                          'title' => $title,
