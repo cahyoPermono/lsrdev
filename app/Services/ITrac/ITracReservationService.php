@@ -244,6 +244,7 @@ class ITracReservationService
           return collect($restResponse)
                ->whereNull('approved_status')
                ->where('reservation_status', '!=', 'Cancelled')
+               ->values()
                ->map(function ($row) {
                     $title = implode(" ", [@$row['first_name'], @$row['middle_name'], @$row['last_name']]);
                     $departure_date = @$row['departure_date'];
