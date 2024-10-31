@@ -169,7 +169,7 @@ class ITracReservationService
                     url: Url::GetFuturePersonReservation,
                     query: [
                          "personid" => $personId,
-                         "departure_date" => date('Y-m-d H:i:s')
+                         "departure_date" => date('Y-m-d')
                     ]
                );
           });
@@ -179,7 +179,7 @@ class ITracReservationService
                     url: Url::GetFuturePoolCarRequest,
                     query: [
                          "personid" => $personId,
-                         "departure_date" => date('Y-m-d H:i:s')
+                         "departure_date" => date('Y-m-d')
                     ]
                );
           });
