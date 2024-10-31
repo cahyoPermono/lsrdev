@@ -4,6 +4,7 @@ namespace App\Services\ITrac;
 use App\Helpers\Url;
 use Illuminate\Http\Request;
 use App\Helpers\MedcoRestful;
+use App\Models\Util\TaskTodo;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
@@ -51,7 +52,7 @@ class ITracReservationService
           );
           $result = collect($restResponse);
 
-          if($workLocation){
+          if ($workLocation) {
                $result = $result->filter(function ($row) use ($workLocation) {
                     return str_contains(strtolower($row['work_location']), strtolower($workLocation));
                });
@@ -99,21 +100,21 @@ class ITracReservationService
           throw new BadRequestException(@$result['message'] ?: 'Gagal Cancel oim approver');
      }
 
-     
+
      public function approvalReservation(Request $request)
      {
-          $action =  $request->type == 'approve' ? 'Approve' : 'Reject';
+          $action = $request->type == 'approve' ? 'Approve' : 'Reject';
           $restResponse = MedcoRestful::postAction(
                url: Url::PostApprovalReservation,
                body: [
                     "reservation_id" => $request->reservation_id,
-                    "approval" => $request->type=='approve' ? true : false,
+                    "approval" => $request->type == 'approve' ? true : false,
                     "comments" => $request->comments ?: ''
                ]
           );
           $result = collect($restResponse);
           if (@$result['status_code'] == Response::HTTP_CREATED) {
-               return @$result['message'] ?: $action." reservation success";
+               return @$result['message'] ?: $action . " reservation success";
           }
 
           throw new BadRequestException(@$result['message'] ?: "Gagal {$action} reservation");
@@ -258,5 +259,30 @@ class ITracReservationService
                     ];
                });
           ;
+     }
+
+     public function calculateTaskTodo($email, $ptsId)
+     {
+          $totalTask = 0;
+          $taskReservation = MedcoRestful::fetchData(
+               url: Url::GetReservationByPersonId,
+               query: [
+                    "approvedbypersonid" => $ptsId,
+               ]
+          );
+          if ($taskReservation) {
+               $totalTask = collect($taskReservation)
+                    ->whereNull('approved_status')
+                    ->where('reservation_status', '!=', 'Cancelled')
+                    ->count();
+          }
+
+          TaskTodo::updateOrCreate([
+               'email' => $email,
+          ], [
+               'email' => $email,
+               'module_key' => 'oim_approval',
+               'total_task' => $totalTask,
+          ]);
      }
 }

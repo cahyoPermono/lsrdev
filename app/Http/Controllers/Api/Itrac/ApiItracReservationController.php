@@ -173,7 +173,9 @@ class ApiItracReservationController extends ApiController
      */
     public function cancelReservation(Request $request,ITracReservationService $iTracReservationService,$reservationId){
         try {
+            $user = $this->auth();
             $message = $iTracReservationService->cancelReservationRequest($reservationId);
+            $iTracReservationService->calculateTaskTodo($user->email,$user->person_id);
             return $this->sendMessage($message);
         } catch (BadRequestException $e) {
             return $this->badRequest($e->getMessage());
@@ -228,7 +230,9 @@ class ApiItracReservationController extends ApiController
      */
     public function approveReject(Request $request,ITracReservationService $iTracReservationService){
         try {
+            $user = $this->auth();
             $message = $iTracReservationService->approvalReservation($request);
+            $iTracReservationService->calculateTaskTodo($user->email,$user->person_id);
             return $this->sendMessage($message);
         } catch (BadRequestException $e) {
             return $this->badRequest($e->getMessage());

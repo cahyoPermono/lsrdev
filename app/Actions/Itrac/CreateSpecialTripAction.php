@@ -38,6 +38,6 @@ class CreateSpecialTripAction
                'additional_info' => implode("*|*", [$user->person_id, $subject_request == 'special_trip' ? 'Special Trip' : 'Late Crew Change Registration']),// PTS ID*|*Request Subject='Crew Change’ (hardcode)
           ];
           (new ITracReservationService)->createReservation($postData);
-          (new TodoTaskService)->incrementTaskByEmail($request->oim_approver_email);
+          (new ITracReservationService)->calculateTaskTodo($request->oim_approver_email,$request->oim_approver_id);
      }
 }
