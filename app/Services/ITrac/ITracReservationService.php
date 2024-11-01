@@ -164,26 +164,21 @@ class ITracReservationService
 
      public function findAllReservation($personId)
      {
-          $CACHE_LIFETIME = 300;//detik
-          $futurePersonResult = Cache::remember("GET-FUTURE-PERSON-RESERVATION-{$personId}", $CACHE_LIFETIME, function () use ($personId) {
-               return MedcoRestful::fetchData(
-                    url: Url::GetFuturePersonReservation,
-                    query: [
-                         "personid" => $personId,
-                         "departure_date" => date('Y-m-d')
-                    ]
-               );
-          });
+          $futurePersonResult = MedcoRestful::fetchData(
+               url: Url::GetFuturePersonReservation,
+               query: [
+                    "personid" => $personId,
+                    "departure_date" => date('Y-m-d')
+               ]
+          );
 
-          $futurePoolCarResult = Cache::remember("GET-FUTURE-POOL-CAR-{$personId}", $CACHE_LIFETIME, function () use ($personId) {
-               return MedcoRestful::fetchData(
-                    url: Url::GetFuturePoolCarRequest,
-                    query: [
-                         "personid" => $personId,
-                         "departure_date" => date('Y-m-d')
-                    ]
-               );
-          });
+          $futurePoolCarResult = MedcoRestful::fetchData(
+               url: Url::GetFuturePoolCarRequest,
+               query: [
+                    "personid" => $personId,
+                    "departure_date" => date('Y-m-d')
+               ]
+          );
 
           $futurePerson = collect($futurePersonResult)->map(function ($row) {
                $additional_info = explode('*|*', @$row['additional_info'] ?: '');
