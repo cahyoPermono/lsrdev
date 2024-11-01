@@ -20,8 +20,8 @@ class CreateSpecialTripAction
           $subject_request = $request->subject_request;
           $postData = [
                'person_id' => intval($request->pts_id),
-               'daytime' => Carbon::parse($request->departure_date)->format('Y-m-d'),
-               'return_date' => Carbon::parse($request->return_date)->format('Y-m-d'),
+               'daytime' => $request->departure_date,
+               'return_date' => $request->return_date,
                'start_loc' => intval($request->from_location_id),
                'end_loc' => intval($request->to_location_id),
                // 'field_site' => $request->to_location_field_site_id,
