@@ -100,7 +100,7 @@ class ITracUtilityService
      }
 
      public function findUtilitySetting($key){
-          $setting = Settings::where('key',$key)->value('value');
+          $setting = Settings::where('key', $key)->pluck('value');
           return $setting ? json_decode($setting) : [];
      }
 }
