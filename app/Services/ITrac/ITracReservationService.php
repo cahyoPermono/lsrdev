@@ -185,7 +185,7 @@ class ITracReservationService
                $approved_status = @$row['approved_status'] ?: 'Need Approval';
 
                $title = @$row['start_location'] . ' - ' . @$row['end_location'];
-               $description = @$additional_info[1] ?: 'Crew Change';
+               $description = @$additional_info[2] ?: 'Crew Change';
                return [
                     'id' => @$row['reservation_id'],
                     'date' => @$row['departure_date'] ? date('Y-m-d', strtotime($row['departure_date'])) : null,
