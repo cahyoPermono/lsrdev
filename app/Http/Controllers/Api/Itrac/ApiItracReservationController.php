@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Itrac;
 
-use App\Http\Controllers\Controller;
 use App\Services\ITrac\ITracReservationService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
@@ -95,6 +94,8 @@ class ApiItracReservationController extends ApiController
      * @defaultParam
      * 
      * @pathParam reservation_id integer required
+     * @queryParam from_location string required
+     * @queryParam to_location string required
      * 
      * @response {
      *   "status": 200,
@@ -122,11 +123,11 @@ class ApiItracReservationController extends ApiController
      *       "justification": "Testing",
      *       "approved_by": "93300073"
      *   }
-     *   }
+     *   } 
      */
     public function show(Request $request, ITracReservationService $iTracReservationService, $reservationId)
     {
-        $result = $iTracReservationService->findReservationInfo($reservationId);
+        $result = $iTracReservationService->findReservationInfo($reservationId, $request->from_location, $request->to_location);
         return $this->sendSuccess($result);
     }
 

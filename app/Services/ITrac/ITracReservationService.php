@@ -5,7 +5,6 @@ use App\Helpers\Url;
 use Illuminate\Http\Request;
 use App\Helpers\MedcoRestful;
 use App\Models\Util\TaskTodo;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
@@ -120,12 +119,14 @@ class ITracReservationService
           throw new BadRequestException(@$result['message'] ?: "Gagal {$action} reservation");
      }
 
-     public function findReservationInfo($reservationId)
+     public function findReservationInfo($reservationId, $fromLocation, $toLocation)
      {
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetReservationInfo,
                query: [
                     "reservationid" => $reservationId,
+                    "fromlocation" => $fromLocation,
+                    "tolocation" => $toLocation
                ]
           );
 
