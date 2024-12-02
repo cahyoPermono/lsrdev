@@ -65,7 +65,7 @@ class ApiItracReservationController extends ApiController
      * @authenticated
      * @defaultParam
      * 
-     * @queryParam work_location string required
+     * @queryParam work_location string optional
      * 
      * @response {
      *       "status": 200,
