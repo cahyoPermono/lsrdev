@@ -8,6 +8,7 @@ use App\Models\Hse\HseNews;
 use App\Models\Hse\HsePopupCampaign;
 use App\Models\Hse\HseQuizz;
 use App\Models\Hse\HseSafetyPoster;
+use App\Models\Settings;
 use App\Models\Util\BannerCampaign;
 
 class HseUtilityService
@@ -21,6 +22,7 @@ class HseUtilityService
           private $leassonLearned = HseLeasonLearned::class,
           private $safetyPoster = HseSafetyPoster::class,
           private $news = HseNews::class,
+          public $settings = Settings::class,
      ) {
      }
 
@@ -133,5 +135,16 @@ class HseUtilityService
                'document' => $document ? true : false,
                'quizz' => $quizz ? true : false,
           ];
+     }
+
+     public function isSectionHidden(string $key, int $dataLength): bool
+     {
+          $result =  $this->settings::where('key', $key)->value('value');
+          switch ($result) {
+               case 'auto':
+                   return $dataLength == 0;
+               default:
+                   return json_decode($result);
+           }
      }
 }
