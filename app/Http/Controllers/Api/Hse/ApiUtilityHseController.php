@@ -261,7 +261,7 @@ class ApiUtilityHseController extends ApiController
         $result = $this->hseUtilityService->findAllLeassonLearned($limit);
         $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_LESSON, $result->count());
         return response()->json([
-            'code' => 200,
+            'status' => 200,
             'message' => 'Success',
             'is_section_hidden' => $isHidden, 
             'data' => $result,   
@@ -298,7 +298,7 @@ class ApiUtilityHseController extends ApiController
         $result = $this->hseUtilityService->findAllSafetyPoster($limit);
         $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_POSTER, $result->count());
         return response()->json([
-            'code' => 200,
+            'status' => 200,
             'message' => 'Success',
             'is_section_hidden' => $isHidden, 
             'data' => $result,   
@@ -339,7 +339,7 @@ class ApiUtilityHseController extends ApiController
         $result = $this->hseUtilityService->findAllNews($limit);
         $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_NEWS, $result->count());
         return response()->json([
-            'code' => 200,
+            'status' => 200,
             'message' => 'Success',
             'is_section_hidden' => $isHidden, 
             'data' => $result,   
