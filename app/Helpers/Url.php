@@ -81,4 +81,23 @@ class Url
      const SafetyCardGetSafetyCardList = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardList";
      const SafetyCardGetSafetyCardDetail = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardDetail";
      const SafetyCardGetObservationLocation = "MMAPSafetyCard/api/SafetyCard/GetObservationLocation";
+     
+     const GetListTrainingByEmail = "MMAPSVC2/api/OTC/GetReportOTC";
+     const GetRequestApproverList = "MMAPiTrac/v1/Reservation/get_request_approver";
+     const GetReservationByApprovePayrol = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_payroll";
+     const GetFuturePersonReservation = "MMAPiTrac/v1/Reservation/get_future_person_reservation";
+     const GetFuturePoolCarRequest = "MMAPiTrac/v1/Reservation/get_future_pool_car_request";
+     const FindUserByPersonIdv2 = "MMAPiTrac/v1/Person/get_person_info";
+     const GetReservationInfo = "MMAPiTrac/v1/Reservation/get_reservation_info";
+     const GetPosition = "MMAPiTrac/v1/Position/get_position";
+     const GetCostCenter = "MMAPiTrac/v1/Cost/get_cost_center";
+     const GetLocation = "MMAPiTrac/v1/Location/get_location";
+     const GetTransportationType = "MMAPiTrac/v1/Transportation/get_transportation_type";
+     const GetPurpostOfVisit = "MMAPiTrac/v1/Purpose/get_purpose_of_visit";
+     const PostUpdateOimApprover = "MMAPiTrac/v1/Reservation/update_oim_approver";
+     const PostCancelReservationRequest = "MMAPiTrac/v1/Reservation/cancel_person_reservation";
+     const PostCreateReservation = "MMAPiTrac/v1/Reservation/post_person_reservation";     
+     const PostCreatePoolCar = "MMAPiTrac/v1/Reservation/post_pool_car_request";    
+     const GetReservationByPersonId = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_person_id"; 
+     const PostApprovalReservation = "MMAPiTrac/v1/Reservation/post_oim_approval"; 
 }

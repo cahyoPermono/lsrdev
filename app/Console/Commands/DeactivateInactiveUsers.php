@@ -2,11 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Enum\Status;
-use App\Models\Account\User;
-use App\Models\Settings;
-use Illuminate\Console\Command;
 use Carbon\Carbon;
+use App\Enum\Status;
+use App\Models\Settings;
+use App\Constanta\Constanta;
+use App\Models\Account\User;
+use Illuminate\Console\Command;
 
 class DeactivateInactiveUsers extends Command
 {
@@ -29,8 +30,8 @@ class DeactivateInactiveUsers extends Command
      */
     public function handle()
     {
-        $maxInActiveDay = Settings::where('key', 'min_active_day')->first();
-        $thresholdDate = Carbon::now()->subDays($maxInActiveDay?->value ?: 90);
+        $minActiveDay = Settings::where('key', Constanta::SETTING::MIN_ACTIVE_DAY)->first();
+        $thresholdDate = Carbon::now()->subDays(intval($minActiveDay?->value) ?: 90);
         User::query()
             ->where('last_login', '<=', $thresholdDate)
             ->where('status', Status::Active)

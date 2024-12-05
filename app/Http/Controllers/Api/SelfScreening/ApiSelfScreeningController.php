@@ -27,35 +27,53 @@ class ApiSelfScreeningController extends ApiController
      * @defaultParam
      * 
      * @response {
-     *   "status": 200,
-     *   "message": "success",
-     *   "data": [
-     *       {
-     *       "training_name": "Medical Check Up",
-     *       "valid_until": "2023-12-16",
-     *       "contract_number": 287467,
-     *       "status": "Active",
-     *       "contact_owner": "Mr. Geovany Kling",
-     *       "contract_period": "35 Months",
-     *       "npwp": "01.365.921.4-073.999",
-     *       "trainer": "Hosea McDermott",
-     *       "nik": "190933303993541706",
-     *       "location": "612 Gleichner Stravenue\nEast Metaborough, NV 30983-5281",
-     *       "position": "D/CADET (ABPL)",
-     *       "requirement_title": "Medical Check Up",
-     *       "requirement_type": "MCU",
-     *       "training_type": "Technical Training",
-     *       "last_taken": "00:00,0",
-     *       "mandatory": "Yes",
-     *       "personel_type": null
-     *       }
-     *   ]
-     * }
+     *       "status": 200,
+     *       "message": "success",
+     *       "data": [
+     *           {
+     *               "training_name": "Oil Spill Response Level 2",
+     *               "validity": 5,
+     *               "valid_until": "2020-08-10",
+     *               "contract_number": "IDN HSE OHS 0026",
+     *               "status": "Active",
+     *               "contact_owner": "",
+     *               "contract_period": "N/A",
+     *               "npwp": "-",
+     *               "trainer": "-",
+     *               "nik": "",
+     *               "location": "",
+     *               "position": "ERT Planning Section chief",
+     *               "requirement_title": "Oil Spill Response Level 2",
+     *               "requirement_type": "HSE Training",
+     *               "training_type": "HSE Training",
+     *               "last_taken": "2015-08-10",
+     *               "mandatory": false,
+     *               "personel_type": null,
+     *               "detail_category": "one",
+     *               "detail": {
+     *                   "payroll_id": "32906024",
+     *                   "name": "Syarif Budiman",
+     *                   "job_role_id": "Suban Operations-25",
+     *                   "job_role_name": "ERT Planning Section chief",
+     *                   "job_role_effective_date": "2023-01-01",
+     *                   "employee_status": "Employee",
+     *                   "employee_effective_date": "2023-01-01",
+     *                   "course_id": "IDN HSE OHS 0026",
+     *                   "course_name": "Oil Spill Response Level 2",
+     *                   "course_type": "HSE Training",
+     *                   "last_training_date": "2015-08-10",
+     *                   "valid_until": "2020-08-10",
+     *                   "validity": true,
+     *                   "record_id": "32906024-Suban Operations-25-IDN HSE OHS 0026"
+     *               }
+     *           }
+     *       ]
+     *   }
      */
     public function training(Request $request)
     {
-        $person_id = $this->auth()->person_id;
-        $items = $this->trainingService->findAllTraining($person_id);
+        $user = $this->auth();
+        $items = $this->trainingService->findAllTraining($user->person_id,$user->email);
         return $this->sendSuccess($items);
     }
 

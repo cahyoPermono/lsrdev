@@ -28,7 +28,7 @@ class AppModulesService extends AdminService
     
     public function store(Request $request)
     {
-        $data = $request->only(['name','key']);
+        $data = $request->only(['name','key','is_module']);
         if($request->hasFile('icon')){
              $data['icon'] = AdminPortal::uploadFile($request->file('icon'));
         }
@@ -38,7 +38,7 @@ class AppModulesService extends AdminService
 
     public function update(Request $request, $uuid)
     {
-        $data =  $request->only(['name','key']);
+        $data =  $request->only(['name','key','is_module']);
 
         return $this->model::whereUuid($uuid)->update($data);
     }

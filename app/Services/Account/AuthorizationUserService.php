@@ -88,10 +88,14 @@ class AuthorizationUserService extends AdminService
                     "key" => $module->key,
                     "icon" => asset($module->icon),
                     "sorting" => $module->sorting,
+                    "is_module" => $module->is_module,
                     "subs" => $modules->where('parent_id', $module->id)
                         ->map(fn($row) => [
                             "label" => $row->name,
-                            "key" => $row->key
+                            "key" => $row->key,
+                            "icon" => asset($row->icon),
+                            "sorting" => $row->sorting,
+                            "is_module" => $row->is_module,
                         ])->values()
                 ];
             })->values();

@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Models\AuthorizationUser;
-use App\Services\Account\AuthorizationUserService;
-use Illuminate\Http\Request;
-use Laililmahfud\Adminportal\Controllers\AdminController; 
 use App\Models\AppModules;
+use Illuminate\Http\Request;
+use App\Models\AuthorizationUser;
 use App\Imports\AuthorizationUserImport;
+use App\Services\Account\AuthorizationUserService;
+use Laililmahfud\Adminportal\Controllers\AdminController;
 
 class AdminAuthorizationUserController extends AdminController
 {

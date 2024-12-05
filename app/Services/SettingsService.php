@@ -1,8 +1,9 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use App\Models\Settings;
+use App\Constanta\Constanta;
+use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Services\AdminService;
 
 class SettingsService extends AdminService
@@ -26,16 +27,16 @@ class SettingsService extends AdminService
     public function store(Request $request)
     {
         return $this->model::updateOrCreate(
-            ['key' => 'min_active_day'],
-            ['value' => $request->input('min_active_day')]
+            ['key' => Constanta::SETTING::MIN_ACTIVE_DAY],
+            ['value' => $request->input(Constanta::SETTING::MIN_ACTIVE_DAY)]
         );
     }
 
     public function update(Request $request, $uuid)
     {
         return $this->model::updateOrCreate(
-            ['key' => 'min_active_day'],
-            ['value' => $request->input('min_active_day')]
+            ['key' => Constanta::SETTING::MIN_ACTIVE_DAY],
+            ['value' => $request->input(Constanta::SETTING::MIN_ACTIVE_DAY)]
         );
     }
 }
