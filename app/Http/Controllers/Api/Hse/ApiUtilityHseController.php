@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\Hse;
 
+use App\Constanta\Constanta;
 use App\Http\Controllers\Controller;
 use App\Services\Hse\HseUtilityService;
 use Illuminate\Http\Request;
@@ -258,7 +259,7 @@ class ApiUtilityHseController extends ApiController
     {
         $limit = $request->get('limit', 10);
         $result = $this->hseUtilityService->findAllLeassonLearned($limit);
-        $isHidden = $this->hseUtilityService->isSectionHidden('hse_hide_lesson', $result->count());
+        $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_LESSON, $result->count());
         return response()->json([
             'code' => 200,
             'message' => 'Success',
@@ -295,7 +296,7 @@ class ApiUtilityHseController extends ApiController
     {
         $limit = $request->get('limit', 10);
         $result = $this->hseUtilityService->findAllSafetyPoster($limit);
-        $isHidden = $this->hseUtilityService->isSectionHidden('hse_hide_poster', $result->count());
+        $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_POSTER, $result->count());
         return response()->json([
             'code' => 200,
             'message' => 'Success',
@@ -336,7 +337,7 @@ class ApiUtilityHseController extends ApiController
     {
         $limit = $request->get('limit', 10);
         $result = $this->hseUtilityService->findAllNews($limit);
-        $isHidden = $this->hseUtilityService->isSectionHidden('hse_hide_news', $result->count());
+        $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_NEWS, $result->count());
         return response()->json([
             'code' => 200,
             'message' => 'Success',
