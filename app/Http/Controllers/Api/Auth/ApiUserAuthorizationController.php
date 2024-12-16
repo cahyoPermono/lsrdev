@@ -85,7 +85,9 @@ class ApiUserAuthorizationController extends ApiController
     public function authorization(Request $request)
     {
         $user = $this->auth();
-        $modules = $this->authorizationUserService->findUserModule($user->email);
+        $regid = $request->header('regid');
+        $appVersion = explode('_', $regid)[1] ?? '0.0.0';
+        $modules = $this->authorizationUserService->findUserModule($user->email, $appVersion);
         return $this->sendSuccess($modules);
     }
 }

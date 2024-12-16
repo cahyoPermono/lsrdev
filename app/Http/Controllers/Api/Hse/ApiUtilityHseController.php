@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\Hse;
 
+use App\Constanta\Constanta;
 use App\Http\Controllers\Controller;
 use App\Services\Hse\HseUtilityService;
 use Illuminate\Http\Request;
@@ -237,6 +238,7 @@ class ApiUtilityHseController extends ApiController
      * @response {
      *      "status": 200,
      *      "message": "success",
+     *      "is_section_hidden": false,
      *      "data": [
      *          {
      *              "id": 4,
@@ -257,7 +259,13 @@ class ApiUtilityHseController extends ApiController
     {
         $limit = $request->get('limit', 10);
         $result = $this->hseUtilityService->findAllLeassonLearned($limit);
-        return $this->sendSuccess($result);
+        $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_LESSON, $result->count());
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+            'is_section_hidden' => $isHidden, 
+            'data' => $result,   
+        ]);
     }
 
     /**
@@ -272,6 +280,7 @@ class ApiUtilityHseController extends ApiController
      * @response {
      *       "status": 200,
      *       "message": "success",
+     *       "is_section_hidden": false,
      *       "data": [
      *           {
      *               "id": 8,
@@ -287,7 +296,13 @@ class ApiUtilityHseController extends ApiController
     {
         $limit = $request->get('limit', 10);
         $result = $this->hseUtilityService->findAllSafetyPoster($limit);
-        return $this->sendSuccess($result);
+        $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_POSTER, $result->count());
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+            'is_section_hidden' => $isHidden, 
+            'data' => $result,   
+        ]);
     }
 
      /**
@@ -302,6 +317,7 @@ class ApiUtilityHseController extends ApiController
      * @response {
      *      "status": 200,
      *      "message": "success",
+     *      "is_section_hidden": false,
      *      "data": [
      *          {
      *              "id": 2,
@@ -321,6 +337,12 @@ class ApiUtilityHseController extends ApiController
     {
         $limit = $request->get('limit', 10);
         $result = $this->hseUtilityService->findAllNews($limit);
-        return $this->sendSuccess($result);
+        $isHidden = $this->hseUtilityService->isSectionHidden(Constanta::SETTING::HSE::HIDE_NEWS, $result->count());
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+            'is_section_hidden' => $isHidden, 
+            'data' => $result,   
+        ]);
     }
 }

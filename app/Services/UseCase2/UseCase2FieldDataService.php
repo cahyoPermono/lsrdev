@@ -18,17 +18,14 @@ class UseCase2FieldDataService
 
      public function findAllByDateAndType($date, $blockCode, $type, $try = false)
      {
+          $exclude_blocks = config('usecase2.blocks_without_well_data');
           $dataItems = $this->model::query()
                ->where('date', $date)
                ->where('type', $type)
                ->where('block_code', $blockCode)
+               ->whereNotIn('asset_code', $exclude_blocks)
                ->orderBy('date','asc')
                ->get();
-
-          if (!count($dataItems) && !$try) {
-               Artisan::call('use-case-2:insert-field-dashboard-data');
-               return $this->findAllByDateAndType($date, $blockCode, $type, true);
-          }
 
           return $dataItems;
      }

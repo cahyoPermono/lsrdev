@@ -12,6 +12,8 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 
 class AuthorizationUserService extends AdminService
 {
+    const HSE_MIN_VERSION = "0.3.9";
+    const HSE_MODULE_KEY = 'hse';
     public function __construct(
         public $model = AuthorizationUser::class,
         private $medcoUserService = new MedcoUserService,
@@ -53,7 +55,7 @@ class AuthorizationUserService extends AdminService
     }
 
 
-    public function findUserModule($email)
+    public function findUserModule($email, $appVersion)
     {
         $excludeModuleKey = ['use-case-2'];
 
@@ -65,6 +67,10 @@ class AuthorizationUserService extends AdminService
         if (!$user->is_pts_active) {   
             $excludeModuleKey = array_merge($excludeModuleKey, $ptsModuleKeys);
         } 
+        // Handle transition from phase 1 to hse, exclude if version < 0.3.9
+        if (compareVersions($appVersion,$this::HSE_MIN_VERSION) == -1){
+            $excludeModuleKey = array_merge($excludeModuleKey, [$this::HSE_MODULE_KEY]);
+        }
 
         $modules = $this->model::query()
         ->join('app_modules as module', 'module.id', 'authorization_users.modules_id')
