@@ -50,7 +50,7 @@ Route::middleware(['private-api'])
             ->prefix('auth/')
             ->as('auth.')
             ->group(function () {
-                Route::get('/authorization', 'authorization')->name('logout');
+                Route::get('/authorization', 'authorization')->name('authorization');
                 Route::delete('/logout', 'logout')->name('logout');
             });
         Route::controller(ApiProfileController::class)
@@ -75,7 +75,7 @@ Route::middleware(['private-api'])
             ->middleware(['authorization:self-screening'])
             ->group(function () {
                 Route::get('/training', 'training')->name('training');
-                Route::get('/competency', 'competency')->name('training');
+                Route::get('/competency', 'competency')->name('competency');
             });
 
         Route::controller(ApiOtherScreeningCertificateController::class)
@@ -94,7 +94,7 @@ Route::middleware(['private-api'])
             ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
                 Route::get('/training', 'training')->name('training');
-                Route::get('/competency', 'competency')->name('training');
+                Route::get('/competency', 'competency')->name('competency');
             });
 
         Route::controller(ApiIsolationController::class)
