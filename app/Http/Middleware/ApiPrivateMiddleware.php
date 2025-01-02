@@ -10,6 +10,8 @@ use Laililmahfud\Adminportal\Api\Error;
 use Laililmahfud\Adminportal\Api\JwtToken;
 use Laililmahfud\Adminportal\Traits\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use \Barryvdh\Debugbar\Facades\Debugbar;
+use Firebase\JWT\ExpiredException;
 
 class ApiPrivateMiddleware
 {
@@ -21,6 +23,11 @@ class ApiPrivateMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        try{
+            JwtToken::decode();
+        } catch (ExpiredException) {
+            return $this->unauthorized("Your token is expired !", Error::EXPIRED_TOKEN);
+        }
         try {
             $token = $request->header('authorization');
             $dataToken = Optimize::cacheRememberForever("data-token:{$token}", function () {
