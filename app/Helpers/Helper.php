@@ -20,16 +20,6 @@ if (!function_exists('dateTimeFromString')) {
      }
 }
 
-if (!function_exists('dateTimeFromString')) {
-     function dateTimeFromString($string,$format = null): mixed
-     {
-          if($string){
-               return Carbon::parse($string)->format($format ?: 'Y-m-d H:i:s');
-          }
-          return null;
-     }
-}
-
 if (!function_exists('compareVersions')) {
      function compareVersions($version1, $version2) {
           $v1Parts = explode('.', $version1);

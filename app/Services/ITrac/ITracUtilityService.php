@@ -4,6 +4,10 @@ namespace App\Services\ITrac;
 use App\Helpers\Url;
 use App\Models\Settings;
 use App\Helpers\MedcoRestful;
+use Barryvdh\Debugbar\Facades\Debugbar;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ITracUtilityService
 {
@@ -81,22 +85,63 @@ class ITracUtilityService
                ->values();
      }
 
-     public function checkRequirementPerson($personId)
+     public function checkRequirementPerson($personId, $position, $departureDate, $status)
      {
+          $positionCodes = array_column($this->findAllPosition()->toArray(), 'code');
+          if (!in_array( $position, $positionCodes)) {
+               throw new BadRequestHttpException( 'Invalid position');
+          }
           $restResponse = MedcoRestful::fetchData(
-               url: Url::ListCertificate,
+               url: Url::GetMinreqValidity,
                query: [
-                    "personid" => $personId
+                    "date" => $departureDate,
+                    "personid" => $personId,
+                    "positioncode" => $position,
                ]
           );
-          if (!$restResponse) {
-               return [];
+          Debugbar::info($restResponse);
+          if ($restResponse === null) {
+               throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to fetch data from PTS');
+          }
+
+          if ($status == "OFF-DUTY") {
+               return [
+                    "is_valid" => true,
+                    "competencies" => []
+               ];
           }
           
-          $requiredCertificates = ["1-HSEORI","2-MCU"];
-          $findRequiredCerfiticate = collect(@$restResponse['certificates'] ?: [])->whereIn('certificate_code',$requiredCertificates)->count();
+          $isValid = true;
+          $competencies = collect($restResponse)->groupBy('competency')->map(function ($group, $competency) use (&$isValid) {
+               // A competency is valid if at least ONE certificate in the group is valid
+               $iscompetencyValid = $group->contains(function ($item) {
+                    return $item['status'] === 'Valid';
+               });
 
-          return $findRequiredCerfiticate==count($requiredCertificates);
+               // Minreq is valid when ALL competencies are valid
+               if (!$iscompetencyValid) {
+                    $isValid = false; 
+               }
+               
+               return [
+                    'name' => $competency,
+                    'certificates' => $group->map(function ($item) {
+                         return [
+                              'code'         => $item['certificate_code'],
+                              'name'         => $item['certificate_name'] ?? $item['certificate_code'],
+                              'valid_until'  => $item['expire_date'] ? date("Y-m-d", strtotime($item['expire_date'])) : null,
+                              'status'       => $item['expire_date'] ? $item['status'] : "Not Exists",
+                         ];
+                    })->toArray(),
+               ];
+          })->values();
+
+          $result['is_valid'] = $isValid;
+
+          // Only return certificate info if minreq invalid
+          $result['competencies'] = !$isValid ? $competencies : [];
+
+          return $result;
      }
 
      public function findUtilitySetting($key){

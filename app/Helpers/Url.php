@@ -82,6 +82,7 @@ class Url
      const SafetyCardGetSafetyCardDetail = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardDetail";
      const SafetyCardGetObservationLocation = "MMAPSafetyCard/api/SafetyCard/GetObservationLocation";
      
+     // Phase 2
      const GetListTrainingByEmail = "MMAPSVC2/api/OTC/GetReportOTC";
      const GetRequestApproverList = "MMAPiTrac/v1/Reservation/get_request_approver";
      const GetReservationByApprovePayrol = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_payroll";
@@ -100,4 +101,5 @@ class Url
      const PostCreatePoolCar = "MMAPiTrac/v1/Reservation/post_pool_car_request";    
      const GetReservationByPersonId = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_person_id"; 
      const PostApprovalReservation = "MMAPiTrac/v1/Reservation/post_oim_approval"; 
+     const GetMinreqValidity = "MMAPiTrac/v1/Reservation/get_minreq_validity"; 
 }

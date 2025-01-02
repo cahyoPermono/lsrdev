@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\Itrac;
 use App\Constanta\Constanta;
 use Illuminate\Http\Request;
 use App\Services\ITrac\ITracUtilityService;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Laililmahfud\Adminportal\Controllers\ApiController;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\Response;
 
 /**
  * @group ITrac/Utility
@@ -62,24 +65,85 @@ class ApiItracUtilityController extends ApiController
            return $this->sendSuccess($result);
       }
 
-      /**
+    /**
       * Person Requirement Validation
       * 
       * @authenticated
       * @defaultParam
       * 
-      * @pathParam person_id string required
-      * 
+      * @queryParam person_id string required 
+      * @queryParam position string required 
+      * @queryParam departure_date string required
+      * @queryParam status string optional
       * 
       * @response {
-      *    "status": 200,
-      *    "message": "success",
-      *    "data": true
-      *   }
+      * "status": 200,
+      * "message": "success",
+      * "data": {
+      *     "is_valid": true,
+      *     "competencies": [
+      *     {
+      *         "name": "HSE Orientation",
+      *         "certificates": [
+      *         {
+      *             "code": "1-HSEORI",
+      *             "name": "HSE Orientation",
+      *             "expire_date": "2025-09-15",
+      *             "status": "Valid"
+      *         }
+      *         ]
+      *     },
+      *     {
+      *         "name": "Medical Check Up",
+      *         "certificates": [
+      *         {
+      *             "code": "2-MCU",
+      *             "name": "Medical Check Up",
+      *             "expire_date": "2024-09-15",
+      *             "status": "Invalid"
+      *         },
+      *         {
+      *             "code": "2-TMPFIT",
+      *             "name": "Temporary Fit",
+      *             "competency": "Medical Check Up",
+      *             "expire_date": null,
+      *             "status": "Not Found"
+      *         }
+      *         ]
+      *     }
+      *     ]
+      * }
+      * }
       */
-      public function personRequirement(Request $request,ITracUtilityService $iTracUtilityService,$personId){
-          $result = $iTracUtilityService->checkRequirementPerson($personId);
-          return $this->sendSuccess($result);
+      public function personRequirement(Request $request,ITracUtilityService $iTracUtilityService){
+        $validatedData = $request->validate([
+            'person_id' => 'required|string',
+            'position' => 'required|string',
+            'departure_date' => 'required|date',
+            'status' => 'nullable|string', // status is optional
+        ]);
+
+        $personId = $validatedData['person_id'];
+        $position = $validatedData['position'];
+        $departureDate = $validatedData['departure_date'];
+        $status = $validatedData['status'] ?? 'default'; // optional
+        
+        try{
+            $result = $iTracUtilityService->checkRequirementPerson(
+                personId: $personId, 
+                position: $position,
+                departureDate: $departureDate,
+                status: $status
+            );
+        }
+        catch (HttpException $e) {
+            return response()->json([
+                'status' => $e->getStatusCode(),
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+        Debugbar::info($result);
+        return $this->sendSuccess($result);
       }
 
      /**

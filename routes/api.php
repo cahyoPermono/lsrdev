@@ -260,7 +260,7 @@ Route::middleware(['private-api'])
                         Route::get('/transit-point', 'transitPoint')->name('transit-point');
                         Route::get('/position', 'position')->name('position');
                         Route::get('/cost-center', 'costCenter')->name('cost-center');
-                        Route::get('/requirement/{person_id}', 'personRequirement')->name('person-requirement');
+                        Route::get('/requirement', 'personRequirement')->name('person-requirement');
                     });
                 Route::controller(ApiItracController::class)
                     ->group(function () {

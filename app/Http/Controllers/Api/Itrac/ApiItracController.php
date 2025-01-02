@@ -50,7 +50,7 @@ class ApiItracController extends ApiController
      *   "message": "An internal server error occured while processing the request"
      *  }
      */
-    public function storeCreawChange(CreateCrewChangeRequest $request, CreateCrewChangeAction $createCrewChangeAction)
+    public function storeCrewChange(CreateCrewChangeRequest $request, CreateCrewChangeAction $createCrewChangeAction)
     {
         try {
             $user = $this->auth();
