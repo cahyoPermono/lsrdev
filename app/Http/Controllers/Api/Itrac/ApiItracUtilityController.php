@@ -8,6 +8,7 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 use Laililmahfud\Adminportal\Controllers\ApiController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * @group ITrac/Utility
@@ -72,7 +73,7 @@ class ApiItracUtilityController extends ApiController
       * @defaultParam
       * 
       * @queryParam person_id string required 
-      * @queryParam position string required 
+      * @queryParam position_code string required 
       * @queryParam departure_date string required
       * @queryParam status string optional
       * 
@@ -118,29 +119,33 @@ class ApiItracUtilityController extends ApiController
       public function personRequirement(Request $request,ITracUtilityService $iTracUtilityService){
         $validatedData = $request->validate([
             'person_id' => 'required|string',
-            'position' => 'required|string',
+            'position_code' => 'required|string',
             'departure_date' => 'required|date',
             'status' => 'nullable|string', // status is optional
         ]);
 
         $personId = $validatedData['person_id'];
-        $position = $validatedData['position'];
+        $positionCode = $validatedData['position_code'];
         $departureDate = $validatedData['departure_date'];
         $status = $validatedData['status'] ?? 'default'; // optional
         
         try{
             $result = $iTracUtilityService->checkRequirementPerson(
                 personId: $personId, 
-                position: $position,
+                positionCode: $positionCode,
                 departureDate: $departureDate,
                 status: $status
             );
         }
+        catch (BadRequestException $e){
+            return $this->badRequest($e->getMessage());
+        }
+
         catch (HttpException $e) {
             return response()->json([
                 'status' => $e->getStatusCode(),
                 'message' => $e->getMessage(),
-            ], 400);
+            ], $e->getStatusCode());
         }
         Debugbar::info($result);
         return $this->sendSuccess($result);
@@ -216,7 +221,7 @@ class ApiItracUtilityController extends ApiController
       /**
       * Location
       *
-      * @authenticated
+      * @authenticated       
       * @defaultParam
       * 
       * 

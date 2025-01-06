@@ -12,11 +12,6 @@ class CreatePoolCarAction
 {
      public function handle(Request $request, $user)
      {
-          $isRequirementFulfilled = (new ITracUtilityService)->checkRequirementPerson($request->pts_id);
-          if (!$isRequirementFulfilled) {
-               throw new BadRequestException('Requirements Not Fulfilled');
-          }
-
           $postData = [
                'person_id' => intval($request->pts_id),
                'daytime' => Carbon::parse($request->date_time),

@@ -6,14 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Services\ITrac\ITracUtilityService;
 use App\Services\ITrac\ITracReservationService;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class CreateSpecialTripAction
 {
      public function handle(Request $request, $user)
      {
-          $isRequirementFulfilled = (new ITracUtilityService)->checkRequirementPerson($request->pts_id);
-          if (!$isRequirementFulfilled) {
+          $position = array_filter((new ITracUtilityService)->findAllPosition()->toArray(), function($position) use ($request) {
+               return $position['id'] === intval($request->position_id);
+          });
+          $position = reset($position);
+          $isRequirementFulfilled = (new ITracUtilityService)->checkRequirementPerson(
+               $request->pts_id,
+               $position['code'],
+               $request->departure_date,
+               $request->status
+          );
+          if(!$isRequirementFulfilled['is_valid']){
                throw new BadRequestException('Requirements Not Fulfilled');
           }
 

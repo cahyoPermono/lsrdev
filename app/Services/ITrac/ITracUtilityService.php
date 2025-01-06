@@ -7,7 +7,7 @@ use App\Helpers\MedcoRestful;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ITracUtilityService
 {
@@ -85,18 +85,18 @@ class ITracUtilityService
                ->values();
      }
 
-     public function checkRequirementPerson($personId, $position, $departureDate, $status)
+     public function checkRequirementPerson($personId, $positionCode, $departureDate, $status)
      {
           $positionCodes = array_column($this->findAllPosition()->toArray(), 'code');
-          if (!in_array( $position, $positionCodes)) {
-               throw new BadRequestHttpException( 'Invalid position');
+          if (!in_array( $positionCode, $positionCodes)) {
+               throw new BadRequestException( 'Invalid position');
           }
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetMinreqValidity,
                query: [
                     "date" => $departureDate,
                     "personid" => $personId,
-                    "positioncode" => $position,
+                    "positioncode" => $positionCode,
                ]
           );
           Debugbar::info($restResponse);

@@ -264,7 +264,7 @@ Route::middleware(['private-api'])
                     });
                 Route::controller(ApiItracController::class)
                     ->group(function () {
-                        Route::post('/store/crew-change', 'storeCreawChange')->name('store.crew-change')->middleware(['authorization:crew_change']);
+                        Route::post('/store/crew-change', 'storeCrewChange')->name('store.crew-change')->middleware(['authorization:crew_change']);
                         Route::post('/store/special-trip', 'storeSpecialTrip')->name('store.special-trip')->middleware(['authorization:special_trip']);
                         Route::post('/store/pool-car', 'storePoolCar')->name('store.pool-car')->middleware(['authorization:pool_car']);
                     });

@@ -8,10 +8,11 @@ use App\Actions\Itrac\CreatePoolCarAction;
 use App\Actions\Itrac\CreateCrewChangeAction;
 use App\Actions\Itrac\CreateSpecialTripAction;
 use Laililmahfud\Adminportal\Controllers\ApiController;
-use Laililmahfud\Adminportal\Helpers\BadRequestException;
 use App\Http\Requests\Api\CrewChange\CreatePoolCarRequest;
 use App\Http\Requests\Api\CrewChange\CreateCrewChangeRequest;
 use App\Http\Requests\Api\CrewChange\CreateSpecialTripRequest;
+use Laililmahfud\Adminportal\Helpers\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @group ITrac
@@ -58,6 +59,11 @@ class ApiItracController extends ApiController
             return $this->sendMessage('Request submitted successfully');
         } catch (BadRequestException $e) {
             return $this->badRequest($e->getMessage());
+        } catch (HttpException $e) {
+            return response()->json([
+                'status' => $e->getStatusCode(),
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
         }
     }
 
@@ -105,6 +111,11 @@ class ApiItracController extends ApiController
             return $this->sendMessage('Request submitted successfully');
         } catch (BadRequestException $e) {
             return $this->badRequest($e->getMessage());
+        } catch (HttpException $e) {
+            return response()->json([
+                'status' => $e->getStatusCode(),
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
         }
     }
 
@@ -142,6 +153,11 @@ class ApiItracController extends ApiController
             return $this->sendMessage('Request submitted successfully');
         } catch (BadRequestException $e) {
             return $this->badRequest($e->getMessage());
+        } catch (HttpException $e) {
+            return response()->json([
+                'status' => $e->getStatusCode(),
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
         }
     }
 }
