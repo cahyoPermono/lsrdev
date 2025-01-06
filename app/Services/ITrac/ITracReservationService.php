@@ -10,6 +10,7 @@ use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ITracReservationService
 {
+
      public function createReservation($postData)
      {
           $restResponse = MedcoRestful::postAction(
@@ -23,8 +24,8 @@ class ITracReservationService
           if (@$result['status_code'] == Response::HTTP_CREATED) {
                return @$result['message'] ?: "Request submitted successfully";
           }
-
-          throw new BadRequestException(@$result['message'] ?: @$result['title']);
+          
+          throw new BadRequestException($this->ptsErrorTranslation(@$result['message']) ?: @$result['title']);
      }
 
      public function createPoolCar($postData)
@@ -41,7 +42,7 @@ class ITracReservationService
                return @$result['message'] ?: "Request submitted successfully";
           }
 
-          throw new BadRequestException(@$result['message'] ?: @$result['title']);
+          throw new BadRequestException($this->ptsErrorTranslation(@$result['message']) ?: @$result['title']);
      }
 
      public function findAllOimApprover($workLocation = null)
@@ -280,5 +281,17 @@ class ITracReservationService
                'module_key' => 'oim_approval',
                'total_task' => $totalTask,
           ]);
+     }
+
+     private function ptsErrorTranslation($message){
+          logger($message);
+          preg_match('/Message: (.*?)\nStackTrace:/s', $message, $matches);
+          $errorMessage = $matches[1];
+          if (str_contains( $errorMessage, 'Transportation ID not found')){
+               return "Transportation not available for the selected date/location";
+          } if (str_contains($errorMessage, 'CARRIER_PERS_RES_DOUBLEBOOKING_IO')){
+               return "Double booking";
+          } 
+          return "Your reservation data is not valid";
      }
 }
