@@ -16,6 +16,8 @@ class UtilityService{
                'ios_version' => $app ? $app->ios_version: '0.0.0',
                'download_url' => $app ? $app->download_url : '',
                'text_template' => $app ? $app->text_template : '',
+               'popup_title' => $app ? $app->popup_title : '',
+               'button_text' =>  $app ? $app->button_text : '',
           ];
      }
 }

@@ -17,9 +17,15 @@
                     <x-portal::input type="url" name="download_url" label="Download App Url" placeholder="https://drive.google.com/">
                     {{$app_version?->download_url}}
                     </x-portal::input>
+                    <x-portal::input type="popup_title" name="popup_title" label="Popup Title" placeholder="Isikan judul popup">
+                    {{$app_version?->popup_title}}
+                    </x-portal::input>
                     <x-portal::input.textarea name="text_template" label="Popup Text Description" placeholder="Isikan deskripsi popup">
                         {{$app_version?->text_template}}
                     </x-portal::input.textarea>
+                    <x-portal::input type="button_text" name="button_text" label="Button Text" placeholder="Isikan teks">
+                    {{$app_version?->button_text}}
+                    </x-portal::input>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </section>

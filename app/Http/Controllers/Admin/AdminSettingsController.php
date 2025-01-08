@@ -32,6 +32,8 @@ class AdminSettingsController extends AdminController
             'ios_version' => $request->ios_version,
             'download_url' => $request->download_url,
             'text_template' => $request->text_template,
+            'popup_title' => $request->popup_title,
+            'button_text' =>  $request->button_text,
         ];
         if($exist){
             $exist->update($props);
