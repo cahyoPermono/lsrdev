@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\OtherScreening;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\Auth\ProfileResource;
 use App\Services\MedcoApi\CompetencyService;
 use App\Services\MedcoApi\MedcoUserService;
 use App\Services\MedcoApi\TrainingService;
@@ -19,6 +17,7 @@ class ApiOtherScreeningController extends ApiController
     public function __construct(
         private TrainingService $trainingService,
         private CompetencyService $competencyService,
+        private MedcoUserService $medcoUserService
     ) {
     }
 
@@ -57,7 +56,8 @@ class ApiOtherScreeningController extends ApiController
      */
     public function training(Request $request,$person_id)
     {
-        $items = $this->trainingService->findAllTraining($person_id);
+        $user = $this->medcoUserService->findUserByPersonId($person_id);
+        $items = $this->trainingService->findAllTraining($user->pts_id, $user->email);
         return $this->sendSuccess($items);
     }
 
