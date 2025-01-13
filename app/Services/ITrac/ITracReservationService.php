@@ -136,7 +136,9 @@ class ITracReservationService
           }
           $row = $restResponse;
           $additional_info = explode('*|*', @$row['additional_info'] ?: ''); // PTS ID*|*Request Subject='Crew Change’ 
-          $comments = explode('*|*', @$row['comments'] ?: ''); //  Schedule*|*Transit Point*|*Justification
+          $comments = preg_split("/\r/", $row['comments']);
+          $cancel_comment = implode(" ", array_slice($comments, 0, -1)); 
+          $comments = explode('*|*', @$comments[array_key_last($comments)] ?: ''); //  Schedule*|*Transit Point*|*Justification
 
           return [
                'title' => @$row['start_location'] . ' - ' . @$row['end_location'],
@@ -145,10 +147,10 @@ class ITracReservationService
                'reservation_id' => @$row['reservation_id'],
                'reservation_status' => @$row['reservation_status'],
                'approved_status' => @$row['approved_status'],
-               'request_subject' => @$additional_info[1] ?: 'N/A',
+               'request_subject' => @$additional_info[2] ?: 'N/A',
                'departure_date' => @$row['departure_date'] ? date('Y-m-d', strtotime($row['departure_date'])) : null,
                'return_date' => @$row['return_date'] ? date('Y-m-d', strtotime($row['return_date'])) : null,
-               'schedule' => @$comments[0] ?: '0',
+               'schedule' => @$comments[0] ?: '-',
                'transit_point' => @$comments[1] ?: 'Direct to Location',
                'transportation_number' => @$row['transportation_number'] ?: '-',
                'transportation_type' => @$row['transportation_type'] ?: '-',
@@ -160,7 +162,8 @@ class ITracReservationService
                'priority' => @$row['priority'] ?: '-',
                'accomodation_location' => @$row['accomodation_location'] ?: '-',
                'justification' => @$comments[2] ?: '-',
-               'approved_by' => @$row['approved_by']
+               'approved_by' => @$row['approved_by'],
+               'comment' => $cancel_comment
           ];
      }
 
