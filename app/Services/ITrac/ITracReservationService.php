@@ -188,6 +188,7 @@ class ITracReservationService
           $futurePerson = collect($futurePersonResult)->map(function ($row) {
                $additional_info = explode('*|*', @$row['additional_info'] ?: '');
                $approved_status = @$row['approved_status'] ?: 'Need Approval';
+               $approved_status = $approved_status === "Disapproved" ? "Rejected" : $approved_status;
 
                $title = @$row['start_location'] . ' - ' . @$row['end_location'];
                $description = @$additional_info[2] ?: 'Crew Change';
