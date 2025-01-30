@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\OtherScreening;
 use App\Services\MedcoApi\CompetencyService;
 use App\Services\MedcoApi\MedcoUserService;
 use App\Services\MedcoApi\TrainingService;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
 
@@ -57,7 +58,7 @@ class ApiOtherScreeningController extends ApiController
     public function training(Request $request,$person_id)
     {
         $user = $this->medcoUserService->findUserByPersonId($person_id);
-        $items = $this->trainingService->findAllTraining($user->pts_id, $user->email);
+        $items = $this->trainingService->findAllTraining($person_id, $user->email);
         return $this->sendSuccess($items);
     }
 
