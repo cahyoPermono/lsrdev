@@ -195,6 +195,7 @@ class ApiUtilityHseController extends ApiController
      */
     public function documents(Request $request)
     {
+        // Illuminate\Pagination\Paginator automatically reads the page query param
         $limit = $request->get('limit', 20);
         $result = $this->hseUtilityService->findAllDocument($limit);
         return $this->sendSuccess($result);
