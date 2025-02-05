@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     }
 
     private function runJob(Schedule $schedule){
-        $dailyJobTime = "06:30";
+        $dailyJobTime = "02:00";
 
         $schedule->command('use-case-2:insert-company-dashboard-data')->everyThirtyMinutes(); 
         $schedule->command('use-case-2:insert-asset-dashboard-data')->everyThirtyMinutes(); 
