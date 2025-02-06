@@ -20,6 +20,7 @@ class Url
      const GetMedcoStockPrice = "MMAPPrice/api/Stock/GetStockPrices";
      const GetCrudeBrentStockPrice = "MMAPPrice/api/Brent/GetBrentCrudeData";
      const GetCPIStockPrice = "MMAPPrice/api/ICP/GetICPData";
+     const GetWTIPrice = "MMAPPrice/api/Wti/GetWTICrudeData";
 
 
      const GetProductionCompanyDashboardData = "MMAPDashboard/v1/Company/Production";

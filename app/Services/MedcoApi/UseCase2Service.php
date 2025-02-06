@@ -14,14 +14,14 @@ class UseCase2Service
           $brentPrice = MedcoRestful::fetchData(
                url: Url::GetCrudeBrentStockPrice
           );
-          $cpiPrice = MedcoRestful::fetchData(
-               url: Url::GetCPIStockPrice
+          $wtiPrice = MedcoRestful::fetchData(
+               url: Url::GetWTIPrice
           );
 
           return [
                $this->putObject($medcoPrice, "MEDC"),
                $this->putObject($brentPrice, "Brent"),
-               $this->putCPI($cpiPrice, "CPI")
+               $this->putWTI($wtiPrice, "WTI")
           ];
      }
 
@@ -45,6 +45,18 @@ class UseCase2Service
                "date" => $date,
                "value" => @$json['Value'] ?: 0,
                "delta" => @$json['Change'] ?: 0,
+               "percent" => @$json['PCT'] ?: 0,
+          ];
+     }
+
+     private function putWTI($json, $title)
+     {
+          $date = $json ? $json['Date'] : now();
+          return [
+               "title" => $title,
+               "date" => $date,
+               "value" => @$json['Value'] ?: 0,
+               "delta" => @$json['Delta'] ?: 0,
                "percent" => @$json['PCT'] ?: 0,
           ];
      }
