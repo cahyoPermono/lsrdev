@@ -21,35 +21,11 @@ class UseCase2Service
           return [
                $this->putObject($medcoPrice, "MEDC"),
                $this->putObject($brentPrice, "Brent"),
-               $this->putWTI($wtiPrice, "WTI")
+               $this->putObject($wtiPrice, "WTI")
           ];
      }
 
      private function putObject($json, $title)
-     {
-          $date = $json ? $json['Date'] : now();
-          return [
-               "title" => $title,
-               "date" => $date,
-               "value" => @$json['Value'] ?: 0,
-               "delta" => @$json['Delta'] ?: 0,
-               "percent" => @$json['PCT'] ?: 0,
-          ];
-     }
-
-     private function putCPI($json, $title)
-     {
-          $date = $json ? $json['Date'] : now();
-          return [
-               "title" => $title,
-               "date" => $date,
-               "value" => @$json['Value'] ?: 0,
-               "delta" => @$json['Change'] ?: 0,
-               "percent" => @$json['PCT'] ?: 0,
-          ];
-     }
-
-     private function putWTI($json, $title)
      {
           $date = $json ? $json['Date'] : now();
           return [
