@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Actions\Auth\ApiLogoutAction;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\Auth\ProfileResource;
 use App\Models\Account\User;
 use App\Services\MedcoApi\MedcoUserService;
 use Illuminate\Http\Request;
@@ -14,6 +11,7 @@ use Laililmahfud\Adminportal\Controllers\ApiController;
  * @group Profile
  * @sorting 2
  */
+// Get self PTS data for Profile
 class ApiProfileController extends ApiController
 {
     public function __construct(
@@ -54,8 +52,6 @@ class ApiProfileController extends ApiController
         $person_id = $user->person_id;
         $medcoUser = $this->medcoUserService->findUserByPersonId($person_id);
         $user = User::where('id', $user_id)->first();
-
-
         $spv = @$medcoUser?->supervisor ?: null;
         if ($spv) {
             $spv = "{$spv->first_name} {$spv->middle_name} {$spv->last_name}";

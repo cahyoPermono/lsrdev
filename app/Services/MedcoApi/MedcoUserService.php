@@ -3,6 +3,7 @@ namespace App\Services\MedcoApi;
 
 use App\Helpers\Url;
 use App\Helpers\MedcoRestful;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class MedcoUserService
 {
@@ -26,26 +27,43 @@ class MedcoUserService
      {
 
           /**
-           * Fetch API Request
+           * MMAPSVC2
            */
-          $restResponse = MedcoRestful::fetchData(
+          $mmapsvcResponse = MedcoRestful::fetchData(
+               url: Url::FindUserByPersonId,
+               query: [
+                    "personid" => $personId
+               ]
+          );
+          /**
+           * MMAPITRAC
+           */
+          $itracResponse = MedcoRestful::fetchData(
                url: Url::FindUserByPersonIdv2,
                query: [
                     "personid" => $personId
                ]
           );
-          if(is_array($restResponse)){
-               $restResponse = @$restResponse[0];
+          if(is_array($itracResponse)){
+               $itracResponse = @$itracResponse[0];
           }
-          $user = $restResponse ? (object) $restResponse : null;
-          if ($user && @$user->supervisor) {
-               $user->supervisor = $spv ? $this->findUserByPersonId($user->supervisor, false) : null;
+          $itracPTSUser = $itracResponse ? (object) $itracResponse : null;
+          $mmapsvcUser = $mmapsvcResponse ? (object) $mmapsvcResponse : null;
+
+          @$itracPTSUser->cell_phone_number = null;
+          if ($mmapsvcUser && @$mmapsvcUser->supervisor) {
+               $itracPTSUser->supervisor = $spv ? $this->findUserByPersonId($mmapsvcUser->supervisor, false) : null;
           }
-          if($user){
-               $user->person_id = $personId;
+          if($itracPTSUser){
+               $itracPTSUser->person_id = $personId;
+               $itracPTSUser->person_status = @$mmapsvcUser->person_status;
+               $itracPTSUser->sex = @$mmapsvcUser->sex;
+               $itracPTSUser->nationality = @$mmapsvcUser->nationality;
+               $itracPTSUser->department = @$itracPTSUser->department_name ?: @$mmapsvcUser->department;
           }
 
-          return $user;
+          Debugbar::log($itracPTSUser);
+          return $itracPTSUser;
      }
 
 }
