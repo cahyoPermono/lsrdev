@@ -50,11 +50,12 @@ class MedcoUserService
           $itracPTSUser = $itracResponse ? (object) $itracResponse : null;
           $mmapsvcUser = $mmapsvcResponse ? (object) $mmapsvcResponse : null;
 
-          @$itracPTSUser->cell_phone_number = null;
+          
           if ($mmapsvcUser && @$mmapsvcUser->supervisor) {
                $itracPTSUser->supervisor = $spv ? $this->findUserByPersonId($mmapsvcUser->supervisor, false) : null;
           }
           if($itracPTSUser){
+	          @$itracPTSUser->cell_phone_number = null;
                $itracPTSUser->person_id = $personId;
                $itracPTSUser->person_status = @$mmapsvcUser->person_status;
                $itracPTSUser->sex = @$mmapsvcUser->sex;
@@ -65,5 +66,4 @@ class MedcoUserService
           Debugbar::log($itracPTSUser);
           return $itracPTSUser;
      }
-
 }
