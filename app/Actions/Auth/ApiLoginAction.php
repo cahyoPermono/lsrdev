@@ -11,6 +11,7 @@ use App\Models\AppModules;
 use App\Services\Account\UserService;
 use App\Services\MedcoApi\MedcoUserService;
 use App\Services\Account\UserActivityService;
+use Barryvdh\Debugbar\Facades\Debugbar as FacadesDebugbar;
 use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ApiLoginAction
@@ -53,6 +54,7 @@ class ApiLoginAction
           ];   
           // Grant HSE Authorization to all medco users
           $this->grantHSEAuthorizationForMedcoAccount($email);
+          $this->validateAppVersion($request);
 
           if ($ptsUser) {   
                $userProperties = [
@@ -125,6 +127,16 @@ class ApiLoginAction
           if(strtolower($decoded_payload['email']) != $email){ 
                throw new BadRequestException('Your token was invalid !');
           };
+     }
+
+     private function validateAppVersion(Request $request){
+          $regid = $request->header('regid');
+          $minVersion = config('frontend.min_version');
+          FacadesDebugbar::log($minVersion);
+          $appVersion = explode('_', $regid)[1] ?? '0.0.0';
+          if (compareVersions($appVersion,$minVersion) == -1){
+               throw new BadRequestException('Your application is outdated. Please go to the download page and install the latest version of SmartX');
+          }
      }
 
      private function validateModuleAccess(Request $request, $email)
