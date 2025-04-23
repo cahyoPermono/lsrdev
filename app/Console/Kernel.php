@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     }
 
     private function runJob(Schedule $schedule){
-        $dailyJobTime = "02:00";
+        $dailyJobTime = "14:00";
 
         $schedule->command('use-case-2:insert-company-dashboard-data')->everyThirtyMinutes(); 
         $schedule->command('use-case-2:insert-asset-dashboard-data')->everyThirtyMinutes(); 
@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('use-case-2:insert-block-chart-data')->everyThirtyMinutes(); 
         $schedule->command('use-case-2:insert-field-chart-data')->everyThirtyMinutes();
 
-        $schedule->command('hse:run-all-hse-command')->dailyAt($dailyJobTime);
+        $schedule->command('hse:run-all-hse-command')->everySixHours();
 
         $schedule->command('app:deactivate-inactive-users')->everyThirtyMinutes(); 
         $schedule->command('utility:calculate-task-todo-user')->everyFiveMinutes(); 
