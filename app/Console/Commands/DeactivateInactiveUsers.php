@@ -35,9 +35,9 @@ class DeactivateInactiveUsers extends Command
         User::query()
             ->where('last_login', '<=', $thresholdDate)
             ->where('status', Status::Active)
+            ->where('email', 'not like', '%medcoenergi.com%')
             ->update([
                 'status' => Status::InActive
             ]);
-
     }
 }

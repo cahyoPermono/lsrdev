@@ -27,21 +27,13 @@ class ApiLoginAction
      public function handle(Request $request)
      {
           $email = strtolower($request->email);
-          $minActiveDay = Settings::where('key', Constanta::SETTING::MIN_ACTIVE_DAY)->first();
-          $maxLastLoginDays = intval($minActiveDay?->value) ?: 90;
           $tokenMedco = $request->header('tokenmedco');
           $ptsUser = $this->medcoUserService->findUserByEmail($email);
 
           $this->validateEmailWithTokenMedco($email, $tokenMedco);
 
-
           if ($user = $this->userService->findOrCreateByEmail($email)) {
-               // Validate date last login
-               $lastLoginDays = $user->last_login->diffInDays(now());
-               if ($lastLoginDays >= $maxLastLoginDays) {
-                    $this->userService->updateUser($user->id, [
-                         'status' => Status::InActive
-                    ]);
+               if ($user->status == Status::InActive){
                     throw new BadRequestException(__('alert.account_in_active'));
                }
           }
