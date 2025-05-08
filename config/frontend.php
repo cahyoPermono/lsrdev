@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'min_version' => env('FRONTEND_MIN_VERSION', '0.0.0'),
+    'smartx_min_version' => env('SMARTX_MIN_VERSION', '0.0.0'),
 ];
