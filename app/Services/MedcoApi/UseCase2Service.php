@@ -3,37 +3,20 @@ namespace App\Services\MedcoApi;
 
 use App\Helpers\Url;
 use App\Helpers\MedcoRestful;
+use App\Models\UseCase2\UseCase2Price;
 
 class UseCase2Service
 {
      public function summaryStockPrice()
      {
-          $medcoPrice = MedcoRestful::fetchData(
-               url: Url::GetMedcoStockPrice
-          );
-          $brentPrice = MedcoRestful::fetchData(
-               url: Url::GetCrudeBrentStockPrice
-          );
-          $wtiPrice = MedcoRestful::fetchData(
-               url: Url::GetWTIPrice
-          );
+          $medcoPrice = UseCase2Price::where('code', 'stock')->first();
+          $brentPrice = UseCase2Price::where('code', 'brent')->first();
+          $wtiPrice = UseCase2Price::where('code', 'wti')->first();
 
           return [
-               $this->putObject($medcoPrice, "MEDC"),
-               $this->putObject($brentPrice, "Brent"),
-               $this->putObject($wtiPrice, "WTI")
-          ];
-     }
-
-     private function putObject($json, $title)
-     {
-          $date = $json ? $json['Date'] : now();
-          return [
-               "title" => $title,
-               "date" => $date,
-               "value" => @$json['Value'] ?: 0,
-               "delta" => @$json['Delta'] ?: 0,
-               "percent" => @$json['PCT'] ?: 0,
+               $medcoPrice,
+               $brentPrice,
+               $wtiPrice
           ];
      }
 }
