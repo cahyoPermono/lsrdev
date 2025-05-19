@@ -38,15 +38,14 @@ class ApiLoginAction
                }
           }
 
+          $this->validateAppVersion($request);
+          
           $userProperties = [
                'platform' => $request->header('platform'),
                'regid' => $request->header('regid'),
                'status' => Status::Active,
                'last_login' => now(),
           ];   
-          // Grant HSE Authorization to all medco users
-          $this->grantHSEAuthorizationForMedcoAccount($email);
-          $this->validateAppVersion($request);
 
           if ($ptsUser) {   
                $userProperties = [
@@ -85,6 +84,9 @@ class ApiLoginAction
                     ]
                ];
           }
+
+          // Grant HSE Authorization to all medco users
+          $this->grantHSEAuthorizationForMedcoAccount($email, $ptsUser);
           
           $user = $this->userService->createOrUpdateUser($email, $userProperties);
 
@@ -157,10 +159,11 @@ class ApiLoginAction
           }
      }
 
-     private function grantHSEAuthorizationForMedcoAccount(String $email){
+     private function grantHSEAuthorizationForMedcoAccount(String $email, object|null $ptsUser){
           $email_regex = '/@(tc\.|sc\.)?medcoenergi\.com$/i';
+          $is_medco_email = preg_match($email_regex, $email);
 
-          if (preg_match($email_regex, $email)) {
+          if ($is_medco_email || $ptsUser) {
               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
           }
      }
