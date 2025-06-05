@@ -58,7 +58,7 @@ class SubmitHseSafetyCardAction
                     "block_or_func" => $request->block_function,
                     "location" => $request->location,
                     "obs_location" => $request->observation_location,
-                    "obs_name" => $user->name ?: "",
+                    "obs_name" => @$user->name ?: "",
                     "company" => $request->company,
                     "division" => $request->division,
                     "department" => $request->department,

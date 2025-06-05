@@ -125,11 +125,11 @@ class ApiLoginAction
 
      private function validateAppVersion(Request $request){
           $regid = $request->header('regid');
-          $appsCategory = $request->header('regid');
           $minVersion = config('frontend.smartx_min_version');
-          FacadesDebugbar::log($minVersion);
-          $appVersion = explode('_', $regid)[1] ?? '0.0.0';
-          if ($appsCategory == 'use-case-1' && compareVersions($appVersion,$minVersion) == -1){
+          $regid = explode('_', $regid);
+          $appVersion = $regid[1] ?? '0.0.0';
+          $appBundleId = $regid[0] ?? '';
+          if (str_contains($appBundleId, 'smartapps') && compareVersions($appVersion,$minVersion) == -1){
                throw new BadRequestException('Your application is outdated. Please go to the download page and install the latest version of SmartX');
           }
      }
