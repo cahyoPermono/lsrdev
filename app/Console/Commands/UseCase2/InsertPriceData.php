@@ -44,7 +44,7 @@ class InsertPriceData extends Command
                 $newRecord = UseCase2Price::create([
                     'code' => $code,
                     'title' => $name,
-                    'date' => date('Y-m-d', strtotime($data['Date'])),
+                    'date' => date('Y-m-d H-i-s', strtotime($data['Date'])),
                     'value' => $data['Value'],
                     'delta' => $data['Change'] ?? $data['Delta'],
                     'percent' => $data['PCT'],
