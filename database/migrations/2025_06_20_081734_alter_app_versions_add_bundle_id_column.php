@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('app_versions', function (Blueprint $table) {
-            $table->string('app');
+            $table->string('app')->default('smartx');
         });
     }
 
