@@ -130,7 +130,8 @@ class ApiLoginAction
           $appVersion = $regid[1] ?? '0.0.0';
           $appBundleId = $regid[0] ?? '';
           if ((str_contains($appBundleId, 'com.medco.smartapps') 
-               || str_contains($appBundleId, 'com.medcoenergi.smartx')) 
+               || str_contains($appBundleId, 'com.medcoenergi.smartx')
+               || $appBundleId == 'android') 
                && compareVersions($appVersion,$minVersion) == -1){
                throw new BadRequestException('Your application is outdated. Please go to the download page and install the latest version of SmartX');
           }
