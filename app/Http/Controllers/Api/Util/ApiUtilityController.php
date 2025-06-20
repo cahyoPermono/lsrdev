@@ -60,7 +60,15 @@ class ApiUtilityController extends ApiController
      * 
      **/
     public function appVersion(Request $request,UtilityService $utilityService){
-        $appVersion = $utilityService->findAppVersion();
+        $regid = $request->header('regid');
+        $regid = explode('_', $regid);
+        $appBundleId = $regid[0] ?? '';
+        if ($appBundleId == "com.medco.dashboardmanagement" || $appBundleId == "com.medcoenergi.productiondashboard"){
+            $app = "production_dashboard";
+        } else {
+            $app = "smartx";
+        }
+        $appVersion = $utilityService->findAppVersion($app);
         return $this->sendSuccess($appVersion);
     }
 }
