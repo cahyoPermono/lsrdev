@@ -28,7 +28,7 @@ class AppVersionSeeder extends Seeder
                 'app' => 'production_dashboard',
                 'android_version' => '1.0.4',
                 'ios_version' => '1.0.4',
-                'download_url' => 'https://mmap1.medcoenergi.com/YYnzMg/',
+                'download_url' => 'https://mmap1.medcoenergi.com/YYnzMg0bdcXy/',
                 'text_template' => 'Production dashboard version $version is now available!',
                 'created_at' => '2024-11-19 11:07:14',
                 'updated_at' => '2025-01-08 13:36:18',
