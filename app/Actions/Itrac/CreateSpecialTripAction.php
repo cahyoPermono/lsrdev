@@ -35,16 +35,21 @@ class CreateSpecialTripAction
                'end_loc' => intval($request->to_location_id),
                // 'field_site' => $request->to_location_field_site_id,
                'job_activity' => $subject_request == 'special_trip' ? 'Special Trip' : $request->status,
-               'crew' => true,
-               'cost_center' => intval($request->coast_center_id),
+               'crew' => false,
+               'cost_center' => intval($request->cost_center_id ?? 1),
                'position' => intval($request->position_id),
                'company' => intval($request->pts_company_id),
                'pov' => intval($request->purpose_of_visit_id),
                'approver' => $request->oim_approver_id,
                'accomm' => $request->accomodation ? true : false,
                'transportation' => 'MEPG_SPC_TRIP',
-               'comments' => implode("*|*", [$subject_request == 'special_trip' ? '' : $request->schedule, $request->transit_point, $request->justification]), //Schedule*|*Transit Point*|*Justification=''(concatenated string with *|* as delimiter),
-               'additional_info' => implode("*|*", [$user->person_id, $subject_request == 'special_trip' ? 'Special Trip' : 'Late Crew Change Registration']),// PTS ID*|*Request Subject='Crew Change’ (hardcode)
+               'comments' => implode("*|*",["","","",$request->justification]), //Schedule*|*Home Base*|*Flight Status*|*Justification
+               'additional_info' => implode("*|*",[
+                    $user->person_id, // Requestor
+                    $subject_request == 'special_trip' ? 'Special Trip' : 'Late Crew Change Registration', // Subject of Request
+                    '', //Personnel Category
+                    $request->department_name, // Department
+               ]),// Requestor*|*"Crew Change" *|*Personnel Category*|*Department
           ];
           (new ITracReservationService)->createReservation($postData);
           (new ITracReservationService)->calculateTaskTodo($request->oim_approver_email,$request->oim_approver_id);

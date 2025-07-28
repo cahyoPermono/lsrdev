@@ -103,4 +103,5 @@ class Url
      const GetReservationByPersonId = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_person_id"; 
      const PostApprovalReservation = "MMAPiTrac/v1/Reservation/post_oim_approval"; 
      const GetMinreqValidity = "MMAPiTrac/v1/Reservation/get_minreq_validity"; 
+     const GetCompany = "MMAPiTrac/v1/Company/get_company_list";
 }

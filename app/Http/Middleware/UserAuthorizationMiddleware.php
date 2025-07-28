@@ -15,7 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 class UserAuthorizationMiddleware
 {
     const HSE_MIN_VERSION = "0.3.9";
+    const ITRAC_MIN_VERSION = "1.2.0";
     const HSE_MODULE_KEY = 'hse';
+    const ITRAC_MODULE_KEY = 'itrac';
     public function __construct(
         public $model = AuthorizationUser::class,
         private $userService = new UserService,
@@ -51,6 +53,10 @@ class UserAuthorizationMiddleware
         // Handle transition from phase 1 to hse, exclude if version < 0.3.9
         if (compareVersions($appVersion,$this::HSE_MIN_VERSION) == -1){
             $excludeModuleKey = array_merge($excludeModuleKey, [$this::HSE_MODULE_KEY]);
+        }
+        // Handle transition from 1.1.2 to 1.2.1, exclude if version < 1.2.0
+        if (compareVersions($appVersion,$this::ITRAC_MIN_VERSION) == -1){
+            $excludeModuleKey = array_merge($excludeModuleKey, [$this::ITRAC_MODULE_KEY]);
         }
 
         $userAccess = AuthorizationUser::query()

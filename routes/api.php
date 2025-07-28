@@ -256,17 +256,24 @@ Route::middleware(['private-api'])
                         Route::get('/location', 'location')->name('location');
                         Route::get('/status', 'status')->name('status');
                         Route::get('/transportation-type', 'transportationType')->name('transportation-type');
-                        Route::get('/schedule', 'schedule')->name('schedule');
+                        Route::get('/crew-change-schedule', 'crewChangeSchedule')->name('crew-change-schedule');
                         Route::get('/transit-point', 'transitPoint')->name('transit-point');
                         Route::get('/position', 'position')->name('position');
                         Route::get('/cost-center', 'costCenter')->name('cost-center');
                         Route::get('/requirement', 'personRequirement')->name('person-requirement');
+                        Route::get('/personnel-category', 'personnelCategory')->name('personnel-category');
+                        Route::get('/home-base', 'homeBase')->name('home-base');
+                        Route::get('/department', 'department')->name('department');
+                        Route::get('/flight-status', 'flightStatus')->name('flight-status');
+                        Route::get('/company','company')->name('company');
+                        Route::get('/intersite-schedule', 'intersiteSchedule')->name('intersite-schedule');
                     });
                 Route::controller(ApiItracController::class)
                     ->group(function () {
                         Route::post('/store/crew-change', 'storeCrewChange')->name('store.crew-change')->middleware(['authorization:crew_change']);
                         Route::post('/store/special-trip', 'storeSpecialTrip')->name('store.special-trip')->middleware(['authorization:special_trip']);
                         Route::post('/store/pool-car', 'storePoolCar')->name('store.pool-car')->middleware(['authorization:pool_car']);
+			            Route::post('/store/intersite', 'storeIntersite')->name('store.intersite')->middleware(['authorization:intersite']);
                     });
             });
     });

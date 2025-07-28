@@ -4,6 +4,9 @@ namespace App\Services\ITrac;
 use App\Helpers\Url;
 use App\Models\Settings;
 use App\Helpers\MedcoRestful;
+use App\Models\ITrac\ITracPersonnelCategory;
+use App\Models\ITrac\ITracUtility;
+use App\Models\ITrac\ITracSchedule;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Response;
@@ -25,21 +28,35 @@ class ITracUtilityService
                ->values();
      }
 
-     public function findAllLocation()
+
+
+     public function findAllLocation($type=null)
      {
           $restResponse = MedcoRestful::fetchData(
                url: Url::GetLocation,
           );
+
           $result = collect($restResponse);
 
-          return $result->map(fn($row) => [
-               'id' => @$row['location_id'],
-               'code' => @$row['code'],
-               'name' => @$row['name'],
-               'field_site_id' => @$row['field_site_id']
-          ])
+          return $result
+               ->filter(function ($row) use ($type) {
+                    if ($type === 'field_site') {
+                         return !empty($row['field_site_id']);
+                    } elseif ($type === 'terminal') {
+                         return !empty($row['terminal_id']);
+                    }
+                    return true; // when $isFieldSite is null
+               })
+               ->map(fn($row) => [
+                    'id' => @$row['location_id'],
+                    'code' => @$row['code'],
+                    'name' => @$row['name'],
+                    'field_site_id' => @$row['field_site_id'],
+                    'terminal_id' => @$row['terminal_id']
+               ])
                ->values();
      }
+
      
      public function findAllPurposeOfVisit()
      {
@@ -145,7 +162,34 @@ class ITracUtilityService
      }
 
      public function findUtilitySetting($key){
-          $setting = Settings::where('key', $key)->pluck('value');
+          $setting = ITracUtility::where('key', $key)->pluck('value');
           return $setting ? json_decode($setting) : [];
+     }
+
+     public function getPersonnelCategories(){
+          $personnelCategories = ITracPersonnelCategory::orderBy('id', 'asc')->get(['id', 'code','name','days']);
+          return $personnelCategories ? json_decode($personnelCategories) : [];
+     }
+	 
+	public function getIntersiteSchedules(?string $from = null, ?string $to = null)
+	{
+		return ITracSchedule::when($from, fn($q) => $q->whereRaw('LOWER(from_location) = ?', [strtolower($from)]))
+							->when($to, fn($q) => $q->whereRaw('LOWER(to_location) = ?', [strtolower($to)]))
+							->orderBy('departure_time')
+							->get();
+	}
+
+
+     public function getCompanies(){
+          $restResponse = MedcoRestful::fetchData(
+               url: Url::GetCompany,
+          );
+          $result = collect($restResponse);
+          return $result->map(fn($row) => [
+               'id' => @$row['company_id'],
+               'code' => @$row['company_code'],
+               'name' => @$row['company_name'],
+          ])
+               ->values();
      }
 }

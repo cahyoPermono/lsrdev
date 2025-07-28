@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\CrewChange;
 use App\Traits\FailedValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateSpecialTripRequest extends FormRequest
+class CreateIntersiteRequest extends FormRequest
 {
     use FailedValidation;
     /**
@@ -24,21 +24,22 @@ class CreateSpecialTripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'subject_request' => 'required|in:special_trip,late_crew_change',
+            'subject_request' => 'required|in:scheduled_intersite,unscheduled_intersite',
             'pts_id' => 'required',
             'pts_company_id' => 'required',
-            'department_name' => 'required',
+            'department_name' => 'required', // Mechanical, IT
             'position_id' => 'required',
-            'departure_date' => 'required|date',
-            'return_date' => 'nullable|date|after:departure_date',
+            'departure_date_time' => 'required|date',
             'purpose_of_visit_id' => 'required',
-            'status' => 'required_if:subject_request,late_crew_change',
+            'schedule' => 'required_if:subject_request,scheduled_intersite',
             'from_location_id' => 'required',
             'to_location_id' => 'required',
-            'justification' => 'required',
-            'oim_approver_id' => 'required',
-	        'oim_approver_email' => 'required',
-            'accomodation' => 'nullable|boolean',
+            // 'to_location_field_site_id' => 'required',
+            // 'transit_point' => 'required',
+            'cost_center_id' => 'nullable',
+            'approver_id' => 'required_if:subject_request,unscheduled_intersite',
+	        'approver_email' => 'required_if:subject_request,unscheduled_intersite',
+            'justification' => 'required_if:subject_request,unscheduled_intersite',
         ];
     }
 }

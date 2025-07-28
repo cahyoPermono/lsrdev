@@ -16,6 +16,7 @@ use Laililmahfud\Adminportal\Helpers\BadRequestException;
 
 class ApiLoginAction
 {
+     private const CORRIDOR_POSITION_IDS = [163, 164]; // Onshore MEPG, ONSHORE Non MEPG
      public function __construct(
           private $userActivityService = new UserActivityService,
           private $authorizationUserService = new AuthorizationUserService,
@@ -58,6 +59,7 @@ class ApiLoginAction
                ];
                if ($ptsUser->person_status==='A'){
                     $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 3); // 3 = Self Screening Module ID
+                    $this->grantITracAccessForCorridorUsers($email, $ptsUser);
                     $userProperties = [
                          ...$userProperties,
                          ...[
@@ -167,7 +169,17 @@ class ApiLoginAction
           $is_medco_email = preg_match($email_regex, $email);
 
           if ($is_medco_email || $ptsUser) {
-              $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Module ID
+              $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 10); // 10 = HSE Campaign
+              $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 18); // 18 = Safety Card
+          }
+     }
+
+     private function grantITracAccessForCorridorUsers(String $email, object|null $ptsUser){
+          $is_corridor = in_array(@$ptsUser->position_id, self::CORRIDOR_POSITION_IDS);
+
+          if ($is_corridor) {
+               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 11); // 11 = iTrac
+               $this->authorizationUserService->findOrCreateByEmailAndModuleID($email, 12); // 12 = Crew Change
           }
      }
 }

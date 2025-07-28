@@ -2,14 +2,19 @@
 namespace App\Constanta;
 
 class Setting {
-     const ITRAC_STATUS = 'itrac_status';
-     const ITRAC_SCHEDULE = 'itrac_schedule';
-     const ITRAC_TRANSIT_POINT = 'itrac_transit_point';
-
      const MIN_ACTIVE_DAY = 'min_active_day';
-
      const HSE = HSE::class;
  }
+
+class ITracUtility {
+     const STATUS = 'status';
+     const CREW_CHANGE_SCHEDULE = 'crew_change_schedule';
+     const TRANSIT_POINT = 'transit_point';
+     const DEPARTMENT = 'department';
+     const FLIGHT_STATUS = 'flight_status';
+     const HOME_BASE = 'home_base';
+     const INTERSITE_SCHEDULE = 'intersite_schedule';
+}
 
 class HSE {
      const HIDE_LESSON = 'hse_hide_lesson';
@@ -20,4 +25,5 @@ class HSE {
 class Constanta
 {
      const SETTING = Setting::class;
+     const ITRAC_UTILITY = ITracUtility::class;
 }

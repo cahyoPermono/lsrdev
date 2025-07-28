@@ -37,6 +37,7 @@ class ProfileResource extends JsonResource
             'cell_phone_number' => @$this->cell_phone_number ?:'-',
             'entity' => ":TODO",
             'person_status' => @$this->person_status ? : '-', 
+            'position_id' => @$this->position_id,
             'position_name' => @$this->position_name ?: '-',
             'supervisor' => $spv,
             'qr_code' => "https://chart.googleapis.com/chart?chl={$this->person_id}&chs=500x500&cht=qr&chld=H%7C0"

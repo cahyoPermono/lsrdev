@@ -29,6 +29,8 @@ class ApiItracReservationController extends ApiController
      *               "description": "N/A | Need Approval",
      *               "person_id": "19823818",
      *               "type": "special_late_crew",
+     *               "approved_status" => "Approved",
+     *               "reservation_status" => "Created",
      *               "detail": null
      *           },
      *           {
@@ -38,6 +40,8 @@ class ApiItracReservationController extends ApiController
      *               "description": "Pool Car",
      *               "person_id": 19823818,
      *               "type": "pool_car",
+     *               "approved_status" => "Approved",
+     *               "reservation_status" => "Created",
      *               "detail": {
      *                   "routing": "CGK - KGKKP",
      *                   "carrier_id": 282477,
@@ -66,6 +70,7 @@ class ApiItracReservationController extends ApiController
      * @defaultParam
      * 
      * @queryParam work_location string optional
+     * @queryParam role string optional
      * 
      * @response {
      *       "status": 200,
@@ -83,7 +88,7 @@ class ApiItracReservationController extends ApiController
      */
     public function oimApprover(Request $request, ITracReservationService $iTracReservationService)
     {
-        $result = $iTracReservationService->findAllOimApprover($request->work_location);
+        $result = $iTracReservationService->findAllOimApprover($request->work_location, $request->role);
         return $this->sendSuccess($result);
     }
 

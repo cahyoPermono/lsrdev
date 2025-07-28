@@ -13,7 +13,9 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 class AuthorizationUserService extends AdminService
 {
     const HSE_MIN_VERSION = "0.3.9";
+    const ITRAC_MIN_VERSION = "1.2.1";
     const HSE_MODULE_KEY = 'hse';
+    const ITRAC_MODULE_KEY = 'itrac';
     public function __construct(
         public $model = AuthorizationUser::class,
         private $medcoUserService = new MedcoUserService,
@@ -70,6 +72,10 @@ class AuthorizationUserService extends AdminService
         // Handle transition from phase 1 to hse, exclude if version < 0.3.9
         if (compareVersions($appVersion,$this::HSE_MIN_VERSION) == -1){
             $excludeModuleKey = array_merge($excludeModuleKey, [$this::HSE_MODULE_KEY]);
+        }
+        // Handle transition from 1.1.2 to 1.2.1, exclude if version < 1.2.0
+        if (compareVersions($appVersion,$this::ITRAC_MIN_VERSION) == -1){
+            $excludeModuleKey = array_merge($excludeModuleKey, [$this::ITRAC_MODULE_KEY]);
         }
 
         $modules = $this->model::query()
