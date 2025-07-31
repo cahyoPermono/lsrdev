@@ -30,17 +30,20 @@ class HseUtilityService
      {
           return $this->slider::query()
                ->select(['id', 'title', 'url', 'file as image'])
+               ->where('start_at', '<=', now())
+               ->where('end_at', '>=', now())
                ->latest('start_at')
                ->paginate($limit)->transform(function ($row) {
-
                     return $row;
                });  
-          }
+     }
 
      public function findFirstPopupCampaign()
      {
           return $this->popupCampaign::query()
                ->select(['id', 'title', 'url', 'file as image'])
+               ->where('start_at', '<=', now())
+               ->where('end_at', '>=', now())
                ->latest('start_at')
                ->first();
      }
@@ -80,6 +83,8 @@ class HseUtilityService
      {
           return $this->quizz::query()
                ->select(['id', 'title', 'url', 'file'])
+                    ->where('start_at', '<=', now())
+                    ->where('end_at', '>=', now())
                ->latest('id')
                ->first();
      }
@@ -87,6 +92,8 @@ class HseUtilityService
      public function findAllLeassonLearned($limit = 10)
      {
           return $this->leassonLearned::query()
+               ->where('start_at', '<=', now())
+               ->where('end_at', '>=', now())
                ->latest('id')
                ->paginate($limit)
                ->transform(function ($row) {
@@ -99,6 +106,8 @@ class HseUtilityService
      {
           return $this->safetyPoster::query()
                ->latest('id')
+               ->where('start_at', '<=', now())
+               ->where('end_at', '>=', now())
                ->paginate($limit)
                ->transform(function ($row) {
                     $row->is_new = now()->diffInDays($row->start_at) <= 30 ? true : false;
@@ -110,6 +119,8 @@ class HseUtilityService
      {
           return $this->news::query()
                ->latest('id')
+               ->where('start_at', '<=', now())
+               ->where('end_at', '>=', now())
                ->paginate($limit)
                ->transform(function ($row) {
                     $row->is_new = now()->diffInDays($row->start_at) <= 30 ? true : false;
