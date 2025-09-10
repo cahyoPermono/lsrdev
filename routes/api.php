@@ -137,10 +137,13 @@ Route::middleware(['private-api'])
                     ->as('main.')
                     ->group(function () {
                         Route::get('/summary', 'summary')->name('summary-production');
+                        Route::get('/summary/production-breakdown', 'productionBreakdown')->name('summary-production-breakdown');
                         Route::get('/chart/gas', 'gasChart')->name('chart-gas');
                         Route::get('/chart/oil', 'oilChart')->name('chart-oil');
                         Route::get('/data/production', 'productionData')->name('data-production');
                         Route::get('/data/sales', 'salesData')->name('data-sales');
+                        Route::get('/data/productionVsBudgetData', 'productionVsBudgetData')->name('data-production-vs-budget');
+                        Route::get('/data/quarterlyProduction', 'quarterlyProductionData')->name('data-quarterly-production');
                     });
                 Route::controller(ApiUseCase2AssetsController::class)
                     ->prefix('assets/{code}')

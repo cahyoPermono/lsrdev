@@ -29,6 +29,7 @@ class InsertCompanyChartData extends Command
      */
     public function handle()
     {
+        print $this->description . PHP_EOL;
         $this->fetchAndInsertData(
             url: Url::GetChartCompanyGasData,
             type: 'gas'
@@ -42,30 +43,51 @@ class InsertCompanyChartData extends Command
 
     private function fetchAndInsertData($url, $type)
     {
-        if ($itemData = MedcoRestful::fetchData($url)) {
-            DB::transaction(function () use ($itemData, $type) {
+        if ($itemData = MedcoRestful::fetchData($url, timeout: 600)) {
+            $aggregatedData = DB::table('use_case2_asset_chart_data')
+            ->select(
+                'date',
+                'type',
+                DB::raw('ROUND(SUM(wpnb_gross)::numeric, 2) as wpnb_gross'),
+                DB::raw('ROUND(SUM(wpnb_net)::numeric, 2) as wpnb_net'),
+                DB::raw('ROUND(SUM(apbn_gross)::numeric, 2) as apbn_gross'),
+                DB::raw('ROUND(SUM(apbn_net)::numeric, 2) as apbn_net')
+            )
+            ->groupBy('date', 'type')
+            ->get()
+            ->keyBy(function ($item) {
+                return "{$item->date}|{$item->type}";
+            });
+
+            DB::transaction(function () use ($itemData, $type, $aggregatedData) {
                 $this->deleteUseCase2Data($type);
                 
                 $items = collect($itemData)->chunk(200);
                 
                 foreach ($items as $data) {
-                    $itemData = $data->map(function ($row) use ($type) {
+                    $itemData = $data->map(function ($row) use ($type, $aggregatedData) {
                             $items = @$row['items'];
                             $actual = @$items['actual'];
                             $budget = @$items['budget'];
                             $outlook = @$items['outlook'];
                             $date = @$row['date'];
+                            $aggKey = "{$date}|{$type}";
+                            $agg = $aggregatedData[$aggKey] ?? null;
+
                             return [
                                 'created_at' => now(),
                                 'type' => $type,
                                 'date' => $date,
-                                'date_label' => date('Y-m',strtotime($date)),
                                 'actual_net' => (double) @$actual['nett'],
                                 'actual_gross' => (double) @$actual['gross'],
                                 'budget_net' => (double) @$budget['nett'],
                                 'budget_gross' => (double) @$budget['gross'],
                                 'outlook_net' => (double) @$outlook['nett'],
                                 'outlook_gross' => (double) @$outlook['gross'],
+                                'wpnb_gross' => (double)  @$agg->wpnb_gross  ?? null,
+                                'wpnb_net' => (double)  @$agg->wpnb_net  ?? null,
+                                'apbn_gross' => (double)  @$agg->apbn_gross  ?? null,
+                                'apbn_net' => (double) @$agg->apbn_net  ?? null,   
                             ];
                         })
                         ->toArray();

@@ -1,9 +1,9 @@
 <?php
 namespace App\Services\MedcoApi;
 
-use App\Helpers\MedcoRestful;
-use App\Helpers\Url;
 use App\Services\UseCase2\UseCase2CompanyDataService;
+use App\Services\UseCase2\UseCase2AssetDataService;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Str;
@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 class UseCase2CompanyService
 {
     public function __construct(
-        private $useCase2CompanyDataService = new UseCase2CompanyDataService
+        private UseCase2CompanyDataService $useCase2CompanyDataService,
+		private UseCase2AssetDataService $useCase2AssetDataService
     ) {
     }
 
@@ -49,8 +50,19 @@ class UseCase2CompanyService
         $period = @$filter['period'] ?: 'YTD';
         $endDate = date('Y-m-d');
         $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
-
-        return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'gas')->map(function ($row) {
+		$assetData =  $this->useCase2AssetDataService->findAllChartsForActualData('gas');
+		
+		$groupedAssetData = [];
+		foreach ($assetData as $row) {
+			$date = $row->date;
+			$assetKind = $row->asset_kind;
+			$groupedAssetData[$date][$assetKind] = [
+				'actual_net' => (double) $row->actual_net,
+				'actual_gross' => (double) $row->actual_gross,
+			];
+		}
+		
+        return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'gas')->map(function ($row) use ($groupedAssetData) {
             $date = Carbon::parse($row->date_label);
             $budget = [
                 'net' => (double) $row->budget_net,
@@ -64,43 +76,92 @@ class UseCase2CompanyService
                 'net' => (double) $row->outlook_net,
                 'gross' => (double) $row->outlook_gross,
             ];
+            $wpnb = [
+                'net' => (double) $row->wpnb_net,
+                'gross' => (double) $row->wpnb_gross,
+            ];
+            $apbn = [
+                'net' => (double) $row->apbn_net,
+                'gross' => (double) $row->apbn_gross,
+            ];
+			$items = [
+				[
+					'label' => "Budget",
+					'slug' => 'budget',
+					'value' => $budget,
+					"percent" => $budget
+				],
+				[
+					'label' => "Actual",
+					'slug' => 'actual',
+					'value' => $actual,
+					"percent" => $actual
+				],
+				[
+					'label' => "Outlook",
+					'slug' => 'outlook',
+					'value' => $outlook,
+					"percent" => $outlook
+				],
+				[
+					'label' => "WPNB",
+					'slug' => 'wpnb',
+					'value' => $wpnb,
+					"percent" => $wpnb
+				],
+				[
+					'label' => "APBN",
+					'slug' => 'apbn',
+					'value' => $apbn,
+					"percent" => $apbn
+				]
+			];
+	
+			if (isset($groupedAssetData[$row->date_label])) {
+				foreach ($groupedAssetData[$row->date_label] as $assetKind => $assetData) {
+					$items[] = [
+						'label' => ucfirst($assetKind),
+						'slug' => strtolower($assetKind),
+						'value' => [
+							'net' => (double) $assetData['actual_net'],
+							'gross' => (double) $assetData['actual_gross'],
+						],
+						'percent' => [
+							'net' => (double) $assetData['actual_net'],
+							'gross' => (double) $assetData['actual_gross'],
+						]
+					];
+				}
+			}
+			
             return [
                 'date' => $date->format('Y-m-d'),
                 'date_label' => $date->format('d M Y'),
                 'month' => $date->format('M'),
                 'year' => $date->format('Y'),
                 'day' => $date->format('d'),
-                'items' => [
-                    [
-                        'label' => "Budget",
-                        'slug' => 'budget',
-                        'value' => $budget,
-                        "percent" => $budget
-                    ],
-                    [
-                        'label' => "Actual",
-                        'slug' => 'actual',
-                        'value' => $actual,
-                        "percent" => $actual
-                    ],
-                    [
-                        'label' => "Outlook",
-                        'slug' => 'outlook',
-                        'value' => $outlook,
-                        "percent" => $outlook
-                    ]
-                ]
+                'items' => $items
             ];
         });
     }
 
     public function oilChart($filter)
     {
-        $period = @$filter['period'] ?: 'YTD';
+		$period = @$filter['period'] ?: 'YTD';
         $endDate = date('Y-m-d');
         $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
-
-        return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'oil')->map(function ($row) {
+		$assetData =  $this->useCase2AssetDataService->findAllChartsForActualData('oil');
+		$groupedAssetData = [];
+		foreach ($assetData as $row) {
+			$date = $row->date;
+			$assetKind = $row->asset_kind;
+			$groupedAssetData[$date][$assetKind] = [
+				'actual_net' => (double) $row->actual_net,
+				'actual_gross' => (double) $row->actual_gross,
+			];
+		}
+		
+        return $this->useCase2CompanyDataService->findAllChartByDateRangeAndType($startDate, $endDate, 'oil')->map(function ($row) use ($groupedAssetData) {
             $date = Carbon::parse($row->date_label);
             $budget = [
                 'net' => (double) $row->budget_net,
@@ -114,32 +175,71 @@ class UseCase2CompanyService
                 'net' => (double) $row->outlook_net,
                 'gross' => (double) $row->outlook_gross,
             ];
+            $wpnb = [
+                'net' => (double) $row->wpnb_net,
+                'gross' => (double) $row->wpnb_gross,
+            ];
+            $apbn = [
+                'net' => (double) $row->apbn_net,
+                'gross' => (double) $row->apbn_gross,
+            ];
+			$items = [
+				[
+					'label' => "Budget",
+					'slug' => 'budget',
+					'value' => $budget,
+					"percent" => $budget
+				],
+				[
+					'label' => "Actual",
+					'slug' => 'actual',
+					'value' => $actual,
+					"percent" => $actual
+				],
+				[
+					'label' => "Outlook",
+					'slug' => 'outlook',
+					'value' => $outlook,
+					"percent" => $outlook
+				],
+				[
+					'label' => "WPNB",
+					'slug' => 'wpnb',
+					'value' => $wpnb,
+					"percent" => $wpnb
+				],
+				[
+					'label' => "APBN",
+					'slug' => 'apbn',
+					'value' => $apbn,
+					"percent" => $apbn
+				]
+			];
+	
+			if (isset($groupedAssetData[$row->date_label])) {
+				foreach ($groupedAssetData[$row->date_label] as $assetKind => $assetData) {
+					$items[] = [
+						'label' => ucfirst($assetKind),
+						'slug' => strtolower($assetKind),
+						'value' => [
+							'net' => (double) $assetData['actual_net'],
+							'gross' => (double) $assetData['actual_gross'],
+						],
+						'percent' => [
+							'net' => (double) $assetData['actual_net'],
+							'gross' => (double) $assetData['actual_gross'],
+						]
+					];
+				}
+			}
+			
             return [
                 'date' => $date->format('Y-m-d'),
                 'date_label' => $date->format('d M Y'),
                 'month' => $date->format('M'),
                 'year' => $date->format('Y'),
                 'day' => $date->format('d'),
-                'items' => [
-                    [
-                        'label' => "Budget",
-                        'slug' => 'budget',
-                        'value' => $budget,
-                        "percent" => $budget
-                    ],
-                    [
-                        'label' => "Actual",
-                        'slug' => 'actual',
-                        'value' => $actual,
-                        "percent" => $actual
-                    ],
-                    [
-                        'label' => "Outlook",
-                        'slug' => 'outlook',
-                        'value' => $outlook,
-                        "percent" => $outlook
-                    ]
-                ]
+                'items' => $items
             ];
         });
     }
@@ -177,4 +277,121 @@ class UseCase2CompanyService
             ],
         ]);
     }
+
+    public function productionVsBudgetData()
+    {
+        $data = $this->useCase2AssetDataService->findActualVsBudgetDelta()->map(function ($item) {
+            return [
+                'name' => $item->asset_kind,
+                'type' => $item -> type,
+                'value' => [
+                    'net' => [
+                        'actual' => [
+                            'value' => (float) $item->actual_net_avg,
+                            'delta' => (float) 0,
+                        ],
+                        'budget' => [
+                            'value' => (float) $item->budget_net_avg,
+                            'delta' => (float) $item->delta_budget_net,
+                        ],
+                        'wpnb' => [
+                            'value' => (float) $item->wpnb_net_avg,
+                            'delta' => (float) $item->delta_wpnb_net,
+                        ],
+                        'apbn' => [
+                            'value' => (float) $item->apbn_net_avg,
+                            'delta' => (float) $item->delta_apbn_net,
+                        ],
+
+                    ],
+                    'gross' => [
+                        'actual' => [
+                            'value' => (float) $item->actual_gross_avg,
+                            'delta' => (float) 0,
+                        ],
+                        'budget' => [
+                            'value' => (float) $item->budget_gross_avg,
+                            'delta' => (float) $item->delta_budget_gross,
+                        ],
+                        'wpnb' => [
+                            'value' => (float) $item->wpnb_gross_avg,
+                            'delta' => (float) $item->delta_wpnb_gross,
+                        ],
+                        'apbn' => [
+                            'value' => (float) $item->apbn_gross_avg,
+                            'delta' => (float) $item->delta_apbn_gross,
+                        ],
+                    ],
+                ],
+            ];
+        })->values();
+        return $data;
+    }
+
+    public function productionBreakdown()
+    {
+        $data = $this->useCase2CompanyDataService->findProductionBreakdown('total');
+        Debugbar::info($data);
+        return $data->groupBy('country_code')->map(function ($rows, $countryCode) {
+            $result = ['country_code' => $countryCode];
+
+            foreach (['gross', 'nett'] as $interest) {
+                $row = $rows->firstWhere('working_interest', $interest);
+
+                $result[$interest] = [
+                    'ytd_production' => $row->ytd_production ?? 0,
+                    'budget'         => $row->budget ?? 0,
+                    'delta'          => $row->delta ?? 0,
+                    'percent'        => $row->percent ?? 0,
+                ];
+            }
+
+            return $result;
+        })->values();
+
+    }
+    public function quarterlyProductionData()
+    {
+        $raw = $this->useCase2CompanyDataService->findAllQuarterlyDataByType('production');
+
+        $grouped = [];
+
+        $currentYear = date('Y');
+        $currentQuarter = ceil(date('n') / 3);
+
+        $emptyMetrics = [
+            "current" => null,
+            "previous" => null,
+            "delta" => null,
+            "percent" => null,
+        ];
+
+        foreach ($raw as $row) {
+            $code = $row->asset_kind;
+
+            $isFuture = (
+                $row->year > $currentYear ||
+                ($row->year == $currentYear && $row->quarter > $currentQuarter)
+            );
+
+            $grouped[$code]['code'] = $code;
+            $grouped[$code]['name'] = $code;
+            $grouped[$code]['items'][] = [
+                'quarter' => $row->quarter,
+                'year' => $row->year,
+                'gas' => [
+                    "net"   => $isFuture ? $emptyMetrics : $row->gas_net,
+                    "gross" => $isFuture ? $emptyMetrics : $row->gas_gross,
+                ],
+                'oil' => [
+                    "net"   => $isFuture ? $emptyMetrics : $row->oil_net,
+                    "gross" => $isFuture ? $emptyMetrics : $row->oil_gross,
+                ],
+            ];
+        }
+
+
+        return collect($grouped);
+    }
+
 }

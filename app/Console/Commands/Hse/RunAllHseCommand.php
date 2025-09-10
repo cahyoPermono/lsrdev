@@ -11,7 +11,7 @@ class RunAllHseCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'hse:run-all-hse-command';
+    protected $signature = 'hse:run-all';
 
     /**
      * The console command description.

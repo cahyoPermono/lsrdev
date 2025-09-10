@@ -1,11 +1,14 @@
 <?php
 namespace App\Services\UseCase2;
 
+use App\Models\UseCase2\UseCase2CompanyQuarterlyData;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\UseCase2\UseCase2CompanyData;
 use App\Models\UseCase2\UseCase2CompanyChartData;
 use App\Models\UseCase2\UseCase2CompanySummary;
+use App\Models\UseCase2\UseCase2CompanyYtdProductionBreakdown;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class UseCase2CompanyDataService
 {
@@ -13,6 +16,8 @@ class UseCase2CompanyDataService
           public $model = UseCase2CompanyData::class,
           public $chartModel = UseCase2CompanyChartData::class,
           public $summaryModel = UseCase2CompanySummary::class,
+          public $productionBreakdownModel = UseCase2CompanyYtdProductionBreakdown::class,
+          public $quarterlyDataModel = UseCase2CompanyQuarterlyData::class
      ) {
      }
 
@@ -64,11 +69,31 @@ class UseCase2CompanyDataService
                     "budget_gross",
                     "outlook_net",
                     "outlook_gross",
+                    "wpnb_net",
+                    "wpnb_gross",
+                    "apbn_net",
+                    "apbn_gross",
                ])
                ->orderBy('date','asc')
-               // ->groupBy('date_label')
                ->get();
 
+
+          return $dataItems;
+     }
+
+     public function findProductionBreakdown($type) {
+          return UseCase2CompanyYtdProductionBreakdown::where('type', $type)
+               ->select('country_code', 'working_interest', 'ytd_production', 'budget', 'delta', 'percent')
+               ->get();
+     }
+
+     public function findAllQuarterlyDataByType($type)
+     {
+          $dataItems = $this->quarterlyDataModel::query()
+               ->where('type', $type)
+               ->orderBy('quarter','asc')
+               ->get();
+          Debugbar::info($dataItems);
           return $dataItems;
      }
 }

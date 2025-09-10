@@ -30,6 +30,7 @@ class InsertBlockChartData extends Command
      */
     public function handle()
     {
+        print $this->description . PHP_EOL;
         $this->fetchAndInsertData(
             url: Url::GetChartBlockGasData,
             type: 'gas'
@@ -43,7 +44,7 @@ class InsertBlockChartData extends Command
 
     private function fetchAndInsertData($url, $type)
     {
-        if ($itemData = MedcoRestful::fetchData($url)) {
+        if ($itemData = MedcoRestful::fetchData($url, timeout:600)) {
             DB::transaction(function () use ($itemData, $type) {
                 $this->deleteUseCase2Data($type);
 
@@ -54,19 +55,25 @@ class InsertBlockChartData extends Command
                             $actual = @$items['actual'];
                             $budget = @$items['budget'];
                             $outlook = @$items['outlook'];
+                            $wpnb = @$items['wpnb'];
+                            $apbn = @$items['apbn'];
                             $date = @$row['date'];
                             return [
                                 'created_at' => now(),
                                 'type' => $type,
-                                'asset_code' => @$row['block_name'],
+                                'asset_kind' => @$row['asset_kind'],
+                                'block_name' => @$row['block_name'],
                                 'date' => $date,
-                                'date_label' => date('Y-m',strtotime($date)),
                                 'actual_net' => (double) @$actual['nett'],
                                 'actual_gross' => (double) @$actual['gross'],
                                 'budget_net' => (double) @$budget['nett'],
                                 'budget_gross' => (double) @$budget['gross'],
                                 'outlook_net' => (double) @$outlook['nett'],
                                 'outlook_gross' => (double) @$outlook['gross'],
+                                'wpnb_gross' => (double) @$wpnb['gross'],
+                                'wpnb_net' => (double) @$wpnb['nett'],
+                                'apbn_gross' => (double) @$apbn['gross'],
+                                'apbn_net' => (double) @$apbn['nett']
                             ];
                         })
                         ->toArray();

@@ -9,6 +9,7 @@ use App\Helpers\MedcoRestful;
 use App\Models\UseCase2\UseCase2BlockChartData;
 use Illuminate\Support\Facades\DB;
 
+
 class InsertFieldChartData extends Command
 {
 
@@ -31,6 +32,9 @@ class InsertFieldChartData extends Command
      */
     public function handle()
     {
+        print $this->description . PHP_EOL;
+        ini_set('memory_limit', '1G');
+        
         $this->fetchAndInsertData(
             url: Url::GetChartFieldGasData,
             type: 'gas'
@@ -44,7 +48,7 @@ class InsertFieldChartData extends Command
 
     private function fetchAndInsertData($url, $type)
     {
-        if ($itemData = MedcoRestful::fetchData($url)) {
+        if ($itemData = MedcoRestful::fetchData($url, timeout: 600)) {
             DB::transaction(function () use ($itemData, $type) {
                 $this->deleteUseCase2Data($type);
                 $items = collect($itemData)->chunk(200);

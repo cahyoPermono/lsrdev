@@ -29,8 +29,9 @@ class InsertCompanySummaryData extends Command
      */
     public function handle()
     {
+        print $this->description . PHP_EOL;
         $itemData = MedcoRestful::fetchData(
-            url: Url::GetSummaryCompanyDashboardData
+            url: Url::GetSummaryCompanyDashboardData, timeout:600
         );
         if ($itemData) {
             DB::transaction(function () use ($itemData) {

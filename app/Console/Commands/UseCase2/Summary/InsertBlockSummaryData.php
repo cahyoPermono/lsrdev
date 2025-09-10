@@ -29,8 +29,9 @@ class InsertBlockSummaryData extends Command
      */
     public function handle()
     {
+        print $this->description . PHP_EOL;
         $itemData = MedcoRestful::fetchData(
-            url: Url::GetSummaryBlockDashboardData
+            url: Url::GetSummaryBlockDashboardData, timeout:600
         );
         if ($itemData) {
             DB::transaction(function () use ($itemData) {

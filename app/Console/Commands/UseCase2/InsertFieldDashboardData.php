@@ -29,7 +29,7 @@ class InsertFieldDashboardData extends Command
      */
     public function handle()
     {
-
+        print $this->description . PHP_EOL;
         $this->fetchAndInsertData(
             url: Url::GetProductionFieldDashboardData,
             type: 'production'
@@ -39,7 +39,7 @@ class InsertFieldDashboardData extends Command
     private function fetchAndInsertData($url, $type)
     {
         $datePeriod = now()->subDays(1)->format('Y-m-d');
-        if ($itemData = MedcoRestful::fetchData($url)) {
+        if ($itemData = MedcoRestful::fetchData($url, timeout: 600)) {
             DB::transaction(function () use ($itemData, $datePeriod, $type) {
 
                 $this->deleteUseCase2Data($datePeriod, $type);

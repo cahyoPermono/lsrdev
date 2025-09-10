@@ -61,6 +61,14 @@ class UseCase2BlockService
                     'net' => (double) $row->outlook_net,
                     'gross' => (double) $row->outlook_gross,
                ];
+               $wpnb = [
+                    'net' => (double) $row->wpnb_net,
+                    'gross' => (double) $row->wpnb_gross,
+               ];
+               $apbn = [
+                    'net' => (double) $row->apbn_net,
+                    'gross' => (double) $row->apbn_gross,
+               ];
                return [
                     'date' => $date->format('Y-m-d'),
                     'date_label' => $date->format('d M Y'),
@@ -72,7 +80,7 @@ class UseCase2BlockService
                               'label' => "Budget",
                               'slug' => 'budget',
                               'value' => $budget,
-                              "percent" => $budget
+                              "percent" => $budget // TODO: ???? kenapa dimasukin ke percent
                          ],
                          [
                               'label' => "Actual",
@@ -85,6 +93,18 @@ class UseCase2BlockService
                               'slug' => 'outlook',
                               'value' => $outlook,
                               "percent" => $outlook
+                         ],
+                         [
+                              'label' => "WPNB",
+                              'slug' => 'wpnb',
+                              'value' => $wpnb,
+                              "percent" => $wpnb
+                         ],
+                         [
+                              'label' => "APBN",
+                              'slug' => 'apbn',
+                              'value' => $apbn,
+                              "percent" => $apbn
                          ]
                     ]
                ];
@@ -98,7 +118,7 @@ class UseCase2BlockService
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
 
           return $this->useCase2BlockDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'oil')->map(function ($row) {
-               $date = Carbon::parse($row->date_label);
+          $date = Carbon::parse($row->date_label);
                $budget = [
                     'net' => (double) $row->budget_net,
                     'gross' => (double) $row->budget_gross,
@@ -110,6 +130,14 @@ class UseCase2BlockService
                $outlook = [
                     'net' => (double) $row->outlook_net,
                     'gross' => (double) $row->outlook_gross,
+               ];
+               $wpnb = [
+                    'net' => (double) $row->wpnb_net,
+                    'gross' => (double) $row->wpnb_gross,
+               ];
+               $apbn = [
+                    'net' => (double) $row->apbn_net,
+                    'gross' => (double) $row->apbn_gross,
                ];
                return [
                     'date' => $date->format('Y-m-d'),
@@ -135,6 +163,18 @@ class UseCase2BlockService
                               'slug' => 'outlook',
                               'value' => $outlook,
                               "percent" => $outlook
+                         ],
+                         [
+                              'label' => "WPNB",
+                              'slug' => 'wpnb',
+                              'value' => $wpnb,
+                              "percent" => $wpnb
+                         ],
+                         [
+                              'label' => "APBN",
+                              'slug' => 'apbn',
+                              'value' => $apbn,
+                              "percent" => $apbn
                          ]
                     ]
                ];

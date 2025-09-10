@@ -35,6 +35,7 @@ class InsertPriceData extends Command
     }
 
     public function fetchAndInsertPrice(string $url, string $code, string $name): void{
+        print $this->description;
         $data = MedcoRestful::fetchData(
             url: $url
         );

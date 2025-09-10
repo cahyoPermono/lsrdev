@@ -30,8 +30,9 @@ class InsertAssetSummaryData extends Command
      */
     public function handle()
     {
+        print $this->description . PHP_EOL;
         $itemData = MedcoRestful::fetchData(
-            url: Url::GetSummaryAssetDashboardData
+            url: Url::GetSummaryAssetDashboardData, timeout:600
         );
         if ($itemData) {
             DB::transaction(function () use ($itemData) {

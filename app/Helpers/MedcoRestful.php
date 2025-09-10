@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Http;
 class MedcoRestful
 {
 
-     public static function fetchData($url, $query = null)
+     public static function fetchData($url, $query = null, $timeout = 30)
      {
           if ($query) {
                $query = "?" . http_build_query($query);
           }
           $url = config('services.api.medco_rest_url') . $url . $query;
           $result = Http::withoutVerifying()
+               ->timeout($timeout)
                ->get($url)
                ->json();
 
