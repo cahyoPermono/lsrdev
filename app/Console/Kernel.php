@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     private function runJob(Schedule $schedule){
         $dailyJobTime = "06:00";
 
-        $schedule->command('use-case-2:run-all')->everySixHours();
+        $schedule->command('use-case-2:run-all')->everyThirtyMinutes();
         $schedule->command('hse:run-all')->everySixHours();
 
         $schedule->command('app:deactivate-inactive-users')->everyThirtyMinutes(); 

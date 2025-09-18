@@ -119,7 +119,7 @@ class ApiUseCaseCompanyController extends ApiController
      */
     public function gasChart(Request $request)
     {
-        $items = $this->useCase2CompanyService->gasChart($request->get("filter", []));
+        $items = $this->useCase2CompanyService->chart($request->get("filter", []), 'gas');
         return $this->sendSuccess($items);
     }
 
@@ -185,7 +185,7 @@ class ApiUseCaseCompanyController extends ApiController
      */
     public function oilChart(Request $request)
     {
-        $items = $this->useCase2CompanyService->oilChart($request->get("filter", []));
+        $items = $this->useCase2CompanyService->chart($request->get("filter", []), 'oil');
         return $this->sendSuccess($items);
     }
 

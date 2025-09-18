@@ -89,6 +89,15 @@ class UseCase2AssetDataService
 		return $data;
 	}
 
+	public function getBudgetChart($type, $asset_kind) {
+		$data = $this->chartModel::select('date', 'asset_kind', 'budget_net', 'budget_gross')
+			->where('type', $type)
+			->where('asset_kind', $asset_kind)
+			->get();
+		
+		return $data;
+	}
+
 	public function findActualVsBudgetDelta() {
 		return collect(DB::select("
 			SELECT 
