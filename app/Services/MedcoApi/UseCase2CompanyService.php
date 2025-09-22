@@ -53,7 +53,7 @@ class UseCase2CompanyService
         $endDate   = $dateRange['end'];
         $assetKinds = ['Corridor', 'Onshore', 'Offshore', 'NOA', 'International', 'Domestic'];
 
-        $assetActualData =  $this->useCase2AssetDataService->findAllChartsForActualData($startDate, $endDate, 'Domestic', $type);
+        $assetActualData =  $this->useCase2AssetDataService->findAllChartsForActualData($startDate, $endDate, $assetKinds, $type);
         $domesticBudgetData = $this->useCase2AssetDataService->getBudgetChart($startDate, $endDate, 'Domestic', $type);
 
         $groupedAssetData = [];

@@ -14,8 +14,7 @@ class ApiUseCase2FieldController extends ApiController
 {
     public function __construct(
         private UseCase2FieldService $useCase2FieldService
-    ) {
-    }
+    ) {}
 
     /**
      * Field Summary
@@ -66,7 +65,7 @@ class ApiUseCase2FieldController extends ApiController
      * 
      * @pathParam code string required
      * 
-     * @queryParam filter[period] string optional default YTD, value in YTD or 360_DAYS
+     * @queryParam filter[period] string optional The period filter. Default is `YTD`. One of: `YTD`, `1W`, `1M`, `1Y`. Example: 1M
      * 
      * @response {
      *      "status": 200,
@@ -134,7 +133,7 @@ class ApiUseCase2FieldController extends ApiController
      * 
      * @pathParam code string required
      * 
-     * @queryParam filter[period] string optional default YTD, value in YTD or 360_DAYS
+     * @queryParam filter[period] string optional The period filter. Default is `YTD`. One of: `YTD`, `1W`, `1M`, `1Y`. Example: 1M
      * 
      * @response {
      *      "status": 200,

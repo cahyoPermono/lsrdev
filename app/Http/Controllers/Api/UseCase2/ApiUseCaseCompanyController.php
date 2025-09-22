@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\UseCase2;
 
 
@@ -16,8 +17,7 @@ class ApiUseCaseCompanyController extends ApiController
 {
     public function __construct(
         private UseCase2CompanyService $useCase2CompanyService
-    ) {
-    }
+    ) {}
 
     /**
      * Company Summary
@@ -64,8 +64,7 @@ class ApiUseCaseCompanyController extends ApiController
      * @authenticated
      * @defaultParam
      * 
-     * @queryParam filter[period] string optional default YTD, value in YTD or 360_DAYS
-     * 
+     * @queryParam filter[period] string optional The period filter. Default is `YTD`. One of: `YTD`, `1W`, `1M`, `1Y`. Example: 1M
      * @response {
      *      "status": 200,
      *       "message": "success",
@@ -130,7 +129,7 @@ class ApiUseCaseCompanyController extends ApiController
      * @authenticated
      * @defaultParam
      * 
-     * @queryParam filter[period] string optional default YTD, value in YTD or 360_DAYS
+     * @queryParam filter[period] string optional The period filter. Default is `YTD`. One of: `YTD`, `1W`, `1M`, `1Y`. Example: 1M
      * 
      * @response {
      *      "status": 200,
@@ -428,7 +427,4 @@ class ApiUseCaseCompanyController extends ApiController
         $items = $this->useCase2CompanyService->quarterlyProductionData();
         return $this->sendSuccess($items);
     }
-    
 }
-
-
