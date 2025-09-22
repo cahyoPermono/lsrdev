@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\UseCase2;
 
 use App\Models\UseCase2\UseCase2AssetChartData;
@@ -13,8 +14,7 @@ class UseCase2AssetDataService
 		public $model = UseCase2AssetData::class,
 		public $chartModel = UseCase2AssetChartData::class,
 		public $summaryModel = UseCase2AssetSummary::class
-	) {
-	}
+	) {}
 
 
 	public function findAllByDateAndType($date, $companyCode, $type, $try = false)
@@ -23,7 +23,7 @@ class UseCase2AssetDataService
 			->where('date', $date)
 			->where('type', $type)
 			->where('company_code', $companyCode)
-			->orderBy('date','asc')
+			->orderBy('date', 'asc')
 			->get();
 
 		if (!count($dataItems) && !$try) {
@@ -42,27 +42,19 @@ class UseCase2AssetDataService
 
 		if (!$data && !$try) {
 			Artisan::call('use-case-2:insert-asset-summary-data');
-			return $this->findSummary($companyCode,true);
+			return $this->findSummary($companyCode, true);
 		}
 
 		return $data;
 	}
 
-
-
-	public function findAllChartByDateRangeAndType($start, $end, $asset_kind, $type, $try = false)
+	public function findAllChartByDateRangeAndType($start, $end, $assetKind, $type)
 	{
-		$query = $this->chartModel::query()
-			// ->whereBetween('date', [$start, $end])
+		return $this->chartModel::query()
 			->where('type', $type)
-			->where('asset_kind', $asset_kind);
-
-		if (!$query->clone()->count() && !$try) {
-			Artisan::call('use-case-2:insert-asset-chart-data');
-			return $this->findAllChartByDateRangeAndType($start, $end, $asset_kind, $type, true);
-		}
-		$dataItems = $query->clone()
-		   	->select([
+			->where('asset_kind', $assetKind)
+			->whereBetween('date', [$start, $end])
+			->select([
 				'date as date_label',
 				"actual_net",
 				"actual_gross",
@@ -75,30 +67,44 @@ class UseCase2AssetDataService
 				"apbn_net",
 				"apbn_gross",
 			])
-			->orderBy('date','asc')
+			->orderBy('date', 'asc')
 			->get();
-
-		return $dataItems;
 	}
-	
-	public function findAllChartsForActualData($type) {
+
+	public function findAllChartsForActualData($start, $end, $assetKinds, $type)
+	{
+		if (!is_array($assetKinds)) {
+			$assetKinds = [$assetKinds];
+		}
+
 		$data = $this->chartModel::select('date', 'asset_kind', 'actual_net', 'actual_gross')
+			->whereBetween('date', [$start, $end])
+			->whereIn('asset_kind', $assetKinds)
 			->where('type', $type)
+			->orderBy('date', 'asc')
 			->get();
-		
+
 		return $data;
 	}
 
-	public function getBudgetChart($type, $asset_kind) {
+	public function getBudgetChart($start, $end, $assetKinds, $type)
+	{
+		if (!is_array($assetKinds)) {
+			$assetKinds = [$assetKinds];
+		}
+
 		$data = $this->chartModel::select('date', 'asset_kind', 'budget_net', 'budget_gross')
+			->whereBetween('date', [$start, $end])
+			->whereIn('asset_kind', $assetKinds)
 			->where('type', $type)
-			->where('asset_kind', $asset_kind)
+			->orderBy('date', 'asc')
 			->get();
-		
+
 		return $data;
 	}
 
-	public function findActualVsBudgetDelta() {
+	public function findActualVsBudgetDelta()
+	{
 		return collect(DB::select("
 			SELECT 
 				type,

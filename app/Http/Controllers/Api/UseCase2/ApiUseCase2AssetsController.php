@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\UseCase2;
 
 
@@ -15,8 +16,7 @@ class ApiUseCase2AssetsController extends ApiController
 {
     public function __construct(
         private UseCase2AssetsService $useCase2AssetsService
-    ) {
-    }
+    ) {}
 
     /**
      * Asset Summary
@@ -122,7 +122,7 @@ class ApiUseCase2AssetsController extends ApiController
      */
     public function gasChart(Request $request, $code)
     {
-        $items = $this->useCase2AssetsService->gasChart($code, $request->get("filter", []));
+        $items = $this->useCase2AssetsService->chart($code, $request->get("filter", []), 'gas');
         return $this->sendSuccess($items);
     }
 
@@ -190,7 +190,7 @@ class ApiUseCase2AssetsController extends ApiController
      */
     public function oilChart(Request $request, $code)
     {
-        $items = $this->useCase2AssetsService->oilChart($code, $request->get("filter", []));
+        $items = $this->useCase2AssetsService->chart($code, $request->get("filter", []), 'oil');
         return $this->sendSuccess($items);
     }
 

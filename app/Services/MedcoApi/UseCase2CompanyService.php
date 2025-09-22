@@ -47,14 +47,17 @@ class UseCase2CompanyService
 
     public function chart($filter, $type)
     {
-        $period = @$filter['period'] ?: 'YTD';
-        $endDate = date('Y-m-d');
-        $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay()->format('Y-m-d') : date('Y-01-01');
-        $assetData =  $this->useCase2AssetDataService->findAllChartsForActualData($type);
-        $domesticBudgetData = $this->useCase2AssetDataService->getBudgetChart($type, 'Domestic');
+        $period = @$filter['period'];
+        $dateRange = getDateRange($period);
+        $startDate = $dateRange['start'];
+        $endDate   = $dateRange['end'];
+        $assetKinds = ['Corridor', 'Onshore', 'Offshore', 'NOA', 'International', 'Domestic'];
+
+        $assetActualData =  $this->useCase2AssetDataService->findAllChartsForActualData($startDate, $endDate, 'Domestic', $type);
+        $domesticBudgetData = $this->useCase2AssetDataService->getBudgetChart($startDate, $endDate, 'Domestic', $type);
 
         $groupedAssetData = [];
-        foreach ($assetData as $row) {
+        foreach ($assetActualData as $row) {
             $date = $row->date;
             $assetKind = $row->asset_kind;
             $groupedAssetData[$date][$assetKind] = [

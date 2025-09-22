@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\UseCase2;
 
 use App\Models\UseCase2\UseCase2CompanyQuarterlyData;
@@ -18,8 +19,7 @@ class UseCase2CompanyDataService
           public $summaryModel = UseCase2CompanySummary::class,
           public $productionBreakdownModel = UseCase2CompanyYtdProductionBreakdown::class,
           public $quarterlyDataModel = UseCase2CompanyQuarterlyData::class
-     ) {
-     }
+     ) {}
 
 
      public function findAllByDateAndType($date, $type, $try = false)
@@ -27,7 +27,7 @@ class UseCase2CompanyDataService
           $dataItems = $this->model::query()
                ->where('date', $date)
                ->where('type', $type)
-               ->orderBy('date','asc')
+               ->orderBy('date', 'asc')
                ->get();
 
           if (!count($dataItems) && !$try) {
@@ -50,17 +50,11 @@ class UseCase2CompanyDataService
           return $data;
      }
 
-     public function findAllChartByDateRangeAndType($start, $end, $type, $try = false)
+     public function findAllChartByDateRangeAndType($start, $end, $type)
      {
-          $query = $this->chartModel::query()
-               // ->whereBetween('date', [$start, $end])
-               ->where('type', $type);
-
-          if (!$query->clone()->count() && !$try) {
-               Artisan::call('use-case-2:insert-company-chart-data');
-               return $this->findAllChartByDateRangeAndType($start, $end, $type, true);
-          }
-          $dataItems = $query->clone()
+          return $this->chartModel::query()
+               ->where('type', $type)
+               ->whereBetween('date', [$start, $end])
                ->select([
                     'date as date_label',
                     "actual_net",
@@ -74,14 +68,12 @@ class UseCase2CompanyDataService
                     "apbn_net",
                     "apbn_gross",
                ])
-               ->orderBy('date','asc')
+               ->orderBy('date', 'asc')
                ->get();
-
-
-          return $dataItems;
      }
 
-     public function findProductionBreakdown($type) {
+     public function findProductionBreakdown($type)
+     {
           return UseCase2CompanyYtdProductionBreakdown::where('type', $type)
                ->select('country_code', 'working_interest', 'ytd_production', 'budget', 'delta', 'percent')
                ->get();
@@ -91,7 +83,7 @@ class UseCase2CompanyDataService
      {
           $dataItems = $this->quarterlyDataModel::query()
                ->where('type', $type)
-               ->orderBy('quarter','asc')
+               ->orderBy('quarter', 'asc')
                ->get();
           Debugbar::info($dataItems);
           return $dataItems;

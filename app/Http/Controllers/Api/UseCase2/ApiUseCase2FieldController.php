@@ -121,7 +121,7 @@ class ApiUseCase2FieldController extends ApiController
      */
     public function gasChart(Request $request, $code)
     {
-        $items = $this->useCase2FieldService->gasChart($code, $request->get("filter", []));
+        $items = $this->useCase2FieldService->chart($code, $request->get("filter", []), 'gas');
         return $this->sendSuccess($items);
     }
 
@@ -189,7 +189,7 @@ class ApiUseCase2FieldController extends ApiController
      */
     public function oilChart(Request $request, $code)
     {
-        $items = $this->useCase2FieldService->oilChart($code, $request->get("filter", []));
+        $items = $this->useCase2FieldService->chart($code, $request->get("filter", []), 'oil');
         return $this->sendSuccess($items);
     }
 

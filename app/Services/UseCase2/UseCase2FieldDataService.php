@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\UseCase2;
 
 use Illuminate\Support\Facades\Artisan;
@@ -12,8 +13,7 @@ class UseCase2FieldDataService
           public $model = UseCase2FieldData::class,
           public $summaryModel = UseCase2FieldSummary::class,
           public $chartModel = UseCase2FieldChartData::class,
-     ) {
-     }
+     ) {}
 
 
      public function findAllByDateAndType($date, $blockCode, $type, $try = false)
@@ -24,7 +24,7 @@ class UseCase2FieldDataService
                ->where('type', $type)
                ->where('block_code', $blockCode)
                ->whereNotIn('asset_code', $exclude_blocks)
-               ->orderBy('date','asc')
+               ->orderBy('date', 'asc')
                ->get();
 
           return $dataItems;
@@ -38,23 +38,18 @@ class UseCase2FieldDataService
 
           if (!$data && !$try) {
                Artisan::call('use-case-2:insert-field-summary-data');
-               return $this->findSummary($blockCode,true);
+               return $this->findSummary($blockCode, true);
           }
 
           return $data;
      }
 
-     public function findAllChartByDateRangeAndType($start, $end, $blockCode, $type, $try = false)
+     public function findAllChartByDateRangeAndType($start, $end, $blockCode, $type)
      {
-          $query = $this->chartModel::query()
+          $dataItems = $this->chartModel::query()
                ->where('type', $type)
-               ->where('block_code', $blockCode);
-
-          if (!$query->clone()->count() && !$try) {
-               Artisan::call('use-case-2:insert-field-chart-data');
-               return $this->findAllChartByDateRangeAndType($start, $end,$blockCode,$type, true);
-          }
-          $dataItems = $query->clone()
+               ->where('block_code', $blockCode)
+               ->whereBetween('date', [$start, $end])
                ->select([
                     'date as date_label',
                     "actual_net",
@@ -64,7 +59,7 @@ class UseCase2FieldDataService
                     "outlook_net",
                     "outlook_gross",
                ])
-               ->orderBy('date','asc')
+               ->orderBy('date', 'asc')
                ->get();
 
           return $dataItems;

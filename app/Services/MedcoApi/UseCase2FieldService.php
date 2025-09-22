@@ -11,8 +11,7 @@ class UseCase2FieldService
 {
      public function __construct(
           private $useCase2FieldDataService = new UseCase2FieldDataService
-     ) {
-     }
+     ) {}
 
      public function summary($code)
      {
@@ -20,46 +19,47 @@ class UseCase2FieldService
           $gross = $data ? $data->gross : [];
           $nett = $data ? $data->net : [];
           return [
-              "total" => [
-                  "net" => @$nett['total'] ?: 0,
-                  "gross" => @$gross['total'] ?: 0,
-              ],
-              "day_variance" => [
-                  "net" => [
-                      "delta" => @$nett['day_variance_delta'] ?: 0,
-                      "percent" => @$nett["day_variance_percent"] ?: 0,
-                  ],
-                  "gross" => [
-                      "delta" => @$gross['day_variance_delta'] ?: 0,
-                      "percent" => @$gross["day_variance_percent"] ?: 0,
-                  ]
-              ],
-              "ytd_production" => [
-                  "net" => @$nett['ytd_production'] ?: 0,
-                  "gross" => @$gross['ytd_production'] ?: 0,
-              ],
+               "total" => [
+                    "net" => @$nett['total'] ?: 0,
+                    "gross" => @$gross['total'] ?: 0,
+               ],
+               "day_variance" => [
+                    "net" => [
+                         "delta" => @$nett['day_variance_delta'] ?: 0,
+                         "percent" => @$nett["day_variance_percent"] ?: 0,
+                    ],
+                    "gross" => [
+                         "delta" => @$gross['day_variance_delta'] ?: 0,
+                         "percent" => @$gross["day_variance_percent"] ?: 0,
+                    ]
+               ],
+               "ytd_production" => [
+                    "net" => @$nett['ytd_production'] ?: 0,
+                    "gross" => @$gross['ytd_production'] ?: 0,
+               ],
           ];
      }
 
-     public function gasChart($code, $filter)
+     public function chart($code, $filter, $type)
      {
-          $period = @$filter['period'] ?: 'YTD';
-          $endDate = date('Y-m-d');
-          $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
+          $period = @$filter['period'];
+          $dateRange = getDateRange($period);
+          $startDate = $dateRange['start'];
+          $endDate   = $dateRange['end'];
 
-          return $this->useCase2FieldDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'gas')->map(function ($row) {
+          return $this->useCase2FieldDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, $type)->map(function ($row) {
                $date = Carbon::parse($row->date_label);
                $budget = [
-                    'net' => (double) $row->budget_net,
-                    'gross' => (double) $row->budget_gross,
+                    'net' => (float) $row->budget_net,
+                    'gross' => (float) $row->budget_gross,
                ];
                $actual = [
-                    'net' => (double) $row->actual_net,
-                    'gross' => (double) $row->actual_gross,
+                    'net' => (float) $row->actual_net,
+                    'gross' => (float) $row->actual_gross,
                ];
                $outlook = [
-                    'net' => (double) $row->outlook_net,
-                    'gross' => (double) $row->outlook_gross,
+                    'net' => (float) $row->outlook_net,
+                    'gross' => (float) $row->outlook_gross,
                ];
                return [
                     'date' => $date->format('Y-m-d'),
@@ -91,60 +91,11 @@ class UseCase2FieldService
           });
      }
 
-     public function oilChart($code, $filter)
-     {
-          $period = @$filter['period'] ?: 'YTD';
-          $endDate = date('Y-m-d');
-          $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
-
-          return $this->useCase2FieldDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'oil')->map(function ($row) {
-               $date = Carbon::parse($row->date_label);
-               $budget = [
-                    'net' => (double) $row->budget_net,
-                    'gross' => (double) $row->budget_gross,
-               ];
-               $actual = [
-                    'net' => (double) $row->actual_net,
-                    'gross' => (double) $row->actual_gross,
-               ];
-               $outlook = [
-                    'net' => (double) $row->outlook_net,
-                    'gross' => (double) $row->outlook_gross,
-               ];
-               return [
-                    'date' => $date->format('Y-m-d'),
-                    'date_label' => $date->format('d M Y'),
-                    'month' => $date->format('M'),
-                    'year' => $date->format('Y'),
-                    'day' => $date->format('d'),
-                    'items' => [
-                         [
-                              'label' => "Budget",
-                              'slug' => 'budget',
-                              'value' => $budget,
-                              "percent" => $budget
-                         ],
-                         [
-                              'label' => "Actual",
-                              'slug' => 'actual',
-                              'value' => $actual,
-                              "percent" => $actual
-                         ],
-                         [
-                              'label' => "Outlook",
-                              'slug' => 'outlook',
-                              'value' => $outlook,
-                              "percent" => $outlook
-                         ]
-                    ]
-               ];
-          });
-     }
 
      public function productionData($code, $limit = 10)
      {
           $date = now()->subDays(1)->format('Y-m-d');
-          return $this->useCase2FieldDataService->findAllByDateAndType($date,$code, 'production')->map(fn($row) => [
+          return $this->useCase2FieldDataService->findAllByDateAndType($date, $code, 'production')->map(fn($row) => [
                'code' => $row->code,
                'name' => $row->name,
                'gas' => [

@@ -12,8 +12,7 @@ class UseCase2AssetsService
 {
      public function __construct(
           private $useCase2AssetDataService = new UseCase2AssetDataService
-     ) {
-     }
+     ) {}
 
      public function summary($code)
      {
@@ -21,54 +20,55 @@ class UseCase2AssetsService
           $gross = $data ? $data->gross : [];
           $nett = $data ? $data->net : [];
           return [
-              "total" => [
-                  "net" => @$nett['total'] ?: 0,
-                  "gross" => @$gross['total'] ?: 0,
-              ],
-              "day_variance" => [
-                  "net" => [
-                      "delta" => @$nett['day_variance_delta'] ?: 0,
-                      "percent" => @$nett["day_variance_percent"] ?: 0,
-                  ],
-                  "gross" => [
-                      "delta" => @$gross['day_variance_delta'] ?: 0,
-                      "percent" => @$gross["day_variance_percent"] ?: 0,
-                  ]
-              ],
-              "ytd_production" => [
-                  "net" => @$nett['ytd_production'] ?: 0,
-                  "gross" => @$gross['ytd_production'] ?: 0,
-              ],
+               "total" => [
+                    "net" => @$nett['total'] ?: 0,
+                    "gross" => @$gross['total'] ?: 0,
+               ],
+               "day_variance" => [
+                    "net" => [
+                         "delta" => @$nett['day_variance_delta'] ?: 0,
+                         "percent" => @$nett["day_variance_percent"] ?: 0,
+                    ],
+                    "gross" => [
+                         "delta" => @$gross['day_variance_delta'] ?: 0,
+                         "percent" => @$gross["day_variance_percent"] ?: 0,
+                    ]
+               ],
+               "ytd_production" => [
+                    "net" => @$nett['ytd_production'] ?: 0,
+                    "gross" => @$gross['ytd_production'] ?: 0,
+               ],
           ];
      }
 
-     public function gasChart($code, $filter)
+     public function chart($code, $filter, $type)
      {
-          $period = @$filter['period'] ?: 'YTD';
-          $endDate = date('Y-m-d');
-          $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
+          $period = @$filter['period'];
+          $dateRange = getDateRange($period);
+          $startDate = $dateRange['start'];
+          $endDate   = $dateRange['end'];
 
-          return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'gas')->map(function ($row) {
+          return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, $type)->map(function ($row) {
                $date = Carbon::parse($row->date_label);
                $budget = [
-                    'net' => (double) $row->budget_net,
-                    'gross' => (double) $row->budget_gross,
+                    'net' => (float) $row->budget_net,
+                    'gross' => (float) $row->budget_gross,
                ];
                $actual = [
-                    'net' => (double) $row->actual_net,
-                    'gross' => (double) $row->actual_gross,
+                    'net' => (float) $row->actual_net,
+                    'gross' => (float) $row->actual_gross,
                ];
                $outlook = [
-                    'net' => (double) $row->outlook_net,
-                    'gross' => (double) $row->outlook_gross,
+                    'net' => (float) $row->outlook_net,
+                    'gross' => (float) $row->outlook_gross,
                ];
                $wpnb = [
-                    'net' => (double) $row->wpnb_net,
-                    'gross' => (double) $row->wpnb_gross,
+                    'net' => (float) $row->wpnb_net,
+                    'gross' => (float) $row->wpnb_gross,
                ];
                $apbn = [
-                    'net' => (double) $row->apbn_net,
-                    'gross' => (double) $row->apbn_gross,
+                    'net' => (float) $row->apbn_net,
+                    'gross' => (float) $row->apbn_gross,
                ];
                return [
                     'date' => $date->format('Y-m-d'),
@@ -119,26 +119,26 @@ class UseCase2AssetsService
           $startDate = $period === '360_DAYS' ? now()->subDays(360)->startOfDay() : date('Y-01-01');
 
           return $this->useCase2AssetDataService->findAllChartByDateRangeAndType($startDate, $endDate, $code, 'oil')->map(function ($row) {
-  $date = Carbon::parse($row->date_label);
+               $date = Carbon::parse($row->date_label);
                $budget = [
-                    'net' => (double) $row->budget_net,
-                    'gross' => (double) $row->budget_gross,
+                    'net' => (float) $row->budget_net,
+                    'gross' => (float) $row->budget_gross,
                ];
                $actual = [
-                    'net' => (double) $row->actual_net,
-                    'gross' => (double) $row->actual_gross,
+                    'net' => (float) $row->actual_net,
+                    'gross' => (float) $row->actual_gross,
                ];
                $outlook = [
-                    'net' => (double) $row->outlook_net,
-                    'gross' => (double) $row->outlook_gross,
+                    'net' => (float) $row->outlook_net,
+                    'gross' => (float) $row->outlook_gross,
                ];
                $wpnb = [
-                    'net' => (double) $row->wpnb_net,
-                    'gross' => (double) $row->wpnb_gross,
+                    'net' => (float) $row->wpnb_net,
+                    'gross' => (float) $row->wpnb_gross,
                ];
                $apbn = [
-                    'net' => (double) $row->apbn_net,
-                    'gross' => (double) $row->apbn_gross,
+                    'net' => (float) $row->apbn_net,
+                    'gross' => (float) $row->apbn_gross,
                ];
                return [
                     'date' => $date->format('Y-m-d'),

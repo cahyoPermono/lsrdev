@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\UseCase2;
 
 use App\Models\UseCase2\UseCase2BlockChartData;
@@ -13,8 +14,7 @@ class UseCase2BlockDataService
           public $model = UseCase2BlockData::class,
           public $chartModel = UseCase2BlockChartData::class,
           public $summaryModel = UseCase2BlockSummary::class
-     ) {
-     }
+     ) {}
 
 
      public function findAllByDateAndType($date, $assetCode, $type, $try = false)
@@ -23,7 +23,7 @@ class UseCase2BlockDataService
                ->where('date', $date)
                ->where('type', $type)
                ->where('asset_code', $assetCode)
-               ->orderBy('date','asc')
+               ->orderBy('date', 'asc')
                ->get();
 
           if (!count($dataItems) && !$try) {
@@ -42,25 +42,19 @@ class UseCase2BlockDataService
 
           if (!$data && !$try) {
                Artisan::call('use-case-2:insert-block-summary-data');
-               return $this->findSummary($assetCode,true);
+               return $this->findSummary($assetCode, true);
           }
 
           return $data;
      }
 
-     
-     public function findAllChartByDateRangeAndType($start, $end, $blockName, $type, $try = false)
-     {
-          $query = $this->chartModel::query()
-               // ->whereBetween('date', [$start, $end])
-               ->where('type', $type)
-               ->where('block_name', $blockName);
 
-          if (!$query->clone()->count() && !$try) {
-               Artisan::call('use-case-2:insert-block-chart-data');
-               return $this->findAllChartByDateRangeAndType($start, $end,$blockName,$type, true);
-          }
-          $dataItems = $query->clone()
+     public function findAllChartByDateRangeAndType($start, $end, $blockName, $type)
+     {
+          $dataItems = $this->chartModel::query()
+               ->whereBetween('date', [$start, $end])
+               ->where('type', $type)
+               ->where('block_name', $blockName)
                ->select([
                     'date as date_label',
                     "actual_net",
@@ -74,7 +68,7 @@ class UseCase2BlockDataService
                     "apbn_net",
                     "apbn_gross",
                ])
-               ->orderBy('date','asc')
+               ->orderBy('date', 'asc')
                ->get();
 
           return $dataItems;

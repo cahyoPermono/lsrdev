@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\UseCase2;
 
 
@@ -14,8 +15,7 @@ class ApiUseCase2BlockController extends ApiController
 {
     public function __construct(
         private UseCase2BlockService $useCase2BlockService
-    ) {
-    }
+    ) {}
 
     /**
      * Block Summary
@@ -121,7 +121,7 @@ class ApiUseCase2BlockController extends ApiController
      */
     public function gasChart(Request $request, $code)
     {
-        $items = $this->useCase2BlockService->gasChart($code, $request->get("filter", []));
+        $items = $this->useCase2BlockService->chart($code, $request->get("filter", []), 'gas');
         return $this->sendSuccess($items);
     }
 
@@ -189,7 +189,7 @@ class ApiUseCase2BlockController extends ApiController
      */
     public function oilChart(Request $request, $code)
     {
-        $items = $this->useCase2BlockService->oilChart($code, $request->get("filter", []));
+        $items = $this->useCase2BlockService->chart($code, $request->get("filter", []), 'oil');
         return $this->sendSuccess($items);
     }
 
