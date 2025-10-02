@@ -1,0 +1,72 @@
+[
+  {
+    "id": "Q001",
+    "question": "Apakah semua persyaratan keselamatan telah dipenuhi sebelum memulai pekerjaan?",
+    "category": "Safety Requirements",
+    "required": true,
+    "stage": "stage_1"
+  },
+  {
+    "id": "Q002",
+    "question": "Apakah semua peralatan PPE (Personal Protective Equipment) telah digunakan dengan benar?",
+    "category": "PPE Compliance",
+    "required": true,
+    "stage": "stage_1"
+  },
+  {
+    "id": "Q003",
+    "question": "Apakah area kerja telah diisolasi dan ditandai dengan benar?",
+    "category": "Work Area Isolation",
+    "required": true,
+    "stage": "stage_1"
+  },
+  {
+    "id": "Q004",
+    "question": "Apakah semua anggota tim telah menerima safety briefing sebelum memulai pekerjaan?",
+    "category": "Safety Briefing",
+    "required": true,
+    "stage": "stage_1"
+  },
+  {
+    "id": "Q005",
+    "question": "Apakah kondisi cuaca memungkinkan untuk melakukan pekerjaan dengan aman?",
+    "category": "Environmental Conditions",
+    "required": false,
+    "stage": "stage_1"
+  },
+  {
+    "id": "Q006",
+    "question": "Apakah semua peralatan kerja telah diperiksa dan dinyatakan layak pakai?",
+    "category": "Equipment Check",
+    "required": true,
+    "stage": "stage_2"
+  },
+  {
+    "id": "Q007",
+    "question": "Apakah semua prosedur darurat telah dikomunikasikan kepada seluruh tim kerja?",
+    "category": "Emergency Procedures",
+    "required": true,
+    "stage": "stage_2"
+  },
+  {
+    "id": "Q008",
+    "question": "Apakah semua izin kerja (work permit) telah disetujui oleh pihak yang berwenang?",
+    "category": "Work Permit",
+    "required": true,
+    "stage": "stage_2"
+  },
+  {
+    "id": "Q009",
+    "question": "Apakah semua risiko telah diidentifikasi dan langkah pengendalian risiko telah diterapkan?",
+    "category": "Risk Assessment",
+    "required": true,
+    "stage": "stage_2"
+  },
+  {
+    "id": "Q010",
+    "question": "Apakah semua sertifikasi dan kompetensi pekerja telah diverifikasi?",
+    "category": "Certification Verification",
+    "required": false,
+    "stage": "stage_2"
+  }
+]

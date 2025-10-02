@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "employee_id": "EMP001",
+    "department": "HSE",
+    "email": "john.doe@medcoenergi.com",
+    "phone": "+62-811-0000-0001",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "employee_id": "EMP002",
+    "department": "Operations",
+    "email": "jane.smith@medcoenergi.com",
+    "phone": "+62-811-0000-0002",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Bob Wilson",
+    "employee_id": "EMP003",
+    "department": "Maintenance",
+    "email": "bob.wilson@medcoenergi.com",
+    "phone": "+62-811-0000-0003",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 4,
+    "name": "Alice Brown",
+    "employee_id": "EMP004",
+    "department": "Engineering",
+    "email": "alice.brown@medcoenergi.com",
+    "phone": "+62-811-0000-0004",
+    "created_at": "2024-01-01T00:00:00Z"
+  }
+]

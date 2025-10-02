@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "High Risk",
+    "description": "High risk activities requiring special permits",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Medium Risk",
+    "description": "Medium risk activities with standard procedures",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Low Risk",
+    "description": "Low risk activities with basic safety measures",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 4,
+    "name": "Critical",
+    "description": "Critical activities requiring multiple approvals",
+    "created_at": "2024-01-01T00:00:00Z"
+  }
+]

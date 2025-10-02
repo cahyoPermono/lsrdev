@@ -1,0 +1,191 @@
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "company_id": 1,
+        "block_id": 1,
+        "area_id": 1,
+        "location_id": 1,
+        "function_id": 1,
+        "ptw_number": "PTW-2024-001",
+        "activity_description": "Electrical maintenance work on main transformer at Jakarta Office",
+        "categories": [
+            1,
+            2
+        ],
+        "start_work_verifier_id": 1,
+        "questionnaires": [
+            {
+                "question_number": "Q001",
+                "compliance_st1": true,
+                "deviation_st1": "No deviation",
+                "compliance_st2": true,
+                "deviation_st2": "No deviation"
+            },
+            {
+                "question_number": "Q002",
+                "compliance_st1": false,
+                "deviation_st1": "PPE not worn during work",
+                "compliance_st2": true,
+                "deviation_st2": "No deviation"
+            }
+        ],
+        "status": "not_comply_stage_2",
+        "created_at": "2024-01-01T08:00:00Z",
+        "updated_at": "2025-10-02T04:18:50.141484Z",
+        "not_comply_reason": "Safety protocols not followed during work execution"
+    },
+    {
+        "id": 2,
+        "user_id": 1,
+        "company_id": 1,
+        "block_id": 2,
+        "area_id": 3,
+        "location_id": 3,
+        "function_id": 2,
+        "ptw_number": "PTW-2024-002",
+        "activity_description": "Mechanical repair work on pump system at Field Office",
+        "categories": [
+            2,
+            3
+        ],
+        "start_work_verifier_id": 2,
+        "questionnaires": [
+            {
+                "question_number": "Q001",
+                "compliance_st1": true,
+                "deviation_st1": "No deviation",
+                "compliance_st2": true,
+                "deviation_st2": "No deviation"
+            }
+        ],
+        "status": "submitted",
+        "created_at": "2024-01-02T09:00:00Z",
+        "updated_at": "2024-01-02T09:00:00Z"
+    },
+    {
+        "id": 3,
+        "user_id": 1,
+        "company_id": 2,
+        "block_id": 3,
+        "area_id": 4,
+        "location_id": 4,
+        "function_id": 3,
+        "ptw_number": "PTW-2024-003",
+        "activity_description": "Civil construction work for new facility at Remote Site",
+        "categories": [
+            1,
+            4
+        ],
+        "start_work_verifier_id": 3,
+        "questionnaires": [
+            {
+                "question_number": "Q001",
+                "compliance_st1": true,
+                "deviation_st1": "No deviation",
+                "compliance_st2": false,
+                "deviation_st2": "Work area not properly barricaded"
+            }
+        ],
+        "status": "approved",
+        "created_at": "2024-01-03T10:00:00Z",
+        "updated_at": "2024-01-03T14:00:00Z"
+    },
+    {
+        "id": 4,
+        "user_id": 1,
+        "company_id": 3,
+        "block_id": 4,
+        "area_id": 2,
+        "location_id": 2,
+        "function_id": 4,
+        "ptw_number": "PTW-2024-004",
+        "activity_description": "Instrumentation calibration work at Site Office",
+        "categories": [
+            2
+        ],
+        "start_work_verifier_id": 4,
+        "questionnaires": [
+            {
+                "question_number": "Q001",
+                "compliance_st1": false,
+                "deviation_st1": "Work permit not approved before starting",
+                "compliance_st2": false,
+                "deviation_st2": "Safety briefing not conducted"
+            }
+        ],
+        "status": "rejected",
+        "created_at": "2024-01-04T11:00:00Z",
+        "updated_at": "2024-01-04T16:00:00Z"
+    },
+    {
+        "id": 5,
+        "user_id": 1,
+        "company_id": 1,
+        "block_id": 1,
+        "area_id": 1,
+        "location_id": 1,
+        "function_id": 1,
+        "ptw_number": "PTW-2024-006",
+        "activity_description": "Electrical maintenance with safety checks",
+        "categories": [
+            1,
+            2
+        ],
+        "start_work_verifier_id": 1,
+        "questionnaires": [
+            {
+                "question_number": "Q001",
+                "compliance_st1": true,
+                "deviation_st1": "No deviation",
+                "compliance_st2": false,
+                "deviation_st2": null
+            },
+            {
+                "question_number": "Q002",
+                "compliance_st1": false,
+                "deviation_st1": "PPE not worn during work",
+                "compliance_st2": true,
+                "deviation_st2": "No deviation"
+            }
+        ],
+        "status": "need_stage_2",
+        "created_at": "2025-10-02T04:30:04.586296Z",
+        "updated_at": "2025-10-02T04:30:04.586365Z"
+    },
+    {
+        "id": 6,
+        "user_id": 1,
+        "company_id": 1,
+        "block_id": 1,
+        "area_id": 1,
+        "location_id": 1,
+        "function_id": 1,
+        "ptw_number": "PTW-2024-006",
+        "activity_description": "Electrical maintenance with safety checks",
+        "categories": [
+            1,
+            2
+        ],
+        "start_work_verifier_id": 1,
+        "questionnaires": [
+            {
+                "question_number": "Q001",
+                "compliance_st1": true,
+                "deviation_st1": "No deviation",
+                "compliance_st2": false,
+                "deviation_st2": null
+            },
+            {
+                "question_number": "Q002",
+                "compliance_st1": false,
+                "deviation_st1": "PPE not worn during work",
+                "compliance_st2": true,
+                "deviation_st2": "No deviation"
+            }
+        ],
+        "status": "need_stage_2",
+        "created_at": "2025-10-02T04:30:48.052845Z",
+        "updated_at": "2025-10-02T04:30:48.052950Z"
+    }
+]

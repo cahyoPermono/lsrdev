@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Block A",
+    "company_id": 1,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Block B",
+    "company_id": 1,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Block C",
+    "company_id": 2,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": 4,
+    "name": "Block D",
+    "company_id": 3,
+    "created_at": "2024-01-01T00:00:00Z"
+  }
+]
