@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
         $this->call(AppVersionSeeder::class);
         $this->call(AppModuleSeeder::class);
+        $this->call(AuthorizationUserSeeder::class);
     }
 }
