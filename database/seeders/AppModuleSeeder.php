@@ -180,6 +180,32 @@ class AppModuleSeeder extends Seeder
                 'is_pts_module' => true,
                 'is_module' => false,
             ],
+            [
+                'id' => 18,
+                'uuid' => 'db1a3e43-8c21-43c3-b8c7-e1ff414fcb97',
+                'name' => 'Safety Card',
+                'icon' => 'uploads/image/EwUKXDQJ0BIPQYNlHB5VT70bCNDteFtVmzXgCleD.png',
+                'key' => 'hse_safety_card',
+                'sorting' => 18,
+                'parent_id' => null,
+                'created_at' => '2025-06-15 13:23:00',
+                'updated_at' => '2025-06-15 13:23:00',
+                'is_pts_module' => false,
+                'is_module' => true,
+            ],
+            [
+                'id' => 19,
+                'uuid' => 'db1a3e43-8c21-43c3-b8c7-e1ff414fcb77',
+                'name' => 'lsr',
+                'icon' => 'uploads/image/EwUKXDQJ0BIPQYNlHB5VT70bCNDteFtVmzXgCleD.png',
+                'key' => 'lsr',
+                'sorting' => 19,
+                'parent_id' => null,
+                'created_at' => '2025-06-15 13:23:00',
+                'updated_at' => '2025-06-15 13:23:00',
+                'is_pts_module' => false,
+                'is_module' => true,
+            ],
         ]);
     }
 }

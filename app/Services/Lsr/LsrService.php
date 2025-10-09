@@ -12,7 +12,10 @@ class LsrService
     public function getCompanies()
     {
         $jsonContent = Storage::get('dummy-data/lsr/companies.json');
-        return json_decode($jsonContent, true);
+        $companies = json_decode($jsonContent, true);
+
+        // Ensure we return an array even if JSON is empty or invalid
+        return is_array($companies) ? $companies : [];
     }
 
     /**
@@ -21,7 +24,10 @@ class LsrService
     public function getBlocks()
     {
         $jsonContent = Storage::get('dummy-data/lsr/blocks.json');
-        return json_decode($jsonContent, true);
+        $blocks = json_decode($jsonContent, true);
+
+        // Ensure we return an array even if JSON is empty or invalid
+        return is_array($blocks) ? $blocks : [];
     }
 
     /**
@@ -86,6 +92,11 @@ class LsrService
         $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
         $submissions = json_decode($jsonContent, true);
 
+        // Ensure we return an array even if JSON is empty or invalid
+        if (!is_array($submissions)) {
+            $submissions = [];
+        }
+
         // Apply filters if provided
         if (!empty($filters)) {
             $submissions = $this->applySubmissionFilters($submissions, $filters);
@@ -102,6 +113,11 @@ class LsrService
         // Get existing submissions
         $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
         $submissions = json_decode($jsonContent, true);
+
+        // Ensure we return an array even if JSON is empty or invalid
+        if (!is_array($submissions)) {
+            $submissions = [];
+        }
 
         // Generate new ID
         $newId = count($submissions) > 0 ? max(array_column($submissions, 'id')) + 1 : 1;
@@ -143,6 +159,11 @@ class LsrService
         $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
         $submissions = json_decode($jsonContent, true);
 
+        // Ensure we return an array even if JSON is empty or invalid
+        if (!is_array($submissions)) {
+            $submissions = [];
+        }
+
         // Find the submission by ID
         $submissionIndex = null;
         foreach ($submissions as $index => $submission) {
@@ -176,6 +197,11 @@ class LsrService
         // Get existing submissions
         $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
         $submissions = json_decode($jsonContent, true);
+
+        // Ensure we return an array even if JSON is empty or invalid
+        if (!is_array($submissions)) {
+            $submissions = [];
+        }
 
         // Find the submission by ID
         $submissionIndex = null;
