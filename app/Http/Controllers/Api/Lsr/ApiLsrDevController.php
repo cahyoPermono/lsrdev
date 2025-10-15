@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\Lsr;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Laililmahfud\Adminportal\Controllers\ApiController;
 
 /**
  * @group LSR (Life Saving Rules) Development
  * @sorting 16
  */
-class ApiLsrDevController extends Controller
+class ApiLsrDevController extends ApiController
 {
     private string $dataPath;
 
@@ -25,9 +25,6 @@ class ApiLsrDevController extends Controller
      * @authenticated
      * @defaultParam
      *
-     * @queryParam initiatorID optional Initiator ID filter
-     * @queryParam initiatorEmail optional Initiator email filter
-     *
      * @response {
      *   "status": 200,
      *   "message": "success",
@@ -37,7 +34,12 @@ class ApiLsrDevController extends Controller
      *       "LSRCategory": 1,
      *       "PTWNo": "PTW-2024-001",
      *       "Statusworkflowprocess": "Completed",
-     *       "DatesubmissionStage1": "2024-01-01T08:00:00Z"
+     *       "DatesubmissionStage1": "2024-01-01T08:00:00Z",
+     *       "InitiatorName": "John Doe",
+     *       "WorkerVerifierName": "Jane Smith",
+     *       "LSRCategoryName": "High Risk",
+     *       "ActivityDesc": "Electrical maintenance work",
+     *       "Current_Activity_StartDate": "2024-01-01T08:00:00Z"
      *     }
      *   ]
      * }
@@ -48,16 +50,9 @@ class ApiLsrDevController extends Controller
 
         // Apply filters if provided
         $filteredData = array_filter($data, function ($item) use ($request) {
-            $responsibleUserID = $request->get('initiatorID');
-            $responsibleUserEmail = $request->get('initiatorEmail');
-
-            // Filter by responsible user ID (using Current_MSID field)
-            if ($responsibleUserID && isset($item['Current_MSID']) && $item['Current_MSID'] != $responsibleUserID) {
-                return false;
-            }
-
+            $email = $this->auth()->email;
             // Filter by responsible user email (using WorkerVerifierEmail field)
-            if ($responsibleUserEmail && isset($item['Current_UserEmail']) && $item['Current_UserEmail'] != $responsibleUserEmail) {
+            if (isset($item['Current_UserEmail']) && $item['Current_UserEmail'] != $email) {
                 return false;
             }
 

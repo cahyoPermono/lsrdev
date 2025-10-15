@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Lsr;
 
-use App\Http\Controllers\Controller;
 use App\Services\Lsr\LsrService;
 use Illuminate\Http\Request;
 use Laililmahfud\Adminportal\Controllers\ApiController;
@@ -23,9 +22,6 @@ class ApiLsrController extends ApiController
      * @authenticated
      * @defaultParam
      *
-     * @queryParam initiatorID optional Initiator ID filter
-     * @queryParam initiatorEmail optional Initiator email filter
-     *
      * @response {
      *   "status": 200,
      *   "message": "success",
@@ -35,16 +31,21 @@ class ApiLsrController extends ApiController
      *       "LSRCategory": 1,
      *       "PTWNo": "PTW-2024-001",
      *       "Statusworkflowprocess": "Completed",
-     *       "DatesubmissionStage1": "2024-01-01T08:00:00Z"
+     *       "DatesubmissionStage1": "2024-01-01T08:00:00Z",
+     *       "InitiatorName": "John Doe",
+     *       "WorkerVerifierName": "Jane Smith",
+     *       "LSRCategoryName": "High Risk",
+     *       "ActivityDesc": "Electrical maintenance work",
+     *       "Current_Activity_StartDate": "2024-01-01T08:00:00Z"
      *     }
      *   ]
      * }
      */
     public function historyList(Request $request)
     {
+        $email = $this->auth()->email;
         $historyList = $this->lsrService->getLSRHistoryList(
-            $request->get('initiatorID'),
-            $request->get('initiatorEmail')
+            $email,
         );
         return $this->sendSuccess($historyList);
     }

@@ -13,10 +13,9 @@ class LsrService
      * Get LSR History List
      * GET LSRFieldVerificator/API/GetLSRHistoryList
      */
-    public function getLSRHistoryList($initiatorID = null, $initiatorEmail = null)
+    public function getLSRHistoryList($initiatorEmail = null)
     {
         $query = array_filter([
-            'initiatorID' => $initiatorID,
             'initiatorEmail' => $initiatorEmail,
         ]);
 
