@@ -18,32 +18,165 @@ class ApiLsrController extends ApiController
     ) {}
 
     /**
-     * LSR : Get List Companies
+     * LSR : Get LSR History List
      *
      * @authenticated
      * @defaultParam
+     *
+     * @queryParam initiatorID optional Initiator ID filter
+     * @queryParam initiatorEmail optional Initiator email filter
      *
      * @response {
      *   "status": 200,
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "Medco E&P Indonesia",
-     *       "code": "MEPI",
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "BPMIDLSRstage1": 123,
+     *       "LSRCategory": 1,
+     *       "PTWNo": "PTW-2024-001",
+     *       "Statusworkflowprocess": "Completed",
+     *       "DatesubmissionStage1": "2024-01-01T08:00:00Z"
      *     }
      *   ]
      * }
      */
-    public function companies(Request $request)
+    public function historyList(Request $request)
     {
-        $companies = $this->lsrService->getCompanies();
+        $historyList = $this->lsrService->getLSRHistoryList(
+            $request->get('initiatorID'),
+            $request->get('initiatorEmail')
+        );
+        return $this->sendSuccess($historyList);
+    }
+
+    /**
+     * LSR : Get LSR Task Todo
+     *
+     * @authenticated
+     * @defaultParam
+     *
+     * @queryParam responsibleUserID optional Responsible user ID filter
+     * @queryParam responsibleUserEmail optional Responsible user email filter
+     *
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": [
+     *     {
+     *       "BPMIDLSRstage1": 124,
+     *       "LSRCategory": 2,
+     *       "PTWNo": "PTW-2024-002",
+     *       "Statusworkflowprocess": "In Progress",
+     *       "DatesubmissionStage1": "2024-01-02T09:00:00Z"
+     *     }
+     *   ]
+     * }
+     */
+    public function taskTodo(Request $request)
+    {
+        $taskTodo = $this->lsrService->getLSRTaskTodo(
+            $request->get('responsibleUserID'),
+            $request->get('responsibleUserEmail')
+        );
+        return $this->sendSuccess($taskTodo);
+    }
+
+    /**
+     * LSR : Search LSR
+     *
+     * @authenticated
+     * @defaultParam
+     *
+     * @queryParam email optional Email filter
+     * @queryParam ptwNumber optional PTW number filter
+     * @queryParam processID optional Process ID filter
+     * @queryParam category optional Category filter
+     *
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *     "BPMIDLSRstage1": 125,
+     *     "LSRCategory": 1,
+     *     "PTWNo": "PTW-2024-003",
+     *     "Statusworkflowprocess": "Pending",
+     *     "DatesubmissionStage1": "2024-01-03T10:00:00Z"
+     *   }
+     * }
+     */
+    public function search(Request $request)
+    {
+        $searchResult = $this->lsrService->searchLSR(
+            $request->get('email'),
+            $request->get('ptwNumber'),
+            $request->get('processID'),
+            $request->get('category')
+        );
+        return $this->sendSuccess($searchResult);
+    }
+
+    /**
+     * LSR : Get LSR Detail
+     *
+     * @authenticated
+     * @defaultParam
+     *
+     * @urlParam id integer required LSR ID
+     *
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *     "Id": 123,
+     *     "ProcessId": 456,
+     *     "CreationDate": "2024-01-01T08:00:00Z",
+     *     "Payroll": "EMP001",
+     *     "Name": "John Doe",
+     *     "Company": "Medco E&P",
+     *     "PTWNumber": "PTW-2024-001",
+     *     "ActivityDesc": "Electrical maintenance work",
+     *     "Status": 1
+     *   }
+     * }
+     */
+    public function detail(Request $request, $id)
+    {
+        $detail = $this->lsrService->getLSRDetail($id);
+
+        if (!$detail) {
+            return $this->sendError('LSR detail not found', 404);
+        }
+
+        return $this->sendSuccess($detail);
+    }
+
+    /**
+     * LSR : Get Company List
+     *
+     * @authenticated
+     * @defaultParam
+     *
+     * @queryParam searchParam optional Search parameter
+     *
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": [
+     *     {
+     *       "Text": "Medco E&P Indonesia",
+     *       "Value": "MEPI"
+     *     }
+     *   ]
+     * }
+     */
+    public function companiesFromApi(Request $request)
+    {
+        $companies = $this->lsrService->getCompany($request->get('searchParam'));
         return $this->sendSuccess($companies);
     }
 
     /**
-     * LSR : Get List Blocks
+     * LSR : Get Block List
      *
      * @authenticated
      * @defaultParam
@@ -53,47 +186,50 @@ class ApiLsrController extends ApiController
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "Block A",
-     *       "company_id": 1,
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "Text": "Block A",
+     *       "Value": "BLOCK_A"
      *     }
      *   ]
      * }
      */
-    public function blocks(Request $request)
+    public function blocksFromApi(Request $request)
     {
-        $blocks = $this->lsrService->getBlocks();
+        $blocks = $this->lsrService->getBlock();
         return $this->sendSuccess($blocks);
     }
 
     /**
-     * LSR : Get List Areas/Fields
+     * LSR : Get Area Field List
      *
      * @authenticated
      * @defaultParam
+     *
+     * @queryParam Block required Block parameter
      *
      * @response {
      *   "status": 200,
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "Area 1",
-     *       "block_id": 1,
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "Text": "Area 1",
+     *       "Value": "AREA_1"
      *     }
      *   ]
      * }
      */
-    public function areas(Request $request)
+    public function areaFields(Request $request)
     {
-        $areas = $this->lsrService->getAreas();
-        return $this->sendSuccess($areas);
+        $block = $request->get('Block');
+        if (!$block) {
+            return $this->sendError('Block parameter is required', 400);
+        }
+
+        $areaFields = $this->lsrService->getAreaField($block);
+        return $this->sendSuccess($areaFields);
     }
 
     /**
-     * LSR : Get List Locations
+     * LSR : Get Location List
      *
      * @authenticated
      * @defaultParam
@@ -103,22 +239,20 @@ class ApiLsrController extends ApiController
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "Jakarta Office",
-     *       "area_id": 1,
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "Text": "Jakarta Office",
+     *       "Value": "JKT_OFFICE"
      *     }
      *   ]
      * }
      */
-    public function locations(Request $request)
+    public function locationsFromApi(Request $request)
     {
-        $locations = $this->lsrService->getLocations();
+        $locations = $this->lsrService->getLocation();
         return $this->sendSuccess($locations);
     }
 
     /**
-     * LSR : Get List Functions
+     * LSR : Get Function List
      *
      * @authenticated
      * @defaultParam
@@ -128,22 +262,20 @@ class ApiLsrController extends ApiController
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "Electrical Work",
-     *       "code": "ELC",
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "Text": "Electrical Work",
+     *       "Value": "ELC"
      *     }
      *   ]
      * }
      */
-    public function functions(Request $request)
+    public function functionsFromApi(Request $request)
     {
-        $functions = $this->lsrService->getFunctions();
+        $functions = $this->lsrService->getFunction();
         return $this->sendSuccess($functions);
     }
 
     /**
-     * LSR : Get List Categories
+     * LSR : Get LSR Category List
      *
      * @authenticated
      * @defaultParam
@@ -153,344 +285,217 @@ class ApiLsrController extends ApiController
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "High Risk",
-     *       "description": "High risk activities requiring special permits",
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "Text": "High Risk",
+     *       "Value": "1"
      *     }
      *   ]
      * }
      */
-    public function categories(Request $request)
+    public function categoriesFromApi(Request $request)
     {
-        $categories = $this->lsrService->getCategories();
+        $categories = $this->lsrService->getLSRCategory();
         return $this->sendSuccess($categories);
     }
 
     /**
-     * LSR : Get List Work Verifiers
+     * LSR : Get LSR Subcategory List
      *
      * @authenticated
      * @defaultParam
+     *
+     * @queryParam LSRCatId required LSR Category ID
      *
      * @response {
      *   "status": 200,
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "name": "John Doe",
-     *       "employee_id": "EMP001",
-     *       "department": "HSE",
-     *       "email": "john.doe@medcoenergi.com",
-     *       "phone": "+62-811-0000-0001",
-     *       "created_at": "2024-01-01T00:00:00Z"
+     *       "Text": "Electrical High Risk",
+     *       "Value": "1"
      *     }
      *   ]
      * }
      */
-    public function workVerifiers(Request $request)
+    public function subcategories(Request $request)
     {
-        $workVerifiers = $this->lsrService->getWorkVerifiers();
-        return $this->sendSuccess($workVerifiers);
+        $lsrCatId = $request->get('LSRCatId');
+        if (!$lsrCatId) {
+            return $this->sendError('LSRCatId parameter is required', 400);
+        }
+
+        $subcategories = $this->lsrService->getLSRSubcategory($lsrCatId);
+        return $this->sendSuccess($subcategories);
     }
 
     /**
-     * LSR : Get List Submissions
+     * LSR : Get Personnel List
      *
      * @authenticated
      * @defaultParam
      *
-     * @queryParam status optional Filter by submission status (draft, submitted, approved, rejected)
-     * @queryParam work_verifier_id optional Filter by work verifier ID
+     * @queryParam name optional Name filter
      *
      * @response {
      *   "status": 200,
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": 1,
-     *       "company_id": 1,
-     *       "block_id": 1,
-     *       "area_id": 1,
-     *       "location_id": 1,
-     *       "function_id": 1,
-     *       "ptw_number": "PTW-2024-001",
-     *       "activity_description": "Electrical maintenance work",
-     *       "categories": [1, 2],
-     *       "start_work_verifier_id": 1,
-     *       "questionnaires": [
-     *         {
-     *           "question_number": "Q001",
-     *           "compliance_st1": true,
-     *           "deviation_st1": "No deviation",
-     *           "compliance_st2": true,
-     *           "deviation_st2": "No deviation"
-     *         }
-     *       ],
-     *       "status": "draft",
-     *       "created_at": "2024-01-01T08:00:00Z",
-     *       "updated_at": "2024-01-01T08:00:00Z"
+     *       "Name": "John Doe",
+     *       "Email": "john.doe@medcoenergi.com",
+     *       "MSID": "EMP001"
      *     }
      *   ]
      * }
      */
-    public function submissions(Request $request)
+    public function personnel(Request $request)
     {
-        $filters = [];
-
-        // Apply optional filters
-        if ($request->has('status')) {
-            $filters['status'] = $request->get('status');
-        }
-
-        if ($request->has('work_verifier_id')) {
-            $filters['work_verifier_id'] = $request->get('work_verifier_id');
-        }
-
-        $submissions = $this->lsrService->getSubmissions($filters);
-        return $this->sendSuccess($submissions);
+        $personnel = $this->lsrService->getPersonnelList($request->get('name'));
+        return $this->sendSuccess($personnel);
     }
 
     /**
-     * LSR : Create New Submission
+     * LSR : Get Checklist
      *
      * @authenticated
      * @defaultParam
      *
-     * @bodyParam user_id integer optional User ID (defaults to 1)
-     * @bodyParam company integer required Company ID
-     * @bodyParam block integer required Block ID
-     * @bodyParam area_field integer required Area/Field ID
-     * @bodyParam location integer required Location ID
-     * @bodyParam function integer required Function ID
-     * @bodyParam ptw_number string required PTW Number
-     * @bodyParam activity_description string required Activity description
-     * @bodyParam categorys array required Array of category IDs
-     * @bodyParam start_work_verifier_id integer required Work verifier ID
-     * @bodyParam questionnaires array optional Array of questionnaire objects with compliance data
-     *
-     * @response {
-     *   "status": 200,
-     *   "message": "success",
-     *   "data": {
-     *     "id": 5,
-     *     "company_id": 1,
-     *     "block_id": 1,
-     *     "area_id": 1,
-     *     "location_id": 1,
-     *     "function_id": 1,
-     *     "ptw_number": "PTW-2024-005",
-     *     "activity_description": "New electrical work",
-     *     "categories": [1, 2],
-     *     "start_work_verifier_id": 1,
-     *     "status": "draft",
-     *     "created_at": "2024-01-05T08:00:00Z",
-     *     "updated_at": "2024-01-05T08:00:00Z"
-     *   }
-     * }
-     */
-    public function storeSubmission(Request $request)
-    {
-        // Validate required fields
-        $validatedData = $request->validate([
-            'user_id' => 'nullable|integer',
-            'company' => 'required|integer',
-            'block' => 'required|integer',
-            'area_field' => 'required|integer',
-            'location' => 'required|integer',
-            'function' => 'required|integer',
-            'ptw_number' => 'required|string',
-            'activity_description' => 'required|string',
-            'categorys' => 'required|array',
-            'start_work_verifier_id' => 'required|integer',
-            'questionnaires' => 'nullable|array',
-            'questionnaires.*.question_number' => 'required_with:questionnaires|string',
-            'questionnaires.*.compliance_st1' => 'required_with:questionnaires|boolean',
-            'questionnaires.*.deviation_st1' => 'required_with:questionnaires|string',
-            'questionnaires.*.compliance_st2' => 'required_with:questionnaires|boolean',
-            'questionnaires.*.deviation_st2' => 'required_with:questionnaires|string'
-        ]);
-
-        $submission = $this->lsrService->createSubmission($validatedData);
-        return $this->sendSuccess($submission, 'Submission created successfully');
-    }
-
-    /**
-     * LSR : Update Submission Questionnaires
-     *
-     * @authenticated
-     * @defaultParam
-     *
-     * @urlParam submission_id integer required The ID of the submission to update
-     * @bodyParam questionnaires array required Array of questionnaire objects with compliance data
-     *
-     * @response {
-     *   "status": 200,
-     *   "message": "success",
-     *   "data": {
-     *     "id": 1,
-     *     "company_id": 1,
-     *     "block_id": 1,
-     *     "area_id": 1,
-     *     "location_id": 1,
-     *     "function_id": 1,
-     *     "ptw_number": "PTW-2024-001",
-     *     "activity_description": "Electrical maintenance work",
-     *     "categories": [1, 2],
-     *     "start_work_verifier_id": 1,
-     *     "questionnaires": [
-     *       {
-     *         "question_number": "Q001",
-     *         "compliance_st1": true,
-     *         "deviation_st1": "No deviation",
-     *         "compliance_st2": true,
-     *         "deviation_st2": "No deviation"
-     *       }
-     *     ],
-     *     "status": "verified_stage_2",
-     *     "created_at": "2024-01-01T08:00:00Z",
-     *     "updated_at": "2024-01-05T10:00:00Z"
-     *   }
-     * }
-     *
-     * @response 404 {
-     *   "status": 404,
-     *   "message": "Submission not found",
-     *   "data": null
-     * }
-     */
-    public function updateSubmission(Request $request, $submissionId)
-    {
-        // Validate required fields
-        $validatedData = $request->validate([
-            'questionnaires' => 'required|array',
-            'questionnaires.*.question_number' => 'required|string',
-            'questionnaires.*.compliance_st1' => 'required|boolean',
-            'questionnaires.*.deviation_st1' => 'required|string',
-            'questionnaires.*.compliance_st2' => 'required|boolean',
-            'questionnaires.*.deviation_st2' => 'required|string'
-        ]);
-
-        $updatedSubmission = $this->lsrService->updateSubmission($submissionId, $validatedData['questionnaires']);
-
-        if ($updatedSubmission === null) {
-            return $this->sendError('Submission not found', 404);
-        }
-
-        return $this->sendSuccess($updatedSubmission, 'Submission updated successfully');
-    }
-
-    /**
-     * LSR : Get List Questionnaires
-     *
-     * @authenticated
-     * @defaultParam
-     *
-     * @queryParam stage optional Filter by stage (stage_1, stage_2)
-     * @queryParam category optional Filter by category
-     * @queryParam required optional Filter by required status (true/false)
+     * @queryParam LSRCatId required LSR Category ID
      *
      * @response {
      *   "status": 200,
      *   "message": "success",
      *   "data": [
      *     {
-     *       "id": "Q001",
-     *       "question": "Apakah semua persyaratan keselamatan telah dipenuhi sebelum memulai pekerjaan?",
-     *       "category": "Safety Requirements",
-     *       "required": true,
-     *       "stage": "stage_1"
-     *     },
-     *     {
-     *       "id": "Q002",
-     *       "question": "Apakah semua peralatan PPE telah digunakan dengan benar?",
-     *       "category": "PPE Compliance",
-     *       "required": true,
-     *       "stage": "stage_1"
+     *       "ParentId": 1,
+     *       "LSRCatId": 1,
+     *       "LSRChecklistName": "Safety helmet check",
+     *       "ChecklistWorker": 1,
+     *       "ChecklistWorkVerifier": 1,
+     *       "ChecklistFieldVerificator": 1
      *     }
      *   ]
      * }
      */
-    public function questionnaires(Request $request)
+    public function checklist(Request $request)
     {
-        $questionnaires = $this->lsrService->getQuestionnaires();
-
-        // Apply optional filters
-        if ($request->has('stage')) {
-            $questionnaires = array_filter($questionnaires, function($q) use ($request) {
-                return $q['stage'] === $request->get('stage');
-            });
+        $lsrCatId = $request->get('LSRCatId');
+        if (!$lsrCatId) {
+            return $this->sendError('LSRCatId parameter is required', 400);
         }
 
-        if ($request->has('category')) {
-            $questionnaires = array_filter($questionnaires, function($q) use ($request) {
-                return $q['category'] === $request->get('category');
-            });
-        }
-
-        if ($request->has('required')) {
-            $required = $request->get('required') === 'true';
-            $questionnaires = array_filter($questionnaires, function($q) use ($required) {
-                return $q['required'] === $required;
-            });
-        }
-
-        return $this->sendSuccess(array_values($questionnaires));
+        $checklist = $this->lsrService->getChecklist($lsrCatId);
+        return $this->sendSuccess($checklist);
     }
 
     /**
-     * LSR : Update Submission Status to Not Comply
+     * LSR : Post LSR
      *
      * @authenticated
      * @defaultParam
      *
-     * @urlParam submission_id integer required The ID of the submission to update
-     * @bodyParam reason string optional Reason for non-compliance
+     * @queryParam action required Action parameter
+     * @bodyParam model object required LSR model data
+     * @bodyParam model.Id integer LSR Id. Example: 3339
+     * @bodyParam model.ProcessId integer Process Id. Example: 5052
+     * @bodyParam model.OldProcessId integer optional Old Process Id. Example: 7375
+     * @bodyParam model.CreationDate datetime optional Creation date (ISO8601). Example: 1983-06-24T00:40:30.803Z
+     * @bodyParam model.CompletionDate datetime optional Completion date (ISO8601). Example: 2018-02-03T18:07:58.866Z
+     * @bodyParam model.Payroll string optional Payroll code. Example: string
+     * @bodyParam model.Name string optional Person name. Example: string
+     * @bodyParam model.Position string optional Position id. Example: string
+     * @bodyParam model.PositionName string optional Position name. Example: string
+     * @bodyParam model.Company string optional Company name. Example: string
+     * @bodyParam model.BlockFunction string optional Block / Function. Example: string
+     * @bodyParam model.AreaField string optional Area / Field. Example: string
+     * @bodyParam model.Location string optional Location. Example: string
+     * @bodyParam model.PTWNumber string optional PTW number. Example: string
+     * @bodyParam model.ActivityDesc string optional Activity description. Example: string
+     * @bodyParam model.LSRCat integer optional LSR Category id. Example: 31
+     * @bodyParam model.Stage1SubmissionDate datetime optional Stage 1 submission date (ISO8601). Example: 1952-12-17T19:48:11.906Z
+     * @bodyParam model.Stage2SubmissionDate datetime optional Stage 2 submission date (ISO8601). Example: 2007-11-21T17:33:24.706Z
+     * @bodyParam model.Stage3SubmissionDate datetime optional Stage 3 submission date (ISO8601). Example: 1957-04-10T20:01:42.652Z
+     * @bodyParam model.WorkerSupervisorName string optional Worker supervisor name. Example: string
+     * @bodyParam model.WorkerSupervisorPayroll string optional Worker supervisor payroll. Example: string
+     * @bodyParam model.WorkerSupervisorPositionId string optional Worker supervisor position id. Example: string
+     * @bodyParam model.WorkerVerifierName string optional Worker verifier name. Example: string
+     * @bodyParam model.WorkerVerifierPayroll string optional Worker verifier payroll. Example: string
+     * @bodyParam model.WorkerVerifierPositionId string optional Worker verifier position id. Example: string
+     * @bodyParam model.FieldVerificatorName string optional Field verificator name. Example: string
+     * @bodyParam model.FieldVerificatorPayroll string optional Field verificator payroll. Example: string
+     * @bodyParam model.FieldVerificatorPositionId string optional Field verificator position id. Example: string
+     * @bodyParam model.Status integer optional Status code. Example: 9428
+     * @bodyParam model.ChecklistIdGenerated integer optional Generated checklist id. Example: 7264
+     * @bodyParam model.AdhocPosName string optional Adhoc position name. Example: string
+     * @bodyParam model.AdhocPosition string optional Adhoc position id. Example: string
+     * @bodyParam model.LSRSubCat integer optional LSR Subcategory id. Example: 1919
+     * @bodyParam model.Functions string optional Functions. Example: string
+     * @bodyParam model.Email string optional Email. Example: string
+     * @bodyParam model.MSID string optional MSID. Example: string
+     * @bodyParam model.MSID_Name string optional MSID name. Example: string
+     * @bodyParam model.Current_UserEmail string optional Current user email. Example: string
+     * @bodyParam model.Current_User string optional Current user id. Example: string
+     * @bodyParam model.Current_Activity string optional Current activity. Example: string
+     * @bodyParam model.Current_Activity_StartDate datetime optional Current activity start date (ISO8601). Example: 2005-06-13T23:30:56.891Z
      *
      * @response {
      *   "status": 200,
      *   "message": "success",
      *   "data": {
-     *     "id": 1,
-     *     "company_id": 1,
-     *     "block_id": 1,
-     *     "area_id": 1,
-     *     "location_id": 1,
-     *     "function_id": 1,
-     *     "ptw_number": "PTW-2024-001",
-     *     "activity_description": "Electrical maintenance work",
-     *     "categories": [1, 2],
-     *     "start_work_verifier_id": 1,
-     *     "questionnaires": [],
-     *     "status": "not_comply_stage_2",
-     *     "not_comply_reason": "Safety protocols not followed",
-     *     "created_at": "2024-01-01T08:00:00Z",
-     *     "updated_at": "2024-01-05T10:00:00Z"
+     *     "Status": true,
+     *     "Message": "LSR submitted successfully"
      *   }
      * }
-     *
-     * @response 404 {
-     *   "status": 404,
-     *   "message": "Submission not found",
-     *   "data": null
-     * }
      */
-    public function updateSubmissionStatus(Request $request, $submissionId)
+    public function submit(Request $request)
     {
         $validatedData = $request->validate([
-            'reason' => 'nullable|string|max:500'
+            'action' => 'required|string',
+            'model' => 'required|array'
         ]);
 
-        $updatedSubmission = $this->lsrService->updateSubmissionStatus(
-            $submissionId,
-            $validatedData['reason'] ?? null
-        );
+        $result = $this->lsrService->postLSR($validatedData['model'], $validatedData['action']);
+        return $this->sendSuccess($result);
+    }
 
-        if ($updatedSubmission === null) {
-            return $this->sendError('Submission not found', 404);
-        }
+    /**
+     * LSR : Post LSR Verify
+     *
+     * @authenticated
+     * @defaultParam
+     *
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *     "Status": true,
+     *     "Message": "LSR verified successfully"
+     *   }
+     * }
+     */
+    public function verify(Request $request)
+    {
+        $result = $this->lsrService->postLSRVerify();
+        return $this->sendSuccess($result);
+    }
 
-        return $this->sendSuccess($updatedSubmission, 'Submission status updated to not_comply_stage_2');
+    /**
+     * LSR : Post LSR Route To Initiator
+     *
+     * @authenticated
+     * @defaultParam
+     *
+     * @response {
+     *   "status": 200,
+     *   "message": "success",
+     *   "data": {
+     *     "Status": true,
+     *     "Message": "LSR routed to initiator successfully"
+     *   }
+     * }
+     */
+    public function routeToInitiator(Request $request)
+    {
+        $result = $this->lsrService->postLSRRouteToInitiator();
+        return $this->sendSuccess($result);
     }
 }

@@ -1,0 +1,26 @@
+[
+    {
+        "Text": "Operations",
+        "Value": "1"
+    },
+    {
+        "Text": "Well-Ops & Drilling",
+        "Value": "2"
+    },
+    {
+        "Text": "Project",
+        "Value": "3"
+    },
+    {
+        "Text": "SCM",
+        "Value": "4"
+    },
+    {
+        "Text": "Exploration",
+        "Value": "5"
+    },
+    {
+        "Text": "Others",
+        "Value": "6"
+    }
+]

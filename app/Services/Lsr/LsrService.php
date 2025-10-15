@@ -2,270 +2,282 @@
 
 namespace App\Services\Lsr;
 
+use App\Helpers\MedcoRestful;
+use App\Helpers\Url;
 use Illuminate\Support\Facades\Storage;
 
 class LsrService
 {
-    /**
-     * Get all companies from JSON file
-     */
-    public function getCompanies()
-    {
-        $jsonContent = Storage::get('dummy-data/lsr/companies.json');
-        $companies = json_decode($jsonContent, true);
 
-        // Ensure we return an array even if JSON is empty or invalid
-        return is_array($companies) ? $companies : [];
+    /**
+     * Get LSR History List
+     * GET LSRFieldVerificator/API/GetLSRHistoryList
+     */
+    public function getLSRHistoryList($initiatorID = null, $initiatorEmail = null)
+    {
+        $query = array_filter([
+            'initiatorID' => $initiatorID,
+            'initiatorEmail' => $initiatorEmail,
+        ]);
+
+        $response = MedcoRestful::fetchData(
+            url: Url::GetLSRHistoryList,
+            query: $query
+        );
+
+        return $response ?: [];
     }
 
     /**
-     * Get all blocks from JSON file
+     * Get LSR Task Todo
+     * GET LSRFieldVerificator/API/GetLSRTaskTodo
      */
-    public function getBlocks()
+    public function getLSRTaskTodo($responsibleUserID = null, $responsibleUserEmail = null)
     {
-        $jsonContent = Storage::get('dummy-data/lsr/blocks.json');
-        $blocks = json_decode($jsonContent, true);
+        $query = array_filter([
+            'responsibleUserID' => $responsibleUserID,
+            'responsibleUserEmail' => $responsibleUserEmail,
+        ]);
 
-        // Ensure we return an array even if JSON is empty or invalid
-        return is_array($blocks) ? $blocks : [];
+        $response = MedcoRestful::fetchData(
+            url: Url::GetLSRTaskTodo,
+            query: $query
+        );
+
+        return $response ?: [];
     }
 
     /**
-     * Get all areas from JSON file
+     * Search LSR
+     * GET LSRFieldVerificator/API/SearchLSR
      */
-    public function getAreas()
+    public function searchLSR($email = null, $ptwNumber = null, $processID = null, $category = null)
     {
-        $jsonContent = Storage::get('dummy-data/lsr/areas.json');
-        return json_decode($jsonContent, true);
+        $query = array_filter([
+            'email' => $email,
+            'ptwNumber' => $ptwNumber,
+            'processID' => $processID,
+            'category' => $category,
+        ]);
+
+        $response = MedcoRestful::fetchData(
+            url: Url::SearchLSR,
+            query: $query
+        );
+
+        return $response ?: [];
     }
 
     /**
-     * Get all locations from JSON file
+     * Get LSR Detail
+     * GET LSRFieldVerificator/API/GetLSRDetail
      */
-    public function getLocations()
+    public function getLSRDetail($id)
     {
-        $jsonContent = Storage::get('dummy-data/lsr/locations.json');
-        return json_decode($jsonContent, true);
-    }
-
-    /**
-     * Get all functions from JSON file
-     */
-    public function getFunctions()
-    {
-        $jsonContent = Storage::get('dummy-data/lsr/functions.json');
-        return json_decode($jsonContent, true);
-    }
-
-    /**
-     * Get all categories from JSON file
-     */
-    public function getCategories()
-    {
-        $jsonContent = Storage::get('dummy-data/lsr/categories.json');
-        return json_decode($jsonContent, true);
-    }
-
-    /**
-     * Get all work verifiers from JSON file
-     */
-    public function getWorkVerifiers()
-    {
-        $jsonContent = Storage::get('dummy-data/lsr/work-verifiers.json');
-        return json_decode($jsonContent, true);
-    }
-
-    /**
-     * Get all questionnaires from JSON file
-     */
-    public function getQuestionnaires()
-    {
-        $jsonContent = Storage::get('dummy-data/lsr/questionnaires.json');
-        return json_decode($jsonContent, true);
-    }
-
-    /**
-     * Get submissions with optional filtering
-     */
-    public function getSubmissions($filters = [])
-    {
-        $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
-        $submissions = json_decode($jsonContent, true);
-
-        // Ensure we return an array even if JSON is empty or invalid
-        if (!is_array($submissions)) {
-            $submissions = [];
-        }
-
-        // Apply filters if provided
-        if (!empty($filters)) {
-            $submissions = $this->applySubmissionFilters($submissions, $filters);
-        }
-
-        return $submissions;
-    }
-
-    /**
-     * Create new submission
-     */
-    public function createSubmission($data)
-    {
-        // Get existing submissions
-        $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
-        $submissions = json_decode($jsonContent, true);
-
-        // Ensure we return an array even if JSON is empty or invalid
-        if (!is_array($submissions)) {
-            $submissions = [];
-        }
-
-        // Generate new ID
-        $newId = count($submissions) > 0 ? max(array_column($submissions, 'id')) + 1 : 1;
-
-        // Create new submission
-        $newSubmission = [
-            'id' => $newId,
-            'user_id' => $data['user_id'] ?? 1, // Default to user ID 1 if not provided
-            'company_id' => $data['company_id'],
-            'block_id' => $data['block_id'],
-            'area_id' => $data['area_field'], // Note: using area_field as per your request
-            'location_id' => $data['location'],
-            'function_id' => $data['function'],
-            'ptw_number' => $data['ptw_number'],
-            'activity_description' => $data['activity_description'],
-            'categories' => $data['categorys'], // Note: using categorys as per your request
-            'start_work_verifier_id' => $data['start_work_verifier_id'],
-            'questionnaires' => isset($data['questionnaires']) ? $data['questionnaires'] : [],
-            'status' => 'need_stage_2',
-            'created_at' => now()->toISOString(),
-            'updated_at' => now()->toISOString()
-        ];
-
-        // Add to submissions array
-        $submissions[] = $newSubmission;
-
-        // Save back to file
-        Storage::put('dummy-data/lsr/submissions.json', json_encode($submissions, JSON_PRETTY_PRINT));
-
-        return $newSubmission;
-    }
-
-    /**
-     * Update submission with new questionnaires and status
-     */
-    public function updateSubmission($submissionId, $newQuestionnaires)
-    {
-        // Get existing submissions
-        $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
-        $submissions = json_decode($jsonContent, true);
-
-        // Ensure we return an array even if JSON is empty or invalid
-        if (!is_array($submissions)) {
-            $submissions = [];
-        }
-
-        // Find the submission by ID
-        $submissionIndex = null;
-        foreach ($submissions as $index => $submission) {
-            if ($submission['id'] == $submissionId) {
-                $submissionIndex = $index;
-                break;
-            }
-        }
-
-        // If submission not found, return null
-        if ($submissionIndex === null) {
+        if (!$id) {
             return null;
         }
 
-        // Update the submission
-        $submissions[$submissionIndex]['questionnaires'] = $newQuestionnaires;
-        $submissions[$submissionIndex]['status'] = 'verified_stage_2';
-        $submissions[$submissionIndex]['updated_at'] = now()->toISOString();
+        $response = MedcoRestful::fetchData(
+            url: Url::GetLSRDetail,
+            query: ['id' => $id]
+        );
 
-        // Save back to file
-        Storage::put('dummy-data/lsr/submissions.json', json_encode($submissions, JSON_PRETTY_PRINT));
-
-        return $submissions[$submissionIndex];
+        return $response;
     }
 
     /**
-     * Update submission status to not_comply_stage_2
+     * Get Company List
+     * GET LSRFieldVerificator/API/GetCompany
      */
-    public function updateSubmissionStatus($submissionId, $reason = null)
+    public function getCompany($searchParam = null)
     {
-        // Get existing submissions
-        $jsonContent = Storage::get('dummy-data/lsr/submissions.json');
-        $submissions = json_decode($jsonContent, true);
+        $query = array_filter([
+            'searchParam' => $searchParam,
+        ]);
 
-        // Ensure we return an array even if JSON is empty or invalid
-        if (!is_array($submissions)) {
-            $submissions = [];
+        $response = MedcoRestful::fetchData(
+            url: Url::GetCompanyLsr,
+            query: $query
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get Block List
+     * GET LSRFieldVerificator/API/GetBlock
+     */
+    public function getBlock()
+    {
+        $response = MedcoRestful::fetchData(
+            url: Url::GetBlock,
+            query: []
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get Area Field List
+     * GET LSRFieldVerificator/API/GetAreaField
+     */
+    public function getAreaField($block)
+    {
+        if (!$block) {
+            return [];
         }
 
-        // Find the submission by ID
-        $submissionIndex = null;
-        foreach ($submissions as $index => $submission) {
-            if ($submission['id'] == $submissionId) {
-                $submissionIndex = $index;
-                break;
-            }
+        $response = MedcoRestful::fetchData(
+            url: Url::GetAreaField,
+            query: ['Block' => $block]
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get Location List
+     * GET LSRFieldVerificator/API/GetLocation
+     */
+    public function getLocation()
+    {
+        $response = MedcoRestful::fetchData(
+            url: Url::GetLocationLsr,
+            query: []
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get Function List
+     * GET LSRFieldVerificator/API/GetFunction
+     */
+    public function getFunction()
+    {
+        $response = MedcoRestful::fetchData(
+            url: Url::GetFunction,
+            query: []
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get LSR Category List
+     * GET LSRFieldVerificator/API/GetLSRCategory
+     */
+    public function getLSRCategory()
+    {
+        $response = MedcoRestful::fetchData(
+            url: Url::GetLSRCategory,
+            query: []
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get LSR Subcategory List
+     * GET LSRFieldVerificator/API/GetLSRSubcategory
+     */
+    public function getLSRSubcategory($lsrCatId)
+    {
+        if (!$lsrCatId) {
+            return [];
         }
 
-        // If submission not found, return null
-        if ($submissionIndex === null) {
+        $response = MedcoRestful::fetchData(
+            url: Url::GetLSRSubcategory,
+            query: ['LSRCatId' => $lsrCatId]
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get Personnel List
+     * GET LSRFieldVerificator/API/GetPersonnelList
+     */
+    public function getPersonnelList($name = null)
+    {
+        $query = array_filter([
+            'name' => $name,
+        ]);
+
+        $response = MedcoRestful::fetchData(
+            url: Url::GetPersonnelList,
+            query: $query
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Get Checklist
+     * GET LSRFieldVerificator/API/GetChecklist
+     */
+    public function getChecklist($lsrCatId)
+    {
+        if (!$lsrCatId) {
+            return [];
+        }
+
+        $response = MedcoRestful::fetchData(
+            url: Url::GetChecklist,
+            query: ['LSRCatId' => $lsrCatId]
+        );
+
+        return $response ?: [];
+    }
+
+    /**
+     * Post LSR
+     * POST LSRFieldVerificator/API/PostLSR
+     */
+    public function postLSR($model, $action)
+    {
+        if (!$model || !$action) {
             return null;
         }
 
-        // Update the submission status
-        $submissions[$submissionIndex]['status'] = 'not_comply_stage_2';
-        $submissions[$submissionIndex]['not_comply_reason'] = $reason;
-        $submissions[$submissionIndex]['updated_at'] = now()->toISOString();
+        $response = MedcoRestful::postAction(
+            url: Url::PostLSR,
+            query: ['action' => $action],
+            body: $model
+        );
 
-        // Save back to file
-        Storage::put('dummy-data/lsr/submissions.json', json_encode($submissions, JSON_PRETTY_PRINT));
-
-        return $submissions[$submissionIndex];
+        return $response;
     }
 
     /**
-     * Apply filters to submissions
+     * Post LSR Verify
+     * POST LSRFieldVerificator/API/PostLSRVerify
      */
-    private function applySubmissionFilters($submissions, $filters)
+    public function postLSRVerify()
     {
-        return array_filter($submissions, function($submission) use ($filters) {
-            // Filter by status
-            if (!empty($filters['status']) && $submission['status'] !== $filters['status']) {
-                return false;
-            }
+        $response = MedcoRestful::postAction(
+            url: Url::PostLSRVerify,
+            query: [],
+            body: []
+        );
 
-            // Filter by work verifier
-            if (!empty($filters['work_verifier_id']) &&
-                $submission['start_work_verifier_id'] != $filters['work_verifier_id']) {
-                return false;
-            }
-
-            return true;
-        });
-    }
-
-    // Future production methods (for easy migration)
-
-    /**
-     * Production: Get companies from external API
-     */
-    public function getCompaniesFromApi()
-    {
-        // return Http::get(config('api.lsr.companies_url'))->json();
-        return $this->getCompanies(); // Currently using dummy data
+        return $response;
     }
 
     /**
-     * Production: Create submission via external API
+     * Post LSR Route To Initiator
+     * POST LSRFieldVerificator/API/PostLSRRouteToInitiator
      */
-    public function createSubmissionViaApi($data)
+    public function postLSRRouteToInitiator()
     {
-        // return Http::post(config('api.lsr.submissions_url'), $data)->json();
-        return $this->createSubmission($data); // Currently using dummy data
+        $response = MedcoRestful::postAction(
+            url: Url::PostLSRRouteToInitiator,
+            query: [],
+            body: []
+        );
+
+        return $response;
     }
 }

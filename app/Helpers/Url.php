@@ -84,7 +84,7 @@ class Url
      const SafetyCardGetSafetyCardList = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardList";
      const SafetyCardGetSafetyCardDetail = "MMAPSafetyCard/api/SafetyCard/GetSafetyCardDetail";
      const SafetyCardGetObservationLocation = "MMAPSafetyCard/api/SafetyCard/GetObservationLocation";
-     
+
      // Phase 2
      const GetListTrainingByEmail = "MMAPSVC2/api/OTC/GetReportOTC";
      const GetRequestApproverList = "MMAPiTrac/v1/Reservation/get_request_approver";
@@ -100,10 +100,29 @@ class Url
      const GetPurpostOfVisit = "MMAPiTrac/v1/Purpose/get_purpose_of_visit";
      const PostUpdateOimApprover = "MMAPiTrac/v1/Reservation/update_oim_approver";
      const PostCancelReservationRequest = "MMAPiTrac/v1/Reservation/cancel_person_reservation";
-     const PostCreateReservation = "MMAPiTrac/v1/Reservation/post_person_reservation";     
-     const PostCreatePoolCar = "MMAPiTrac/v1/Reservation/post_pool_car_request";    
-     const GetReservationByPersonId = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_person_id"; 
-     const PostApprovalReservation = "MMAPiTrac/v1/Reservation/post_oim_approval"; 
-     const GetMinreqValidity = "MMAPiTrac/v1/Reservation/get_minreq_validity"; 
+     const PostCreateReservation = "MMAPiTrac/v1/Reservation/post_person_reservation";
+     const PostCreatePoolCar = "MMAPiTrac/v1/Reservation/post_pool_car_request";
+     const GetReservationByPersonId = "MMAPiTrac/v1/Reservation/get_reservation_by_approver_person_id";
+     const PostApprovalReservation = "MMAPiTrac/v1/Reservation/post_oim_approval";
+     const GetMinreqValidity = "MMAPiTrac/v1/Reservation/get_minreq_validity";
      const GetCompany = "MMAPiTrac/v1/Company/get_company_list";
+
+     //lsr
+     const GetLSRHistoryList = "LSRFieldVerificator/API/GetLSRHistoryList";
+     const GetLSRTaskTodo = "LSRFieldVerificator/API/GetLSRTaskTodo";
+     const SearchLSR = "LSRFieldVerificator/API/SearchLSR";
+     const GetLSRDetail = "LSRFieldVerificator/API/GetLSRDetail";
+     const GetCompanyLsr = "LSRFieldVerificator/API/GetCompany";
+     const GetBlock = "LSRFieldVerificator/API/GetBlock";
+     const GetAreaField = "LSRFieldVerificator/API/GetAreaField";
+     const GetLocationLsr = "LSRFieldVerificator/API/GetLocation";
+     const GetFunction = "LSRFieldVerificator/API/GetFunction";
+     const GetLSRCategory = "LSRFieldVerificator/API/GetLSRCategory";
+     const GetLSRSubcategory = "LSRFieldVerificator/API/GetLSRSubcategory";
+     const GetPersonnelList = "LSRFieldVerificator/API/GetPersonnelList";
+     const GetChecklist = "LSRFieldVerificator/API/GetChecklist";
+     const PostLSR = "LSRFieldVerificator/API/PostLSR";
+     const PostLSRVerify = "LSRFieldVerificator/API/PostLSRVerify";
+     const PostLSRRouteToInitiator = "LSRFieldVerificator/API/PostLSRRouteToInitiator";
+
 }

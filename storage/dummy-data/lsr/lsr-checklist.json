@@ -1,0 +1,65 @@
+[
+    {
+      "Id": 45,
+      "LSRCatId": 8,
+      "IdByCat": 1,
+      "LSRChecklistName": "Lifting plan (termasuk batas beban alat angkut,  load weight, load size, lifting points dll) sudah tersedia dan sudah diotorisasi oleh yang berwenang serta  didiskusikan dengan pekerja",
+      "isGrayArea": null
+    },
+    {
+      "Id": 46,
+      "LSRCatId": 8,
+      "IdByCat": 2,
+      "LSRChecklistName": "Peralatan pengangkatan, komponen pengikatan, perangkat keselamatan (safety & monitoring device, load chart) serta beban angkat sudah diinspeksi (termasuk pre use),  dan tersertifikasi",
+      "isGrayArea": null
+    },
+    {
+      "Id": 47,
+      "LSRCatId": 8,
+      "IdByCat": 3,
+      "LSRChecklistName": "Seluruh pekerja yang terlibat (Operator, Rigger, Signalman, Lifting Supervisor/ Work Leader) memiliki kompetensi untuk melakukan pekerjaan dengan aman",
+      "isGrayArea": null
+    },
+    {
+      "Id": 48,
+      "LSRCatId": 8,
+      "IdByCat": 4,
+      "LSRChecklistName": "Beban yang diangkat sudah diinspeksi dan sesuai dengan ijin kerja",
+      "isGrayArea": null
+    },
+    {
+      "Id": 49,
+      "LSRCatId": 8,
+      "IdByCat": 5,
+      "LSRChecklistName": "Hazard sudah diidentifikasi (termasuk line of fire, load path, swing radius, overhead hazards, pickup/ laydown area, SIMOPS) dan sudah tercantum di dalam risk assessment/ JSA",
+      "isGrayArea": null
+    },
+    {
+      "Id": 50,
+      "LSRCatId": 8,
+      "IdByCat": 6,
+      "LSRChecklistName": "Mitigasi sudah mencukupi, sudah diterapkan di lokasi kerja dan didiskusikan dengan pekerja seperti:\r\n- barrier dan exclusion zone telah ditetapkan dan terpasang \r\n- escape route sudah jelas\r\n- alat angkat stabil dan tidak bergerak\r\n- perangkat keselamatan (termasuk outrigger dll) sudah terpasang\r\n- perubahan cuaca, angin dll.",
+      "isGrayArea": null
+    },
+    {
+      "Id": 51,
+      "LSRCatId": 8,
+      "IdByCat": 7,
+      "LSRChecklistName": "Tag line atau alat bantu lainnya sudah terpasang atau digunakan sesuai aturan.\r\n\r\n- Catatan : Pastikan pekerja tidak menyentuh beban yang diangkat menggunakan tangan",
+      "isGrayArea": null
+    },
+    {
+      "Id": 52,
+      "LSRCatId": 8,
+      "IdByCat": 8,
+      "LSRChecklistName": "Hand signal ataupun alat komunikasi lainnya sudah disepakati dan berfungsi dengan baik khususnya dalam situasi blind lift serta signalman/ spotter sudah ditunjuk",
+      "isGrayArea": 0
+    },
+    {
+      "Id": 53,
+      "LSRCatId": 8,
+      "IdByCat": 9,
+      "LSRChecklistName": "Tidak ada personil yang berdiri atau berjalan di bawah beban yang sedang di angkat",
+      "isGrayArea": 1
+    }
+  ]

@@ -1,0 +1,23 @@
+[
+  {
+    "BPMIDLSRstage1": 123,
+    "LSRCategory": 1,
+    "PTWNo": "PTW-2024-001",
+    "Statusworkflowprocess": "Completed",
+    "DatesubmissionStage1": "2024-01-01T08:00:00Z"
+  },
+  {
+    "BPMIDLSRstage1": 124,
+    "LSRCategory": 2,
+    "PTWNo": "PTW-2024-002",
+    "Statusworkflowprocess": "In Progress",
+    "DatesubmissionStage1": "2024-01-02T09:00:00Z"
+  },
+  {
+    "BPMIDLSRstage1": 125,
+    "LSRCategory": 1,
+    "PTWNo": "PTW-2024-003",
+    "Statusworkflowprocess": "Pending",
+    "DatesubmissionStage1": "2024-01-03T10:00:00Z"
+  }
+]

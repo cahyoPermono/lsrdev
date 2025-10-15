@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningController;
 use App\Http\Controllers\Api\SelfScreening\ApiSelfScreeningCertificateController;
 use App\Http\Controllers\Api\OtherScreening\ApiOtherScreeningCertificateController;
 use App\Http\Controllers\Api\Lsr\ApiLsrController;
+use App\Http\Controllers\Api\Lsr\ApiLsrDevController;
 
 /*
 |--------------------------------------------------------------------------
@@ -285,18 +286,22 @@ Route::middleware(['private-api'])
             ->as('lsr.')
             ->middleware(['authorization:lsr'])
             ->group(function () {
-                Route::get('/companies', [ApiLsrController::class, 'companies'])->name('companies');
-                Route::get('/blocks', [ApiLsrController::class, 'blocks'])->name('blocks');
-                Route::get('/areas', [ApiLsrController::class, 'areas'])->name('areas');
-                Route::get('/locations', [ApiLsrController::class, 'locations'])->name('locations');
-                Route::get('/functions', [ApiLsrController::class, 'functions'])->name('functions');
-                Route::get('/categories', [ApiLsrController::class, 'categories'])->name('categories');
-                Route::get('/work-verifiers', [ApiLsrController::class, 'workVerifiers'])->name('work-verifiers');
-                Route::get('/questionnaires', [ApiLsrController::class, 'questionnaires'])->name('questionnaires');
-                Route::get('/submissions', [ApiLsrController::class, 'submissions'])->name('submissions');
-                Route::post('/submissions', [ApiLsrController::class, 'storeSubmission'])->name('submissions.store');
-                Route::post('/submissions/{submission_id}', [ApiLsrController::class, 'updateSubmission'])->name('submissions.update');
-                Route::post('/submissions/{submission_id}/status', [ApiLsrController::class, 'updateSubmissionStatus'])->name('submissions.status.update');
+                Route::get('/history-list', [ApiLsrController::class, 'historyList'])->name('history-list');
+                Route::get('/task-todo', [ApiLsrController::class, 'taskTodo'])->name('task-todo');
+                Route::get('/search', [ApiLsrController::class, 'search'])->name('search');
+                Route::get('/detail/{id}', [ApiLsrController::class, 'detail'])->name('detail');
+                Route::get('/companies', [ApiLsrController::class, 'companiesFromApi'])->name('companies');
+                Route::get('/blocks', [ApiLsrController::class, 'blocksFromApi'])->name('blocks');
+                Route::get('/area-fields', [ApiLsrController::class, 'areaFields'])->name('area-fields');
+                Route::get('/locations', [ApiLsrController::class, 'locationsFromApi'])->name('locations');
+                Route::get('/functions', [ApiLsrController::class, 'functionsFromApi'])->name('functions');
+                Route::get('/categories', [ApiLsrController::class, 'categoriesFromApi'])->name('categories');
+                Route::get('/subcategories', [ApiLsrController::class, 'subcategories'])->name('subcategories');
+                Route::get('/personnel', [ApiLsrController::class, 'personnel'])->name('personnel');
+                Route::get('/checklist', [ApiLsrController::class, 'checklist'])->name('checklist');
+                Route::post('/post-lsr', [ApiLsrController::class, 'submit'])->name('submit');
+                Route::post('/post-lsr-verify', [ApiLsrController::class, 'verify'])->name('verify');
+                Route::post('/route-to-initiator', [ApiLsrController::class, 'routeToInitiator'])->name('route-to-initiator');
             });
     });
 
@@ -307,306 +312,31 @@ Route::middleware(['private-api'])
 |
 | Routes khusus untuk development dan testing API LSR.
 | LANGSUNG akses data dummy tanpa autentikasi sama sekali.
-| HANYA aktif di environment local/development.
 | GUNAKAN HANYA untuk testing, JANGAN di production!
 |
 */
 
-// if (app()->environment(['local', 'development'])) {
     Route::prefix('dev/lsr')
         ->name('dev.lsr.')
+        ->middleware(['authorization:lsr'])
         ->group(function () {
-
-            // Companies
-            Route::get('/companies', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/companies.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Companies data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Areas
-            Route::get('/areas', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/areas.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Areas data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Blocks
-            Route::get('/blocks', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/blocks.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Blocks data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Locations
-            Route::get('/locations', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/locations.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Locations data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Functions
-            Route::get('/functions', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/functions.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Functions data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Categories
-            Route::get('/categories', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/categories.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Categories data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Work Verifiers
-            Route::get('/work-verifiers', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/work-verifiers.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Work verifiers data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Questionnaires
-            Route::get('/questionnaires', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/questionnaires.json')), true);
-
-                // Apply optional filters
-                if (request()->has('stage')) {
-                    $stage = request()->get('stage');
-                    $data = array_filter($data, function($q) use ($stage) {
-                        return $q['stage'] === $stage;
-                    });
-                }
-
-                if (request()->has('category')) {
-                    $category = request()->get('category');
-                    $data = array_filter($data, function($q) use ($category) {
-                        return $q['category'] === $category;
-                    });
-                }
-
-                if (request()->has('required')) {
-                    $required = request()->get('required') === 'true';
-                    $data = array_filter($data, function($q) use ($required) {
-                        return $q['required'] === $required;
-                    });
-                }
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Questionnaires data loaded',
-                    'data' => array_values($data)
-                ]);
-            });
-
-            // Submissions
-            Route::get('/submissions', function () {
-                $data = json_decode(file_get_contents(storage_path('dummy-data/lsr/submissions.json')), true);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Submissions data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Create Submission (Development)
-            Route::post('/submissions', function () {
-                $requestData = request()->json()->all();
-
-                // Validate required fields
-                $requiredFields = ['company', 'block', 'area_field', 'location', 'function', 'ptw_number', 'activity_description', 'categorys', 'start_work_verifier_id'];
-                foreach ($requiredFields as $field) {
-                    if (!isset($requestData[$field])) {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => "Field '{$field}' is required",
-                            'data' => null
-                        ], 400);
-                    }
-                }
-
-                $submissions = json_decode(file_get_contents(storage_path('dummy-data/lsr/submissions.json')), true);
-
-                // Generate new ID
-                $newId = count($submissions) > 0 ? max(array_column($submissions, 'id')) + 1 : 1;
-
-                // Create new submission
-                $newSubmission = [
-                    'id' => $newId,
-                    'user_id' => $requestData['user_id'] ?? 1,
-                    'company_id' => $requestData['company'],
-                    'block_id' => $requestData['block'],
-                    'area_id' => $requestData['area_field'],
-                    'location_id' => $requestData['location'],
-                    'function_id' => $requestData['function'],
-                    'ptw_number' => $requestData['ptw_number'],
-                    'activity_description' => $requestData['activity_description'],
-                    'categories' => $requestData['categorys'],
-                    'start_work_verifier_id' => $requestData['start_work_verifier_id'],
-                    'questionnaires' => $requestData['questionnaires'] ?? [],
-                    'status' => 'need_stage_2',
-                    'created_at' => now()->toISOString(),
-                    'updated_at' => now()->toISOString()
-                ];
-
-                // Add to submissions array
-                $submissions[] = $newSubmission;
-
-                // Save back to file
-                file_put_contents(storage_path('dummy-data/lsr/submissions.json'), json_encode($submissions, JSON_PRETTY_PRINT));
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Submission created successfully',
-                    'data' => $newSubmission
-                ]);
-            });
-
-            // Update Submission (Development)
-            Route::post('/submissions/{submission_id}', function ($submissionId) {
-                $requestData = request()->json()->all();
-
-                if (!isset($requestData['questionnaires']) || !is_array($requestData['questionnaires'])) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Questionnaires array is required',
-                        'data' => null
-                    ], 400);
-                }
-
-                $submissions = json_decode(file_get_contents(storage_path('dummy-data/lsr/submissions.json')), true);
-
-                $submissionIndex = null;
-                foreach ($submissions as $index => $submission) {
-                    if ($submission['id'] == $submissionId) {
-                        $submissionIndex = $index;
-                        break;
-                    }
-                }
-
-                if ($submissionIndex === null) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Submission not found',
-                        'data' => null
-                    ], 404);
-                }
-
-                $submissions[$submissionIndex]['questionnaires'] = $requestData['questionnaires'];
-                $submissions[$submissionIndex]['status'] = 'verified_stage_2';
-                $submissions[$submissionIndex]['updated_at'] = now()->toISOString();
-
-                file_put_contents(storage_path('dummy-data/lsr/submissions.json'), json_encode($submissions, JSON_PRETTY_PRINT));
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Submission updated successfully',
-                    'data' => $submissions[$submissionIndex]
-                ]);
-            });
-
-            // Update Submission Status (Development)
-            Route::post('/submissions/{submission_id}/status', function ($submissionId) {
-                $requestData = request()->json()->all();
-
-                $submissions = json_decode(file_get_contents(storage_path('dummy-data/lsr/submissions.json')), true);
-
-                $submissionIndex = null;
-                foreach ($submissions as $index => $submission) {
-                    if ($submission['id'] == $submissionId) {
-                        $submissionIndex = $index;
-                        break;
-                    }
-                }
-
-                if ($submissionIndex === null) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Submission not found',
-                        'data' => null
-                    ], 404);
-                }
-
-                $submissions[$submissionIndex]['status'] = 'not_comply_stage_2';
-                $submissions[$submissionIndex]['not_comply_reason'] = $requestData['reason'] ?? null;
-                $submissions[$submissionIndex]['updated_at'] = now()->toISOString();
-
-                file_put_contents(storage_path('dummy-data/lsr/submissions.json'), json_encode($submissions, JSON_PRETTY_PRINT));
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: Submission status updated to not_comply_stage_2',
-                    'data' => $submissions[$submissionIndex]
-                ]);
-            });
-
-            // All Data (kombinasi semua)
-            Route::get('/all-data', function () {
-                $data = [
-                    'companies' => json_decode(file_get_contents(storage_path('dummy-data/lsr/companies.json')), true),
-                    'blocks' => json_decode(file_get_contents(storage_path('dummy-data/lsr/blocks.json')), true),
-                    'areas' => json_decode(file_get_contents(storage_path('dummy-data/lsr/areas.json')), true),
-                    'locations' => json_decode(file_get_contents(storage_path('dummy-data/lsr/locations.json')), true),
-                    'functions' => json_decode(file_get_contents(storage_path('dummy-data/lsr/functions.json')), true),
-                    'categories' => json_decode(file_get_contents(storage_path('dummy-data/lsr/categories.json')), true),
-                    'work_verifiers' => json_decode(file_get_contents(storage_path('dummy-data/lsr/work-verifiers.json')), true),
-                    'questionnaires' => json_decode(file_get_contents(storage_path('dummy-data/lsr/questionnaires.json')), true),
-                    'submissions' => json_decode(file_get_contents(storage_path('dummy-data/lsr/submissions.json')), true),
-                ];
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Development: All LSR data loaded',
-                    'data' => $data
-                ]);
-            });
-
-            // Info endpoint
-            Route::get('/info', function () {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'LSR Development API',
-                    'endpoints' => [
-                        'companies' => '/dev/lsr/companies',
-                        'blocks' => '/dev/lsr/blocks',
-                        'areas' => '/dev/lsr/areas',
-                        'locations' => '/dev/lsr/locations',
-                        'functions' => '/dev/lsr/functions',
-                        'categories' => '/dev/lsr/categories',
-                        'work_verifiers' => '/dev/lsr/work-verifiers',
-                        'questionnaires' => '/dev/lsr/questionnaires',
-                        'submissions' => '/dev/lsr/submissions',
-                        'create_submission' => '/dev/lsr/submissions (POST)',
-                        'update_submission' => '/dev/lsr/submissions/{id} (POST)',
-                        'update_submission_status' => '/dev/lsr/submissions/{id}/status (POST)',
-                        'all_data' => '/dev/lsr/all-data'
-                    ],
-                    'note' => 'HANYA untuk development environment'
-                ]);
-            });
+            Route::get('/history-list', [ApiLsrDevController::class, 'historyList'])->name('history-list');
+            Route::get('/task-todo', [ApiLsrDevController::class, 'taskTodo'])->name('task-todo');
+            Route::get('/search', [ApiLsrDevController::class, 'search'])->name('search');
+            Route::get('/detail/{id}', [ApiLsrDevController::class, 'detail'])->name('detail');
+            Route::get('/companies', [ApiLsrDevController::class, 'companiesFromApi'])->name('companies');
+            Route::get('/blocks', [ApiLsrDevController::class, 'blocksFromApi'])->name('blocks');
+            Route::get('/area-fields', [ApiLsrDevController::class, 'areaFields'])->name('area-fields');
+            Route::get('/locations', [ApiLsrDevController::class, 'locationsFromApi'])->name('locations');
+            Route::get('/functions', [ApiLsrDevController::class, 'functionsFromApi'])->name('functions');
+            Route::get('/categories', [ApiLsrDevController::class, 'categoriesFromApi'])->name('categories');
+            Route::get('/subcategories', [ApiLsrDevController::class, 'subcategories'])->name('subcategories');
+            Route::get('/personnel', [ApiLsrDevController::class, 'personnel'])->name('personnel');
+            Route::get('/checklist', [ApiLsrDevController::class, 'checklist'])->name('checklist');
+            Route::post('/post-lsr', [ApiLsrDevController::class, 'submit'])->name('submit');
+            Route::post('/post-lsr-verify', [ApiLsrDevController::class, 'verify'])->name('verify');
+            Route::post('/route-to-initiator', [ApiLsrDevController::class, 'routeToInitiator'])->name('route-to-initiator');
         });
-// }
 
 
 

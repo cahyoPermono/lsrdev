@@ -1,0 +1,78 @@
+[
+    {
+        "Text": "Office",
+        "Value": "Office"
+    },
+    {
+        "Text": "Camp & Kitchen",
+        "Value": "Camp & Kitchen"
+    },
+    {
+        "Text": "Clinic / Medical",
+        "Value": "Clinic / Medical"
+    },
+    {
+        "Text": "Processing Facility/ Plant",
+        "Value": "Processing Facility/ Plant"
+    },
+    {
+        "Text": "Well Area & Cluster",
+        "Value": "Well Area & Cluster"
+    },
+    {
+        "Text": "Flowline/ Trunkline/ Pipeline",
+        "Value": "Flowline/ Trunkline/ Pipeline"
+    },
+    {
+        "Text": "Rig Site",
+        "Value": "Rig Site"
+    },
+    {
+        "Text": "Workshop",
+        "Value": "Workshop"
+    },
+    {
+        "Text": "Warehouse",
+        "Value": "Warehouse"
+    },
+    {
+        "Text": "Port/ Jetty/ Landing",
+        "Value": "Port/ Jetty/ Landing"
+    },
+    {
+        "Text": "Barging Operation/ SPOB",
+        "Value": "Barging Operation/ SPOB"
+    },
+    {
+        "Text": "Storage Tank",
+        "Value": "Storage Tank"
+    },
+    {
+        "Text": "Metering Station/ Booster",
+        "Value": "Metering Station/ Booster"
+    },
+    {
+        "Text": "Incinerator",
+        "Value": "Incinerator"
+    },
+    {
+        "Text": "Laboratory",
+        "Value": "Laboratory"
+    },
+    {
+        "Text": "Road",
+        "Value": "Road"
+    },
+    {
+        "Text": "Electrical OHL/ Underground",
+        "Value": "Electrical OHL/ Underground"
+    },
+    {
+        "Text": "Airport",
+        "Value": "Airport"
+    },
+    {
+        "Text": "Other",
+        "Value": "Other"
+    }
+]

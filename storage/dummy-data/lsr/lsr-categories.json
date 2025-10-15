@@ -1,0 +1,46 @@
+[
+    {
+        "Text": "Dalam Kondisi Sehat Untuk Bekerja",
+        "Value": "1"
+    },
+    {
+        "Text": "Otorisasi Untuk Bekerja",
+        "Value": "2"
+    },
+    {
+        "Text": "Jalur Bahaya",
+        "Value": "3"
+    },
+    {
+        "Text": "Menonaktifkan Kontrol Keselamatan",
+        "Value": "4"
+    },
+    {
+        "Text": "Isolasi Energi",
+        "Value": "5"
+    },
+    {
+        "Text": "Berkendara",
+        "Value": "11"
+    },
+    {
+        "Text": "Pengangkatan Secara Mekanis Yang Aman",
+        "Value": "8"
+    },
+    {
+        "Text": "Bekerja di Ketinggian",
+        "Value": "9"
+    },
+    {
+        "Text": "Ruang Terbatas",
+        "Value": "6"
+    },
+    {
+        "Text": "Kerja Panas",
+        "Value": "7"
+    },
+    {
+        "Text": "Gangguan Pada Tanah",
+        "Value": "10"
+    }
+]

@@ -7,7 +7,7 @@ return [
         'version' => 'v0.0.1',
         'description' => env('APP_NAME')." API Documentation page",
     ],
- 
+
     'path' => 'api-documentation',
 
     'enable_documentation' => true,
@@ -33,7 +33,7 @@ return [
             'description' => 'SATURN',
         ],
         [
-            'url' => env('APP_URL', 'http://localhost'),
+            'url' => env('APP_URL', 'http://localhost:8000'),
             'description' => 'LOCAL',
         ],
         [
@@ -50,7 +50,7 @@ return [
         ],
     ],
 
-    
+
     'api' =>[
         'path' => 'api/',
         'exclude' => [
@@ -59,7 +59,7 @@ return [
 
         // 'overview_information_view' => 'api-doc/overview',
 
-        
+
         // 'response_code' => [
         //     "200" => "OKE",
         //     "401" => "Unauthorized",
@@ -83,7 +83,7 @@ return [
         'headers' =>  [
             'platform' => ['string',true],
             'regid' => ['string',true],
-        ]  
+        ]
     ]
 
 ];
