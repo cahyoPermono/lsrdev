@@ -51,8 +51,15 @@ class ApiLsrDevController extends ApiController
         // Apply filters if provided
         $filteredData = array_filter($data, function ($item) use ($request) {
             $email = $this->auth()->email;
-            // Filter by responsible user email (using WorkerVerifierEmail field)
-            if (isset($item['Current_UserEmail']) && $item['Current_UserEmail'] != $email) {
+
+            // Filter by responsible user email (using Current_UserEmail field)
+            // Only include items that have Current_UserEmail field and it matches the authenticated user's email
+            if (isset($item['Current_UserEmail']) && !empty($item['Current_UserEmail'])) {
+                if ($item['Current_UserEmail'] != $email) {
+                    return false;
+                }
+            } else {
+                // Exclude items that don't have Current_UserEmail field set
                 return false;
             }
 
@@ -155,9 +162,6 @@ class ApiLsrDevController extends ApiController
      * @authenticated
      * @defaultParam
      *
-     * @queryParam responsibleUserID optional Responsible user ID filter
-     * @queryParam responsibleUserEmail optional Responsible user email filter
-     *
      * @response {
      *   "status": 200,
      *   "message": "success",
@@ -178,16 +182,16 @@ class ApiLsrDevController extends ApiController
 
         // Apply filters if provided
         $filteredData = array_filter($data, function ($item) use ($request) {
-            $responsibleUserID = $request->get('responsibleUserID');
-            $responsibleUserEmail = $request->get('responsibleUserEmail');
+            $email = $this->auth()->email;
 
-            // Filter by responsible user ID (using Current_MSID field)
-            if ($responsibleUserID && isset($item['Current_MSID']) && $item['Current_MSID'] != $responsibleUserID) {
-                return false;
-            }
-
-            // Filter by responsible user email (using WorkerVerifierEmail field)
-            if ($responsibleUserEmail && isset($item['WorkerVerifierEmail']) && $item['WorkerVerifierEmail'] != $responsibleUserEmail) {
+            // Filter by responsible user email (using Current_UserEmail field)
+            // Only include items that have Current_UserEmail field and it matches the authenticated user's email
+            if (isset($item['WorkerVerifierEmail']) && !empty($item['WorkerVerifierEmail'])) {
+                if ($item['WorkerVerifierEmail'] != $email) {
+                    return false;
+                }
+            } else {
+                // Exclude items that don't have Current_UserEmail field set
                 return false;
             }
 
@@ -224,7 +228,6 @@ class ApiLsrDevController extends ApiController
      * @authenticated
      * @defaultParam
      *
-     * @queryParam email optional Email filter
      * @queryParam ptwNumber optional PTW number filter
      * @queryParam processID optional Process ID filter
      * @queryParam category optional Category filter
@@ -232,13 +235,16 @@ class ApiLsrDevController extends ApiController
      * @response {
      *   "status": 200,
      *   "message": "success",
-     *   "data": {
-     *     "BPMIDLSRstage1": 125,
-     *     "LSRCategory": 1,
-     *     "PTWNo": "PTW-2024-003",
-     *     "Statusworkflowprocess": "Pending",
-     *     "DatesubmissionStage1": "2024-01-03T10:00:00Z"
-     *   }
+     *   "data":  {
+     *   "BPMIDLSRstage1": 3268,
+     *   "LSRCategory": 8,
+     *   "PTWNo": "17081945",
+     *   "Statusworkflowprocess": null,
+     *   "DatesubmissionStage1": "2025-10-14T00:00:00",
+     *   "InitiatorName": "medcoweb.uat1@medcoenergi.com",
+     *   "WorkerVerifierName": "Naufal Adi Wijanarko",
+     *   "LSRCategoryName": ""
+     *    }
      * }
      */
     public function search(Request $request): JsonResponse
@@ -247,13 +253,18 @@ class ApiLsrDevController extends ApiController
 
         // Apply filters if provided
         $filteredData = array_filter($data, function ($item) use ($request) {
-            $email = $request->get('email');
+            $email = $this->auth()->email;
             $ptwNumber = $request->get('ptwNumber');
             $processID = $request->get('processID');
             $category = $request->get('category');
 
             // Filter by email (using Email field)
-            if ($email && isset($item['Email']) && $item['Email'] != $email) {
+            if (isset($item['Current_UserEmail']) && !empty($item['Current_UserEmail'])) {
+                if ($item['Current_UserEmail'] != $email) {
+                    return false;
+                }
+            } else {
+                // Exclude items that don't have Current_UserEmail field set
                 return false;
             }
 
@@ -311,17 +322,67 @@ class ApiLsrDevController extends ApiController
      *   "status": 200,
      *   "message": "success",
      *   "data": {
-     *     "Id": 123,
-     *     "ProcessId": 456,
-     *     "CreationDate": "2024-01-01T08:00:00Z",
-     *     "Payroll": "EMP001",
-     *     "Name": "John Doe",
-     *     "Company": "Medco E&P",
-     *     "PTWNumber": "PTW-2024-001",
-     *     "ActivityDesc": "Electrical maintenance work",
-     *     "Status": 1
+     *    "Details": [
+     *        {
+     *            "Id": 6077,
+     *            "ProcessId": -3268,
+     *            "Payroll": "",
+     *            "LSRCatId": 8,
+     *            "IdByCat": 1,
+     *            "ChecklistWorker": 1,
+     *            "ChecklistWorkVerifier": null,
+     *            "ChecklistFieldVerificator": null,
+     *            "NonCompliancesDetail1": "",
+     *            "NonCompliancesDetail2": null,
+     *            "NonCompliancesDetail3": null,
+     *            "ChecklistIdGenerated": null,
+     *            "Email": "medcoweb.uat1@medcoenergi.com"
+     *        }
+     *    ],
+     *    "Id": 3268,
+     *    "ProcessId": -3268,
+     *    "OldProcessId": null,
+     *    "CreationDate": "2025-10-14T00:00:00",
+     *    "CompletionDate": null,
+     *    "Payroll": "",
+     *    "Name": "",
+     *    "Position": "Contractor",
+     *    "PositionName": null,
+     *    "Company": "string",
+     *    "BlockFunction": "Bangkanai",
+     *    "AreaField": "Luwehulu",
+     *    "Location": "Office",
+     *    "PTWNumber": "17081945",
+     *    "ActivityDesc": "Mengangkat sesuatu",
+     *    "LSRCat": 8,
+     *    "Stage1SubmissionDate": "2025-10-14T00:00:00",
+     *    "Stage2SubmissionDate": null,
+     *    "Stage3SubmissionDate": null,
+     *    "WorkerSupervisorName": null,
+     *    "WorkerSupervisorPayroll": null,
+     *    "WorkerSupervisorPositionId": null,
+     *    "WorkerVerifierName": "Naufal Adi Wijanarko",
+     *    "WorkerVerifierPayroll": null,
+     *    "WorkerVerifierPositionId": null,
+     *    "FieldVerificatorName": null,
+     *    "FieldVerificatorPayroll": null,
+     *    "FieldVerificatorPositionId": null,
+     *    "Status": null,
+     *    "ChecklistIdGenerated": null,
+     *    "AdhocPosName": null,
+     *    "AdhocPosition": null,
+     *    "LSRSubCat": null,
+     *    "Functions": "Operations",
+     *    "Email": "medcoweb.uat1@medcoenergi.com",
+     *    "MSID": "",
+     *    "MSID_Name": "",
+     *    "Current_UserEmail": "medcoweb.uat1@medcoenergi.com",
+     *    "Current_User": "medcoweb.uat1@medcoenergi.com",
+     *    "Current_Activity": "Work Verifier Approval",
+     *    "Current_Activity_StartDate": "2025-10-14T00:00:00",
+     *    "WorkerVerifierEmail": "naufal.wijanarko@sc.medcoenergi.com"
      *   }
-     * }
+     *  }
      */
     public function detail(Request $request, $id): JsonResponse
     {

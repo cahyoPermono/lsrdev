@@ -31,10 +31,9 @@ class LsrService
      * Get LSR Task Todo
      * GET LSRFieldVerificator/API/GetLSRTaskTodo
      */
-    public function getLSRTaskTodo($responsibleUserID = null, $responsibleUserEmail = null)
+    public function getLSRTaskTodo($responsibleUserEmail = null)
     {
         $query = array_filter([
-            'responsibleUserID' => $responsibleUserID,
             'responsibleUserEmail' => $responsibleUserEmail,
         ]);
 

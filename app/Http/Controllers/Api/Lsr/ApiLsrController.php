@@ -56,9 +56,6 @@ class ApiLsrController extends ApiController
      * @authenticated
      * @defaultParam
      *
-     * @queryParam responsibleUserID optional Responsible user ID filter
-     * @queryParam responsibleUserEmail optional Responsible user email filter
-     *
      * @response {
      *   "status": 200,
      *   "message": "success",
@@ -75,9 +72,9 @@ class ApiLsrController extends ApiController
      */
     public function taskTodo(Request $request)
     {
+        $email = $this->auth()->email;
         $taskTodo = $this->lsrService->getLSRTaskTodo(
-            $request->get('responsibleUserID'),
-            $request->get('responsibleUserEmail')
+            $email,
         );
         return $this->sendSuccess($taskTodo);
     }
@@ -88,7 +85,6 @@ class ApiLsrController extends ApiController
      * @authenticated
      * @defaultParam
      *
-     * @queryParam email optional Email filter
      * @queryParam ptwNumber optional PTW number filter
      * @queryParam processID optional Process ID filter
      * @queryParam category optional Category filter
@@ -107,8 +103,9 @@ class ApiLsrController extends ApiController
      */
     public function search(Request $request)
     {
+        $email = $this->auth()->email;
         $searchResult = $this->lsrService->searchLSR(
-            $request->get('email'),
+            $email,
             $request->get('ptwNumber'),
             $request->get('processID'),
             $request->get('category')
@@ -128,17 +125,67 @@ class ApiLsrController extends ApiController
      *   "status": 200,
      *   "message": "success",
      *   "data": {
-     *     "Id": 123,
-     *     "ProcessId": 456,
-     *     "CreationDate": "2024-01-01T08:00:00Z",
-     *     "Payroll": "EMP001",
-     *     "Name": "John Doe",
-     *     "Company": "Medco E&P",
-     *     "PTWNumber": "PTW-2024-001",
-     *     "ActivityDesc": "Electrical maintenance work",
-     *     "Status": 1
+     *    "Details": [
+     *        {
+     *            "Id": 6077,
+     *            "ProcessId": -3268,
+     *            "Payroll": "",
+     *            "LSRCatId": 8,
+     *            "IdByCat": 1,
+     *            "ChecklistWorker": 1,
+     *            "ChecklistWorkVerifier": null,
+     *            "ChecklistFieldVerificator": null,
+     *            "NonCompliancesDetail1": "",
+     *            "NonCompliancesDetail2": null,
+     *            "NonCompliancesDetail3": null,
+     *            "ChecklistIdGenerated": null,
+     *            "Email": "medcoweb.uat1@medcoenergi.com"
+     *        }
+     *    ],
+     *    "Id": 3268,
+     *    "ProcessId": -3268,
+     *    "OldProcessId": null,
+     *    "CreationDate": "2025-10-14T00:00:00",
+     *    "CompletionDate": null,
+     *    "Payroll": "",
+     *    "Name": "",
+     *    "Position": "Contractor",
+     *    "PositionName": null,
+     *    "Company": "string",
+     *    "BlockFunction": "Bangkanai",
+     *    "AreaField": "Luwehulu",
+     *    "Location": "Office",
+     *    "PTWNumber": "17081945",
+     *    "ActivityDesc": "Mengangkat sesuatu",
+     *    "LSRCat": 8,
+     *    "Stage1SubmissionDate": "2025-10-14T00:00:00",
+     *    "Stage2SubmissionDate": null,
+     *    "Stage3SubmissionDate": null,
+     *    "WorkerSupervisorName": null,
+     *    "WorkerSupervisorPayroll": null,
+     *    "WorkerSupervisorPositionId": null,
+     *    "WorkerVerifierName": "Naufal Adi Wijanarko",
+     *    "WorkerVerifierPayroll": null,
+     *    "WorkerVerifierPositionId": null,
+     *    "FieldVerificatorName": null,
+     *    "FieldVerificatorPayroll": null,
+     *    "FieldVerificatorPositionId": null,
+     *    "Status": null,
+     *    "ChecklistIdGenerated": null,
+     *    "AdhocPosName": null,
+     *    "AdhocPosition": null,
+     *    "LSRSubCat": null,
+     *    "Functions": "Operations",
+     *    "Email": "medcoweb.uat1@medcoenergi.com",
+     *    "MSID": "",
+     *    "MSID_Name": "",
+     *    "Current_UserEmail": "medcoweb.uat1@medcoenergi.com",
+     *    "Current_User": "medcoweb.uat1@medcoenergi.com",
+     *    "Current_Activity": "Work Verifier Approval",
+     *    "Current_Activity_StartDate": "2025-10-14T00:00:00",
+     *    "WorkerVerifierEmail": "naufal.wijanarko@sc.medcoenergi.com"
      *   }
-     * }
+     *  }
      */
     public function detail(Request $request, $id)
     {
