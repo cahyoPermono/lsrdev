@@ -739,17 +739,46 @@ class ApiLsrDevController extends ApiController
             // Read existing data from lsr-data.json
             $existingData = $this->getJsonData('lsr-data.json');
 
-            // Generate new ID (find the highest existing ID and add 1)
-            $maxId = 0;
-            foreach ($existingData as $item) {
-                if (isset($item['Id']) && $item['Id'] > $maxId) {
-                    $maxId = $item['Id'];
-                }
-            }
-            $newId = $maxId + 1;
+            // Check if Id is provided and not 0 (update existing record)
+            $isUpdate = isset($requestData['Id']) && $requestData['Id'] != 0;
+            $recordIndex = null;
+            $existingRecord = null;
 
-            // Generate new ProcessId if not provided
-            $newProcessId = isset($existingData[0]['ProcessId']) ? $existingData[0]['ProcessId'] + 1 : 1;
+            if ($isUpdate) {
+                // Find existing record by Id for update
+                foreach ($existingData as $index => $item) {
+                    if (isset($item['Id']) && $item['Id'] == $requestData['Id']) {
+                        $recordIndex = $index;
+                        $existingRecord = $item;
+                        break;
+                    }
+                }
+
+                // If record not found, return error
+                if ($existingRecord === null) {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'LSR record not found for update',
+                        'data' => [
+                            'Status' => false,
+                            'Message' => 'LSR record with Id ' . $requestData['Id'] . ' not found'
+                        ]
+                    ], 404);
+                }
+            } else {
+                // Generate new ID for new record (find the highest existing ID and add 1)
+                $maxId = 0;
+                foreach ($existingData as $item) {
+                    if (isset($item['Id']) && $item['Id'] > $maxId) {
+                        $maxId = $item['Id'];
+                    }
+                }
+                $requestData['Id'] = $maxId + 1;
+
+                // Generate new ProcessId if not provided
+                $newProcessId = isset($existingData[0]['ProcessId']) ? $existingData[0]['ProcessId'] + 1 : 1;
+                $requestData['ProcessId'] = $newProcessId;
+            }
 
             // Process Details array to map NonCompliancesDetail to NonCompliancesDetail1
             $processedDetails = [];
@@ -766,11 +795,11 @@ class ApiLsrDevController extends ApiController
                 }
             }
 
-            // Create new LSR data entry with the new format
-            $newLsrData = [
-                'Id' => $newId,
-                'ProcessId' => $newProcessId,
-                'CreationDate' => now()->toISOString(),
+            // Create or update LSR data entry
+            $lsrData = [
+                'Id' => $requestData['Id'],
+                'ProcessId' => $requestData['ProcessId'] ?? ($isUpdate ? $existingRecord['ProcessId'] : null),
+                'CreationDate' => $isUpdate ? ($existingRecord['CreationDate'] ?? now()->toISOString()) : now()->toISOString(),
                 'Current_User' => $user->name ?? '',
                 'Current_UserEmail' => $user->email ?? '',
                 'Current_MSID' => $requestData['Current_MSID'] ?? '',
@@ -781,15 +810,23 @@ class ApiLsrDevController extends ApiController
                 'PTWNumber' => $requestData['PTWNumber'] ?? '',
                 'ActivityDesc' => $requestData['ActivityDesc'] ?? '',
                 'LSRCat' => $requestData['LSRCat'] ?? null,
+                'LSRSubCat' => $requestData['LSRSubCat'] ?? null,
                 'WorkerVerifierName' => $requestData['WorkerVerifierName'] ?? '',
                 'WorkerVerifierEmail' => $requestData['WorkerVerifierEmail'] ?? '',
                 'Functions' => $requestData['Functions'] ?? '',
-                'Status' => 'need stage 2', // Default status for new submissions
+                'Status' => $isUpdate ? ($existingRecord['Status'] ?? 'need stage 2') : 'need stage 2', // Default status for new submissions
                 'Details' => $processedDetails, // Use processed details with mapped field
             ];
 
-            // Add new data to existing data array
-            $existingData[] = $newLsrData;
+            if ($isUpdate) {
+                // Update existing record
+                $existingData[$recordIndex] = $lsrData;
+                $message = 'LSR updated successfully';
+            } else {
+                // Add new data to existing data array
+                $existingData[] = $lsrData;
+                $message = 'LSR submitted successfully';
+            }
 
             // Save updated data back to file
             $filePath = $this->dataPath . 'lsr-data.json';
@@ -811,9 +848,9 @@ class ApiLsrDevController extends ApiController
                 'message' => 'success',
                 'data' => [
                     'Status' => true,
-                    'Message' => 'LSR submitted successfully',
-                    'Id' => $newId,
-                    'ProcessId' => $newProcessId
+                    'Message' => $message,
+                    'Id' => $requestData['Id'],
+                    'ProcessId' => $requestData['ProcessId'] ?? null
                 ]
             ]);
 
