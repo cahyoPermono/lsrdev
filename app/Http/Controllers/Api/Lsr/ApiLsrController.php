@@ -88,6 +88,7 @@ class ApiLsrController extends ApiController
      * @queryParam ptwNumber optional PTW number filter
      * @queryParam processID optional Process ID filter
      * @queryParam category optional Category filter
+     * @queryParam isInitiator optional Category filter
      *
      * @response {
      *   "status": 200,
@@ -104,8 +105,15 @@ class ApiLsrController extends ApiController
     public function search(Request $request)
     {
         $email = $this->auth()->email;
+        // if isInitiator is set, $initiatorEmail = $email, else workerVerifierEmail = $email
+        if ($request->has('isInitiator') && $request->get('isInitiator')) {
+            $initiatorEmail = $this->auth()->email;
+        } else {
+            $workerVerifierEmail = $this->auth()->email;
+        }
         $searchResult = $this->lsrService->searchLSR(
-            $email,
+            $initiatorEmail,
+            $workerVerifierEmail,
             $request->get('ptwNumber'),
             $request->get('processID'),
             $request->get('category')

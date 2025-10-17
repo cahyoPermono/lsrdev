@@ -231,6 +231,7 @@ class ApiLsrDevController extends ApiController
      * @queryParam ptwNumber optional PTW number filter
      * @queryParam processID optional Process ID filter
      * @queryParam category optional Category filter
+     * @queryParam isInitiator optional Category filter
      *
      * @response {
      *   "status": 200,
@@ -257,15 +258,29 @@ class ApiLsrDevController extends ApiController
             $ptwNumber = $request->get('ptwNumber');
             $processID = $request->get('processID');
             $category = $request->get('category');
+            $isInitiator = $request->get('isInitiator');
 
-            // Filter by email (using Email field)
-            if (isset($item['Current_UserEmail']) && !empty($item['Current_UserEmail'])) {
-                if ($item['Current_UserEmail'] != $email) {
+            // Filter by email based on isInitiator parameter
+            if ($isInitiator) {
+                // If isInitiator is set, filter by Current_UserEmail
+                if (isset($item['Current_UserEmail']) && !empty($item['Current_UserEmail'])) {
+                    if ($item['Current_UserEmail'] != $email) {
+                        return false;
+                    }
+                } else {
+                    // Exclude items that don't have Current_UserEmail field set
                     return false;
                 }
             } else {
-                // Exclude items that don't have Current_UserEmail field set
-                return false;
+                // If isInitiator is not set or false, filter by WorkerVerifierEmail
+                if (isset($item['WorkerVerifierEmail']) && !empty($item['WorkerVerifierEmail'])) {
+                    if ($item['WorkerVerifierEmail'] != $email) {
+                        return false;
+                    }
+                } else {
+                    // Exclude items that don't have WorkerVerifierEmail field set
+                    return false;
+                }
             }
 
             // Filter by PTW number (using PTWNumber field)
@@ -814,7 +829,7 @@ class ApiLsrDevController extends ApiController
                 'WorkerVerifierName' => $requestData['WorkerVerifierName'] ?? '',
                 'WorkerVerifierEmail' => $requestData['WorkerVerifierEmail'] ?? '',
                 'Functions' => $requestData['Functions'] ?? '',
-                'Status' => $isUpdate ? ($existingRecord['Status'] ?? 'need stage 2') : 'need stage 2', // Default status for new submissions
+                'Status' => 'need stage 2', // Default status for new submissions
                 'Details' => $processedDetails, // Use processed details with mapped field
             ];
 

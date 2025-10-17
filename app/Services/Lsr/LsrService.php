@@ -49,10 +49,11 @@ class LsrService
      * Search LSR
      * GET LSRFieldVerificator/API/SearchLSR
      */
-    public function searchLSR($email = null, $ptwNumber = null, $processID = null, $category = null)
+    public function searchLSR($initiatorEmail = null,$workerVerifierEmail = null, $ptwNumber = null, $processID = null, $category = null)
     {
         $query = array_filter([
-            'email' => $email,
+            'initiatorEmail' => $initiatorEmail,
+            'workerVerifierEmail' => $workerVerifierEmail,
             'ptwNumber' => $ptwNumber,
             'processID' => $processID,
             'category' => $category,
