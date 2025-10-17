@@ -391,5 +391,79 @@
         "Current_User": "",
         "WorkerVerifierName": "Wahyudi Wahyudi",
         "LSRCategoryName": "Pengangkatan Secara Mekanis Yang Aman"
+    },
+    {
+        "Id": 3272,
+        "ProcessId": 458,
+        "CreationDate": "2025-10-15T10:54:36.989083Z",
+        "Current_User": "",
+        "Current_UserEmail": "medcoweb.uat1@medcoenergi.com",
+        "Current_MSID": "",
+        "Company": "PT Medco E&P Indonesia",
+        "BlockFunction": "Bangkanai",
+        "AreaField": "Suban",
+        "Location": "Camp & Kitchen",
+        "PTWNumber": "PTW-092",
+        "ActivityDesc": "Oke",
+        "LSRCat": 8,
+        "WorkerVerifierName": "",
+        "WorkerVerifierEmail": "Muhammad.Alghiffary@tc.medcoenergi.com",
+        "Functions": "1",
+        "Status": "need stage 2",
+        "Details": [
+            {
+                "LSRCatId": 8,
+                "IdByCat": 1,
+                "ChecklistWorker": 1,
+                "NonCompliancesDetail": "OK",
+                "NonCompliancesDetail1": "OK"
+            },
+            {
+                "LSRCatId": 8,
+                "IdByCat": 2,
+                "ChecklistWorker": 1,
+                "NonCompliancesDetail": "Ok",
+                "NonCompliancesDetail1": "Ok"
+            }
+        ]
+    },
+    {
+        "Id": 3273,
+        "ProcessId": 458,
+        "CreationDate": "2025-10-15T13:48:35.445633Z",
+        "Current_User": "medcoweb.uat1@medcoenergi.com",
+        "Current_UserEmail": "medcoweb.uat1@medcoenergi.com",
+        "Current_MSID": "",
+        "Company": "PT Medco E&P Indonesia",
+        "BlockFunction": "Bangkanai",
+        "AreaField": "Suban",
+        "Location": "Camp & Kitchen",
+        "PTWNumber": "PTW-092",
+        "ActivityDesc": "Oke",
+        "LSRCat": 8,
+        "WorkerVerifierName": "Muhammad Naufal Alghiffary",
+        "WorkerVerifierEmail": "Muhammad.Alghiffary@tc.medcoenergi.com",
+        "Functions": "1",
+        "Status": "verified stage 2",
+        "Details": [
+            {
+                "LSRCatId": 8,
+                "IdByCat": 1,
+                "ChecklistWorker": 1,
+                "NonCompliancesDetail": "OK",
+                "NonCompliancesDetail1": "OK",
+                "ChecklistWorkVerifier": 1,
+                "NonCompliancesDetail2": "OK"
+            },
+            {
+                "LSRCatId": 8,
+                "IdByCat": 2,
+                "ChecklistWorker": 1,
+                "NonCompliancesDetail": "Ok",
+                "NonCompliancesDetail1": "Ok",
+                "ChecklistWorkVerifier": 1,
+                "NonCompliancesDetail2": "Ok"
+            }
+        ]
     }
 ]

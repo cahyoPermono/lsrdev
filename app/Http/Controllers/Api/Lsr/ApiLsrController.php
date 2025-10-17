@@ -441,49 +441,23 @@ class ApiLsrController extends ApiController
      * @authenticated
      * @defaultParam
      *
-     * @queryParam action required Action parameter
-     * @bodyParam model object required LSR model data
-     * @bodyParam model.Id integer LSR Id. Example: 3339
-     * @bodyParam model.ProcessId integer Process Id. Example: 5052
-     * @bodyParam model.OldProcessId integer optional Old Process Id. Example: 7375
-     * @bodyParam model.CreationDate datetime optional Creation date (ISO8601). Example: 1983-06-24T00:40:30.803Z
-     * @bodyParam model.CompletionDate datetime optional Completion date (ISO8601). Example: 2018-02-03T18:07:58.866Z
-     * @bodyParam model.Payroll string optional Payroll code. Example: string
-     * @bodyParam model.Name string optional Person name. Example: string
-     * @bodyParam model.Position string optional Position id. Example: string
-     * @bodyParam model.PositionName string optional Position name. Example: string
-     * @bodyParam model.Company string optional Company name. Example: string
-     * @bodyParam model.BlockFunction string optional Block / Function. Example: string
-     * @bodyParam model.AreaField string optional Area / Field. Example: string
-     * @bodyParam model.Location string optional Location. Example: string
-     * @bodyParam model.PTWNumber string optional PTW number. Example: string
-     * @bodyParam model.ActivityDesc string optional Activity description. Example: string
-     * @bodyParam model.LSRCat integer optional LSR Category id. Example: 31
-     * @bodyParam model.Stage1SubmissionDate datetime optional Stage 1 submission date (ISO8601). Example: 1952-12-17T19:48:11.906Z
-     * @bodyParam model.Stage2SubmissionDate datetime optional Stage 2 submission date (ISO8601). Example: 2007-11-21T17:33:24.706Z
-     * @bodyParam model.Stage3SubmissionDate datetime optional Stage 3 submission date (ISO8601). Example: 1957-04-10T20:01:42.652Z
-     * @bodyParam model.WorkerSupervisorName string optional Worker supervisor name. Example: string
-     * @bodyParam model.WorkerSupervisorPayroll string optional Worker supervisor payroll. Example: string
-     * @bodyParam model.WorkerSupervisorPositionId string optional Worker supervisor position id. Example: string
-     * @bodyParam model.WorkerVerifierName string optional Worker verifier name. Example: string
-     * @bodyParam model.WorkerVerifierPayroll string optional Worker verifier payroll. Example: string
-     * @bodyParam model.WorkerVerifierPositionId string optional Worker verifier position id. Example: string
-     * @bodyParam model.FieldVerificatorName string optional Field verificator name. Example: string
-     * @bodyParam model.FieldVerificatorPayroll string optional Field verificator payroll. Example: string
-     * @bodyParam model.FieldVerificatorPositionId string optional Field verificator position id. Example: string
-     * @bodyParam model.Status integer optional Status code. Example: 9428
-     * @bodyParam model.ChecklistIdGenerated integer optional Generated checklist id. Example: 7264
-     * @bodyParam model.AdhocPosName string optional Adhoc position name. Example: string
-     * @bodyParam model.AdhocPosition string optional Adhoc position id. Example: string
-     * @bodyParam model.LSRSubCat integer optional LSR Subcategory id. Example: 1919
-     * @bodyParam model.Functions string optional Functions. Example: string
-     * @bodyParam model.Email string optional Email. Example: string
-     * @bodyParam model.MSID string optional MSID. Example: string
-     * @bodyParam model.MSID_Name string optional MSID name. Example: string
-     * @bodyParam model.Current_UserEmail string optional Current user email. Example: string
-     * @bodyParam model.Current_User string optional Current user id. Example: string
-     * @bodyParam model.Current_Activity string optional Current activity. Example: string
-     * @bodyParam model.Current_Activity_StartDate datetime optional Current activity start date (ISO8601). Example: 2005-06-13T23:30:56.891Z
+     * @bodyParam Id integer LSR Id. Example: 474
+     * @bodyParam Current_UserEmail string Current user email. Example: string
+     * @bodyParam Company string Company name. Example: string
+     * @bodyParam BlockFunction string Block / Function. Example: string
+     * @bodyParam AreaField string Area / Field. Example: string
+     * @bodyParam Location string Location. Example: string
+     * @bodyParam PTWNumber string PTW number. Example: string
+     * @bodyParam ActivityDesc string Activity description. Example: string
+     * @bodyParam LSRCat integer LSR Category id. Example: 4219
+     * @bodyParam LSRSubCat integer LSR Category id. Example: 4219
+     * @bodyParam WorkerVerifierEmail string Worker verifier email. Example: string
+     * @bodyParam Functions string Functions. Example: string
+     * @bodyParam Details array Details array containing checklist items
+     * @bodyParam Details[].LSRCatId integer LSR Category ID. Example: 2592
+     * @bodyParam Details[].IdByCat integer ID by category. Example: 9542
+     * @bodyParam Details[].ChecklistWorker integer Checklist worker status (0 or 1). Example: 0
+     * @bodyParam Details[].NonCompliancesDetail string Non compliances detail. Example: string
      *
      * @response {
      *   "status": 200,
@@ -496,12 +470,10 @@ class ApiLsrController extends ApiController
      */
     public function submit(Request $request)
     {
-        $validatedData = $request->validate([
-            'action' => 'required|string',
-            'model' => 'required|array'
-        ]);
-
-        $result = $this->lsrService->postLSR($validatedData['model'], $validatedData['action']);
+        $model = $request->all();
+        //change Current_UserEmail = $this->auth()->email;
+        $model['Current_UserEmail'] = $this->auth()->email;
+        $result = $this->lsrService->postLSR($model);
         return $this->sendSuccess($result);
     }
 
@@ -510,6 +482,23 @@ class ApiLsrController extends ApiController
      *
      * @authenticated
      * @defaultParam
+     * @bodyParam Id integer LSR Id. Example: 474
+     * @bodyParam Current_UserEmail string Current user email. Example: string
+     * @bodyParam Company string Company name. Example: string
+     * @bodyParam BlockFunction string Block / Function. Example: string
+     * @bodyParam AreaField string Area / Field. Example: string
+     * @bodyParam Location string Location. Example: string
+     * @bodyParam PTWNumber string PTW number. Example: string
+     * @bodyParam ActivityDesc string Activity description. Example: string
+     * @bodyParam LSRCat integer LSR Category id. Example: 4219
+     * @bodyParam LSRSubCat integer LSR Category id. Example: 4219
+     * @bodyParam WorkerVerifierEmail string Worker verifier email. Example: string
+     * @bodyParam Functions string Functions. Example: string
+     * @bodyParam Details array Details array containing checklist items
+     * @bodyParam Details[].LSRCatId integer LSR Category ID. Example: 2592
+     * @bodyParam Details[].IdByCat integer ID by category. Example: 9542
+     * @bodyParam Details[].ChecklistWorker integer Checklist worker status (0 or 1). Example: 0
+     * @bodyParam Details[].NonCompliancesDetail string Non compliances detail. Example: string
      *
      * @response {
      *   "status": 200,
@@ -522,7 +511,7 @@ class ApiLsrController extends ApiController
      */
     public function verify(Request $request)
     {
-        $result = $this->lsrService->postLSRVerify();
+        $result = $this->lsrService->postLSRVerify($request->all());
         return $this->sendSuccess($result);
     }
 
@@ -531,6 +520,24 @@ class ApiLsrController extends ApiController
      *
      * @authenticated
      * @defaultParam
+     *
+     * @bodyParam Id integer LSR Id. Example: 474
+     * @bodyParam Current_UserEmail string Current user email. Example: string
+     * @bodyParam Company string Company name. Example: string
+     * @bodyParam BlockFunction string Block / Function. Example: string
+     * @bodyParam AreaField string Area / Field. Example: string
+     * @bodyParam Location string Location. Example: string
+     * @bodyParam PTWNumber string PTW number. Example: string
+     * @bodyParam ActivityDesc string Activity description. Example: string
+     * @bodyParam LSRCat integer LSR Category id. Example: 4219
+     * @bodyParam LSRSubCat integer LSR Category id. Example: 4219
+     * @bodyParam WorkerVerifierEmail string Worker verifier email. Example: string
+     * @bodyParam Functions string Functions. Example: string
+     * @bodyParam Details array Details array containing checklist items
+     * @bodyParam Details[].LSRCatId integer LSR Category ID. Example: 2592
+     * @bodyParam Details[].IdByCat integer ID by category. Example: 9542
+     * @bodyParam Details[].ChecklistWorker integer Checklist worker status (0 or 1). Example: 0
+     * @bodyParam Details[].NonCompliancesDetail string Non compliances detail. Example: string
      *
      * @response {
      *   "status": 200,
@@ -543,7 +550,7 @@ class ApiLsrController extends ApiController
      */
     public function routeToInitiator(Request $request)
     {
-        $result = $this->lsrService->postLSRRouteToInitiator();
+        $result = $this->lsrService->postLSRRouteToInitiator($request->all());
         return $this->sendSuccess($result);
     }
 }

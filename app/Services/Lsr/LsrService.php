@@ -234,15 +234,14 @@ class LsrService
      * Post LSR
      * POST LSRFieldVerificator/API/PostLSR
      */
-    public function postLSR($model, $action)
+    public function postLSR($model)
     {
-        if (!$model || !$action) {
+        if (!$model) {
             return null;
         }
 
         $response = MedcoRestful::postAction(
             url: Url::PostLSR,
-            query: ['action' => $action],
             body: $model
         );
 
@@ -253,12 +252,16 @@ class LsrService
      * Post LSR Verify
      * POST LSRFieldVerificator/API/PostLSRVerify
      */
-    public function postLSRVerify()
+    public function postLSRVerify($model)
     {
+        if (!$model) {
+            return null;
+        }
+
         $response = MedcoRestful::postAction(
             url: Url::PostLSRVerify,
             query: [],
-            body: []
+            body: $model
         );
 
         return $response;
@@ -268,12 +271,16 @@ class LsrService
      * Post LSR Route To Initiator
      * POST LSRFieldVerificator/API/PostLSRRouteToInitiator
      */
-    public function postLSRRouteToInitiator()
+    public function postLSRRouteToInitiator($model)
     {
+        if (!$model) {
+            return null;
+        }
+
         $response = MedcoRestful::postAction(
             url: Url::PostLSRRouteToInitiator,
             query: [],
-            body: []
+            body: $model
         );
 
         return $response;

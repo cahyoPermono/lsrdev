@@ -442,6 +442,16 @@ class ApiLsrDevController extends ApiController
     public function companiesFromApi(Request $request): JsonResponse
     {
         $data = $this->getJsonData('lsr-companies.json');
+
+        //filter searchParam = text contains searchParam
+        $searchParam = $request->get('searchParam');
+        if ($searchParam) {
+            $data = array_filter($data, function ($item) use ($searchParam) {
+                return stripos($item['Text'], $searchParam) !== false;
+            });
+            // Reset array keys after filtering
+            $data = array_values($data);
+        }
         return response()->json([
             'status' => 200,
             'message' => 'success',
@@ -670,9 +680,7 @@ class ApiLsrDevController extends ApiController
      * @defaultParam
      *
      * @bodyParam Id integer LSR Id. Example: 474
-     * @bodyParam Current_User string Current user. Example: string
      * @bodyParam Current_UserEmail string Current user email. Example: string
-     * @bodyParam Current_MSID string Current MSID. Example: string
      * @bodyParam Company string Company name. Example: string
      * @bodyParam BlockFunction string Block / Function. Example: string
      * @bodyParam AreaField string Area / Field. Example: string
@@ -680,7 +688,7 @@ class ApiLsrDevController extends ApiController
      * @bodyParam PTWNumber string PTW number. Example: string
      * @bodyParam ActivityDesc string Activity description. Example: string
      * @bodyParam LSRCat integer LSR Category id. Example: 4219
-     * @bodyParam WorkerVerifierName string Worker verifier name. Example: string
+     * @bodyParam LSRSubCat integer LSR Category id. Example: 4219
      * @bodyParam WorkerVerifierEmail string Worker verifier email. Example: string
      * @bodyParam Functions string Functions. Example: string
      * @bodyParam Details array Details array containing checklist items
@@ -703,6 +711,18 @@ class ApiLsrDevController extends ApiController
         try {
             // Get the new request body format directly
             $requestData = $request->all();
+            $user = $this->auth();
+
+            //get name by email $requestData['WorkerVerifierEmail'] from lsr-personnel.json
+            if (isset($requestData['WorkerVerifierEmail'])) {
+                $personnelData = $this->getJsonData('lsr-personnel.json');
+                foreach ($personnelData as $person) {
+                    if (isset($person['Email']) && $person['Email'] == $requestData['WorkerVerifierEmail']) {
+                        $requestData['WorkerVerifierName'] = $person['Name'] ?? '';
+                        break;
+                    }
+                }
+            }
 
             // Validate required fields
             if (!$requestData) {
@@ -751,8 +771,8 @@ class ApiLsrDevController extends ApiController
                 'Id' => $newId,
                 'ProcessId' => $newProcessId,
                 'CreationDate' => now()->toISOString(),
-                'Current_User' => $requestData['Current_User'] ?? '',
-                'Current_UserEmail' => $requestData['Current_UserEmail'] ?? '',
+                'Current_User' => $user->name ?? '',
+                'Current_UserEmail' => $user->email ?? '',
                 'Current_MSID' => $requestData['Current_MSID'] ?? '',
                 'Company' => $requestData['Company'] ?? '',
                 'BlockFunction' => $requestData['BlockFunction'] ?? '',
@@ -826,6 +846,7 @@ class ApiLsrDevController extends ApiController
      * @bodyParam PTWNumber string PTW number. Example: string
      * @bodyParam ActivityDesc string Activity description. Example: string
      * @bodyParam LSRCat integer LSR Category id. Example: 4219
+     * @bodyParam LSRSubCat integer LSR Category id. Example: 4219
      * @bodyParam WorkerVerifierName string Worker verifier name. Example: string
      * @bodyParam WorkerVerifierEmail string Worker verifier email. Example: string
      * @bodyParam Functions string Functions. Example: string
@@ -991,7 +1012,6 @@ class ApiLsrDevController extends ApiController
      * @defaultParam
      *
      * @bodyParam Id integer required LSR Id. Example: 474
-     * @bodyParam Current_User string Current user. Example: string
      * @bodyParam Current_UserEmail string Current user email. Example: string
      * @bodyParam Current_MSID string Current MSID. Example: string
      * @bodyParam Company string Company name. Example: string
@@ -1001,6 +1021,7 @@ class ApiLsrDevController extends ApiController
      * @bodyParam PTWNumber string PTW number. Example: string
      * @bodyParam ActivityDesc string Activity description. Example: string
      * @bodyParam LSRCat integer LSR Category id. Example: 4219
+     * @bodyParam LSRSubCat integer LSR Category id. Example: 4219
      * @bodyParam WorkerVerifierName string Worker verifier name. Example: string
      * @bodyParam WorkerVerifierEmail string Worker verifier email. Example: string
      * @bodyParam Functions string Functions. Example: string
