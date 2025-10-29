@@ -482,7 +482,7 @@ class ApiLsrController extends ApiController
         //change Current_UserEmail = $this->auth()->email;
         $model['Current_UserEmail'] = $this->auth()->email;
         $result = $this->lsrService->postLSR($model);
-        return $this->sendSuccess($result);
+        return $this->handleLsrServiceResponse($result, 'Error submitting LSR');
     }
 
     /**
@@ -520,7 +520,7 @@ class ApiLsrController extends ApiController
     public function verify(Request $request)
     {
         $result = $this->lsrService->postLSRVerify($request->all());
-        return $this->sendSuccess($result);
+        return $this->handleLsrServiceResponse($result, 'Error verifying LSR');
     }
 
     /**
@@ -558,7 +558,30 @@ class ApiLsrController extends ApiController
      */
     public function routeToInitiator(Request $request)
     {
-        $result = $this->lsrService->postLSRRouteToInitiator($request->all());
-        return $this->sendSuccess($result);
+        // $result = $this->lsrService->postLSRRouteToInitiator($request->all());
+        // buat variable result seperti hasil dari json ini {"StatusCode": 500,"Message": "errorrorororo"}
+        $result = [
+            'StatusCode' =>  500,
+            'Message' => 'Error routing LSR to initiator'
+        ];
+        return $this->handleLsrServiceResponse($result, 'Error routing LSR to initiator');
+    }
+
+    private function handleLsrServiceResponse($result, $errorMessage)
+    {
+        if (isset($result['StatusCode']) && $result['StatusCode'] >= 200 && $result['StatusCode'] < 300) {
+            return $this->sendSuccess($result);
+        } else {
+            $message = $result['Message'] ?? $errorMessage;
+            $status = $result['StatusCode'] ?? 500;
+            return response()->json([
+                'status' => $status,
+                'message' => $message,
+                'data' => [
+                    'Status' => $status,
+                    'Message' => $message
+                ]
+            ], $status);
+        }
     }
 }
